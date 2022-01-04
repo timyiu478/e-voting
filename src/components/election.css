@@ -1,0 +1,8 @@
+.election_card:hover , .election_card:focus{
+    border-left: 4px solid black;
+
+}
+
+.election_card:hover{
+    cursor: pointer;
+}

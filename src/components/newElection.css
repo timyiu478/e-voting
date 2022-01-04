@@ -1,0 +1,16 @@
+.newElection_container{
+    height: 100%;
+}
+
+.form_container{
+    width: 70%;
+    margin: auto;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.pointer:hover{
+    cursor: pointer;
+}
