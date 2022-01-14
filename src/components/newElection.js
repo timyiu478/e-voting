@@ -11,6 +11,7 @@ import makeAnimated from 'react-select/animated';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import {MdOutlineFileUpload} from 'react-icons/md';
+import Spinner from 'react-bootstrap/Spinner';
 
 export default function NewElection({handleCloseNewElection, votingApp, account}){
 
@@ -104,8 +105,13 @@ export default function NewElection({handleCloseNewElection, votingApp, account}
     const handleSend = () => {
         // console.log(account);
         // console.log(votingApp);
+        const ec_publickey_Xs = voters.map(v => "0x"+v.slice(2,66));
+        const ec_publickey_Ys = voters.map(v => "0x"+v.slice(66,));
+        console.log(ec_publickey_Xs);
+        console.log(ec_publickey_Ys);
+
         votingApp.methods.addElection(
-            [title, description,voters, candidates, 
+            [title, description,voters,ec_publickey_Xs,ec_publickey_Ys, candidates, 
             key_generation_time,vote_time,secret_upload_time,
             key_generation_time_unit,vote_time_unit,secret_upload_time_unit,min_shares]
         ).send({from: account})

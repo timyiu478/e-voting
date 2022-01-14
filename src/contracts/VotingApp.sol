@@ -18,6 +18,7 @@ contract VotingApp{
         string title;
         string description;
         string[] public_keys;
+        Election.ECPoint[] EC_public_keys;
         string[] candidates;
         uint key_gen_time;
         uint vote_time;
@@ -58,9 +59,10 @@ contract VotingApp{
         e.setTitle(_data.title);
         e.setDescription(_data.description);
         e.setPublicKeys(_data.public_keys);
+        e.setECpublickeys(_data.EC_public_keys);
         e.setCandidates(_data.candidates);
         e.setMinShares(_data.min_shares);
-    
+
         electionCount++;
 
         emit addElectionEvent(e.getElectionData());
@@ -70,9 +72,9 @@ contract VotingApp{
         return electionAddresses;
     }
 
-    function vote(address electionAddress, uint candidateID) public{
-        Election e = Election(electionAddress);
-        e.addVote(candidateID);
+    function vote(uint electionID, uint candidateID,uint256 _message, uint256 _U0,uint256[] memory _V,Election.ECPoint memory _K) public{
+        Election e = Election(electionAddresses[electionID]);
+        e.addVote(candidateID,_message, _U0, _V, _K);
     } 
 
     function getElectionData(address electionAddress) public view returns (Election.ElectionData memory){

@@ -1,3 +1,4 @@
+import Web3 from 'web3';
 import { ECPointFp,ECCurveFp } from './lib/ec.js';
 import BigInteger from './lib/jsbn.js';
 import SecureRandom from './lib/rng.js';
@@ -6,13 +7,14 @@ import {sha256} from './lib/sha256.js';
 
 const ec_params = getSECCurveByName('secp256r1');
 const Curve = ec_params.getCurve();
-// const Q = ec_params.getCurve().getQ();
+const Q = ec_params.getCurve().getQ();
+const P = new BigInteger("FFFFFFFF00000000FFFFFFFFFFFFFFFFBCE6FAADA7179E84F3B9CAC2FC632551",16);
 const G = ec_params.getG();
 const N = ec_params.getN();
+let n1 = N.subtract(BigInteger.ONE);
 
 export function getRandomInt(){
     let rng = new SecureRandom();
-    let n1 = N.subtract(BigInteger.ONE);
     let r = new BigInteger(N.bitLength(),rng);
     r = r.mod(n1).add(BigInteger.ONE).mod(N);
     // console.log(r.toString(10));
@@ -39,9 +41,13 @@ export function publicKeyToHex(publicKey){
 }
 
 export function hexToPublicKey(publicKeyHex){
-    publicKeyHex = publicKeyHex.replace(/04/g, "");
+    publicKeyHex = publicKeyHex.slice(2,);
     let x = publicKeyHex.slice(0,64);
     let y = publicKeyHex.slice(64);
+    // console.log(x);
+    // console.log(y);
+    // console.log(x.length);
+    // console.log(y.length);
     let publicKey = new ECPointFp(
         Curve,
         Curve.fromBigInteger(new BigInteger(x,16)),
@@ -52,16 +58,23 @@ export function hexToPublicKey(publicKeyHex){
 }
 // genKeyPair();
 
+export function messageToInt(message){
+    return hash1(message);
+}
+
 export function hash1(message){
-    // console.log(message);
-    let digest = sha256(message);
-    // console.log(digest);
-    let num = new BigInteger(digest,16).mod(N);
-    // console.log(num);
+    // console.log(message.toString(10));
+    let digest = Web3.utils.soliditySha3({type:'uint256',value:message.toString(10)});
+    let num = new BigInteger(digest.slice(2,),16).mod(N);
+    // console.log(num.toString(10));
     return num;
 }
 
+// https://crypto.stackexchange.com/questions/60904/right-way-to-hash-elliptic-curve-points-into-finite-field
 export function hash2(message){
+    // console.log(message.toString(10));
+    // console.log(G.multiply(hash1(message)).getX().toBigInteger().toString(10));
+    // console.log(G.multiply(hash1(message)).getY().toBigInteger().toString(10));
     return G.multiply(hash1(message));
     // return mapToCurve(hash1(message));
 }
@@ -69,7 +82,7 @@ export function hash2(message){
 export function concateArray(arr){
     let num = new BigInteger("0",16);
     for(let i=0;i<arr.length;i++){
-        num = num.add(arr[i]);
+        num = num.add(arr[i]).mod(N);
     }
     return num;
 }
@@ -79,10 +92,11 @@ export function pointToInt(p){
     // console.log(p);
     let x = p.getX().toBigInteger();
     let y = p.getY().toBigInteger();
-    // console.log(x);
-    // console.log(y);
+    // console.log(x.toString(16));
+    // console.log(y.toString(16));
+    // console.log(x.add(y).mod(N).toString(10));
     // console.log(x.add(y));
-    return x.add(y);
+    return x.add(y).mod(N);
 }
 
 // https://www.tutorialguruji.com/javascript/javascript-big-integer-square-root/

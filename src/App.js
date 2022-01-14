@@ -12,7 +12,7 @@ import Elections from './components/elections';
 import {genSig,verifySig,test} from './components/linkable_ring_signature/lrs';
 
 const App = () => {
-
+  const [web3,setWeb3] = useState(null);
   const [account,setAccount] = useState('');
   const [loading,setLoading] = useState(false);
   const [votingApp,setVotingApp] = useState(null);
@@ -23,6 +23,7 @@ const App = () => {
 
   const blockchainInstance = async () => {
     const web3 = new Web3(Web3.givenProvider|| 'http://localhost:8545');
+    setWeb3(web3);
     const network = await web3.eth.net.getNetworkType();
     console.log("network: ",network);
     
@@ -47,8 +48,9 @@ const App = () => {
       electionAddresses.forEach(address => {
         votingApp.methods.getElectionData(address).call().then((data)=>{
           setElections((elections)=>[data, ...elections]);
+          console.log(data);
         });
-        // console.log(elections);
+        
       });
 
       // listen add election event
@@ -105,7 +107,7 @@ const App = () => {
           (isNewElection)? 
           <NewElection handleCloseNewElection={handleCloseNewElection} votingApp={votingApp} account={account} />
           : 
-          <Elections elections={elections}  />
+          <Elections elections={elections} votingApp={votingApp} account={account}  />
         }
       </div>
 

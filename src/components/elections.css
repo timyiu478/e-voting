@@ -31,5 +31,10 @@
 }
 
 .table_height{
-    height: 140px;
+    height: 150px;
 }
+
+.operations{
+    min-height: 400px;
+}
+
