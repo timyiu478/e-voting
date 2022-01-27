@@ -105,19 +105,17 @@ export default function NewElection({handleCloseNewElection, votingApp, account}
     const handleSend = () => {
         // console.log(account);
         // console.log(votingApp);
-        const ec_publickey_Xs = voters.map(v => "0x"+v.slice(2,66));
-        const ec_publickey_Ys = voters.map(v => "0x"+v.slice(66,));
-        console.log(ec_publickey_Xs);
-        console.log(ec_publickey_Ys);
 
+        const ec_publickeys = voters.map(v => ["0x"+v.slice(2,66),"0x"+v.slice(66,)]);
+        console.log(ec_publickeys);
         votingApp.methods.addElection(
-            [title, description,voters,ec_publickey_Xs,ec_publickey_Ys, candidates, 
+            [title, description,voters,ec_publickeys, candidates, 
             key_generation_time,vote_time,secret_upload_time,
             key_generation_time_unit,vote_time_unit,secret_upload_time_unit,min_shares]
-        ).send({from: account})
+        ).send({from: account, gas:300000000})
         .on('error', function(error, receipt){
-            console.error("error:",error);
-        });;
+            console.error("error:",error); 
+        });
     }
     
 

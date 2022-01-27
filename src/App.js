@@ -17,6 +17,7 @@ const App = () => {
   const [loading,setLoading] = useState(false);
   const [votingApp,setVotingApp] = useState(null);
   const [elections,setElections] = useState([]);
+  const [electionAddresses,setElectionAddresses] = useState([]);
   const [isNewElection,setisNewElection] = useState(false);
   const handleCloseNewElection = () => setisNewElection(false);
   const handleOpenNewElection = () => setisNewElection(true);
@@ -37,37 +38,45 @@ const App = () => {
     const networkData = VotingApp['networks'][networkID];
     console.log("networkData:",networkData);
     if(networkData){
-      const votingApp = new web3.eth.Contract(VotingApp['abi'],networkData['address']);
-      setVotingApp(votingApp);
-      console.log("votingApp:",votingApp);
+      const vApp = new web3.eth.Contract(VotingApp['abi'],networkData['address']);
+      setVotingApp(vApp);
+      console.log("votingApp:",vApp);
 
       // get Election contract addresses
-      const electionAddresses = await votingApp.methods.getElectionAddresses().call();
-      console.log("Election Address: ",electionAddresses);
+      const eAddresses = await vApp.methods.getElectionAddresses().call();
+      setElectionAddresses(eAddresses);
+      console.log("Election Address: ",eAddresses);
       // get Elections data
-      electionAddresses.forEach(address => {
-        votingApp.methods.getElectionData(address).call().then((data)=>{
-          setElections((elections)=>[data, ...elections]);
-          console.log(data);
+      if(eAddresses!=null){
+        eAddresses.forEach(address => {
+          vApp.methods.getElectionData(address).call().then((data)=>{
+            setElections((elections)=>[data, ...elections]);
+            console.log(data);
+          });
+          
         });
-        
-      });
+      }
 
-      // listen add election event
-      votingApp.events.addElectionEvent({},
-        function(error, receipt) {
+      // listen new election event
+      vApp.events.newElectionEvent({},
+        async function(error, receipt) {
             if(error){
                 console.error(error);
                 alert("Create New Election Failed");
             }else{
                 // console.log(receipt);
-                const result = receipt.returnValues.eData;
+                const eData = receipt.returnValues.eData;
+                const eAddress = receipt.returnValues.eAddress;
                 // console.log(result);
-                setElections((elections)=>[result, ...elections]);
+                setElections((elections)=>[eData, ...elections]);
+                setElectionAddresses((eAddresses)=>[eAddress, ...eAddresses]);
+
                 alert("Create New Election success");
             }
         }            
       );
+
+
 
     }else{
       console.error("VotingApp Contract not deployed to detected network.");
@@ -107,7 +116,7 @@ const App = () => {
           (isNewElection)? 
           <NewElection handleCloseNewElection={handleCloseNewElection} votingApp={votingApp} account={account} />
           : 
-          <Elections elections={elections} votingApp={votingApp} account={account}  />
+          <Elections elections={elections} web3={web3} account={account} electionAddresses={electionAddresses}  />
         }
       </div>
 

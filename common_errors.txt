@@ -1,0 +1,11 @@
+type					solutions
+---------------------------------------------------------------------------------------------------------
+stack too deep			remove local variables, use struct
+
+heap out of memory		set/export NODE_OPTIONS=--max_old_space_size=4096, 
+						if increased the memory and still exist this error, 
+						then the problem may related to other problems e.g. gas limit.
+
+out of gas				increase gas limit				
+
+libiraries				https://ethereum.stackexchange.com/questions/39372/you-must-deploy-and-link-the-following-libraries-before-you-can-deploy-a-new-ver/39623				

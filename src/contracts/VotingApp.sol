@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 <0.9.0;
 
+import './Utils.sol';
 import "./Election.sol";
 
 contract VotingApp{
@@ -10,15 +11,15 @@ contract VotingApp{
     // Store election count;
     uint public electionCount;
     
-    // add Election Event
-    event addElectionEvent(Election.ElectionData eData);
+    // new Election Event
+    event newElectionEvent(Election.ElectionData eData, Election eAddress); 
 
     // Model a election init data require data sent by onwer
     struct ElectionInit{
         string title;
         string description;
         string[] public_keys;
-        Election.ECPoint[] EC_public_keys;
+        Utils.ECPoint[] EC_public_keys;
         string[] candidates;
         uint key_gen_time;
         uint vote_time;
@@ -42,7 +43,7 @@ contract VotingApp{
         return t;
     }
 
-    function addElection(ElectionInit memory _data) public{
+    function addElection(ElectionInit calldata _data) external{
         
         // require minimum number of candidates and voters are 2
         require(_data.candidates.length > 1 && _data.public_keys.length > 1,"require minimum number of candidates and voters are 2");
@@ -65,19 +66,20 @@ contract VotingApp{
 
         electionCount++;
 
-        emit addElectionEvent(e.getElectionData());
+        emit newElectionEvent(e.getElectionData(),electionAddresses[electionCount-1]);
+        
     }
 
-    function getElectionAddresses() public view returns (Election[] memory){
+    function getElectionAddresses() external view returns (Election[] memory){
         return electionAddresses;
     }
 
-    function vote(uint electionID, uint candidateID,uint256 _message, uint256 _U0,uint256[] memory _V,Election.ECPoint memory _K) public{
-        Election e = Election(electionAddresses[electionID]);
-        e.addVote(candidateID,_message, _U0, _V, _K);
-    } 
+    // function vote(uint electionID, uint candidateID,uint256 _message, uint256 _U0,uint256[] calldata _V,LRS.ECPoint calldata _K) public{
+    //     Election e = Election(electionAddresses[electionID]);
+    //     // e.addVote(candidateID,Election.LRS_parameters(_message, _U0, _V, _K));
+    // } 
 
-    function getElectionData(address electionAddress) public view returns (Election.ElectionData memory){
+    function getElectionData(address electionAddress) external view returns (Election.ElectionData memory){
         Election e = Election(electionAddress);
         return e.getElectionData();
     }

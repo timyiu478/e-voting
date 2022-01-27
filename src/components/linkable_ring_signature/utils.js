@@ -3,7 +3,6 @@ import { ECPointFp,ECCurveFp } from './lib/ec.js';
 import BigInteger from './lib/jsbn.js';
 import SecureRandom from './lib/rng.js';
 import {getSECCurveByName} from './lib/sec.js';
-import {sha256} from './lib/sha256.js';
 
 const ec_params = getSECCurveByName('secp256r1');
 const Curve = ec_params.getCurve();
@@ -13,22 +12,54 @@ const G = ec_params.getG();
 const N = ec_params.getN();
 let n1 = N.subtract(BigInteger.ONE);
 
-export function getRandomInt(){
-    let rng = new SecureRandom();
+let rng = new SecureRandom();
+
+export function getRandomIntModN(){
     let r = new BigInteger(N.bitLength(),rng);
     r = r.mod(n1).add(BigInteger.ONE).mod(N);
     // console.log(r.toString(10));
     return r;
 }
 
+export function getRandomInt(){
+    let r = new BigInteger(N.bitLength(),rng);
+    r = r.mod(n1).add(BigInteger.ONE).mod(P);
+    // console.log(r.toString(10));
+    return r;
+}
+
+export function getPublicKeyXY(privateKeyString){
+    const prvKey = new BigInteger(privateKeyString,10);
+    const pubKey = G.multiply(prvKey);
+    const X = pubKey.getX().toBigInteger().toString(10);
+    const Y = pubKey.getY().toBigInteger().toString(10);
+    return [X,Y];
+}
+
+
 
 export function genKeyPair(){
     let privateKey = getRandomInt();
     let publicKey = G.multiply(privateKey);
+    let privateKeyHex = privateKey.toString(16);
+    let zeros = "";
+    for(let i=0;i<(64-privateKeyHex.length);i++){
+        zeros+="0";
+    }
+    // console.log(zeros);
     return {
-        privateKey: privateKey.toString(16),
+        privateKey: zeros+privateKeyHex,
         publicKey: publicKeyToHex(publicKey)
     };
+}
+
+export function genKetPairs(num){
+    let tmp = [];
+    for(let i=0;i<num;i++){
+        tmp.push(genKeyPair());
+    }
+    console.log(tmp);
+    return tmp;
 }
 
 export function publicKeyToHex(publicKey){
@@ -39,6 +70,8 @@ export function publicKeyToHex(publicKey){
     // console.log(hex);
     return hex;
 }
+
+
 
 export function hexToPublicKey(publicKeyHex){
     publicKeyHex = publicKeyHex.slice(2,);
@@ -59,11 +92,17 @@ export function hexToPublicKey(publicKeyHex){
 // genKeyPair();
 
 export function messageToInt(message){
-    return hash1(message);
+    // console.log(message);
+    // console.log(message.slice(2,));
+    const num = new BigInteger(message.slice(2,),16).mod(N);
+    console.log(num);
+    return num;
+
+    // return hash1(message);
 }
 
 export function hash1(message){
-    // console.log(message.toString(10));
+    console.log(message.toString(10));
     let digest = Web3.utils.soliditySha3({type:'uint256',value:message.toString(10)});
     let num = new BigInteger(digest.slice(2,),16).mod(N);
     // console.log(num.toString(10));
@@ -87,6 +126,26 @@ export function concateArray(arr){
     return num;
 }
 
+export function pointToXYInt(p){
+    let x = p.getX().toBigInteger().toString(10);
+    let y = p.getY().toBigInteger().toString(10);
+    return [x,y]
+}
+
+export function decimalStrToHexStr(d){
+    return new BigInteger(d,10).toString(16);
+}
+
+export function intTopoint(x,y){
+    let point = new ECPointFp(
+        Curve,
+        Curve.fromBigInteger(new BigInteger(x,10)),
+        Curve.fromBigInteger(new BigInteger(y,10))
+    );
+    return point;
+}
+
+
 export function pointToInt(p){
     // if(p.isInfinity()){return new BigInteger("0",16);}
     // console.log(p);
@@ -99,49 +158,47 @@ export function pointToInt(p){
     return x.add(y).mod(N);
 }
 
+// sqrt() function refer to 
 // https://www.tutorialguruji.com/javascript/javascript-big-integer-square-root/
-// function sqrt(value) {
-//     if (value.compareTo(new BigInteger("0",16)) < 0) {
-//         throw 'square root of negative numbers is not supported'
-//     }
+function sqrt(value) {
+    if (value.compareTo(new BigInteger("0",16)) < 0) {
+        throw 'square root of negative numbers is not supported'
+    }
 
-//     if (value.compareTo(new BigInteger("2",16)) < 0) {
-//         return value;
-//     }
+    if (value.compareTo(new BigInteger("2",16)) < 0) {
+        return value;
+    }
 
-//     function newtonIteration(n, x0) {
-//         const x1 = n.divide(x0).add(x0).shiftRight(new BigInteger("1",16));
-//         if (x0.compareTo(x1) === 0 || x0.compareTo(x1.subtract(new BigInteger("1",16))) === 0) {
-//             return x0;
-//         }
-//         return newtonIteration(n, x1);
-//     }
+    function newtonIteration(n, x0) {
+        const x1 = n.divide(x0).add(x0).shiftRight(new BigInteger("1",16));
+        if (x0.compareTo(x1) === 0 || x0.compareTo(x1.subtract(new BigInteger("1",16))) === 0) {
+            return x0;
+        }
+        return newtonIteration(n, x1);
+    }
 
-//     return newtonIteration(value, new BigInteger("1",16));
-// }
+    return newtonIteration(value, new BigInteger("1",16));
+}
 
 // try and increase
-// function mapToCurve(x){
-//     let point;
-//     let three = new BigInteger("3",16);
-//     let a = new BigInteger("FFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFC",16);
-//     let b = new BigInteger("5AC635D8AA3A93E7B3EBBD55769886BC651D06B0CC53B0F63BCE3C3E27D2604B",16);
-//     for(let i=x;x.compareTo(Q);i.add(new BigInteger("1",16))){
-//         let fx = i.pow(three).add(a.multiply(i)).add(b).mod(P);
-//         try{
-//             let res = sqrt(fx);
-//             // console.log(x); 
-//             // console.log(res);
-//             point = new ECPointFp(
-//                 Curve,
-//                 Curve.fromBigInteger(i),
-//                 Curve.fromBigInteger(res)
-//             );
-//             // if(point.isInfinity()){continue;}
-//             // console.log(point);
-//             return point;
-//         }catch{
-//             continue;
-//         }
-//     }
-// }
+export function mapToCurve(x){
+    let point;
+    const Three = new BigInteger("3",16);
+    const A = new BigInteger("FFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFC",16);
+    const B = new BigInteger("5AC635D8AA3A93E7B3EBBD55769886BC651D06B0CC53B0F63BCE3C3E27D2604B",16);
+    let y = sqrt(x.pow(Three).add(A.multiply(x)).add(B).mod(P));
+    while(true){
+        // console.log(x.toString(16));
+        // console.log(y.toString(16));
+        try{
+            point = new ECPointFp(
+                Curve,
+                Curve.fromBigInteger(x),
+                Curve.fromBigInteger(y)
+            );
+            return point;
+        }catch{
+            y++;
+        }
+    }
+}

@@ -1,20 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 <0.9.0;
 
-import "./EllipticCurve.sol";
+import './Utils.sol';
 
 contract Election {
-    // Elliptic Curve Point
-    struct ECPoint{
-        uint256 x;
-        uint256 y;
-    }
 
-    uint public id;
     address public owner;
+    
     string public title;
     string public description;
     string[] public public_keys;
+
+    uint public id;
     uint public candidateCount;
     uint public voterCount;
     uint public post_time;
@@ -23,8 +20,9 @@ contract Election {
     uint public secret_upload_end_time;
     uint public totalVoteCount;
     uint public min_shares;
+    uint public totatKeygenValueSentCount;
+    uint public totalSubSecretSentCount;
 
-    bool public isTallyed;
     bool public isTitleSet;
     bool public isDescriptionSet;
     bool public isCandidateCountSet;
@@ -33,24 +31,14 @@ contract Election {
     bool public isECPublic_keysSet;
     bool public isVoterCount;
     bool public isMinSharesSet;
+    bool public isVoteTallied;
 
     // linkable ring signature varaibles 
     uint256 public L;
-    ECPoint public H;
-    mapping(bytes32 => bool) K_list;
-    ECPoint[] public EC_public_keys;
+    Utils.ECPoint public H;
+    mapping(bytes20 => bool) K_list;
+    Utils.ECPoint[] public EC_public_keys;
 
-    // secp256r1 parameters
-    // https://neuromancer.sk/std/secg/secp256r1#
-    uint256 public constant GX = 0x6b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c296;
-    uint256 public constant GY = 0x4fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5;
-    uint256 public constant AA = 0xffffffff00000001000000000000000000000000fffffffffffffffffffffffc;
-    uint256 public constant BB = 0x5ac635d8aa3a93e7b3ebbd55769886bc651d06b0cc53b0f63bce3c3e27d2604b;
-    uint256 public constant PP = 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff;
-    uint256 public constant NN = 0xffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551;
-    uint256 public constant HH = 0x1;
-
-    
 
     // Model a candidate
     struct Candidate{
@@ -62,61 +50,82 @@ contract Election {
     // Store candidates
     Candidate[] public candidates; 
 
+    struct F{
+        Utils.ECPoint p;
+        uint i;
+        uint j;
+        uint256 h;
+        Utils.ECDSA_Sig sig;
+    }
+
+
+
+    struct f{
+        Utils.Elgamal_ciphertext ciphertext;
+        uint i;
+        uint j;
+        uint256 h;
+        Utils.ECDSA_Sig sig;
+    }
+
+    mapping(bytes20 => F) F_2d;
+    mapping(bytes20 => f) f_2d;
+    mapping(bytes20 => bool) isF_2d;
+    mapping(bytes20 => bool) isf_2d;
+
+
+    Utils.SubSecretWithSig[] subSecrets;
+    mapping(uint => bool) isSubSecrets; 
+
+
     // Model a ballot
     struct Ballot{
         uint id;
-        uint candidate_id;
+        uint voteTime;
+        int candidate_id;
+        uint256 encVoteHash;
+        uint256 U0;
+        uint256[] V;
+        Utils.ECPoint K;
+        Utils.Elgamal_ciphertext encVote;
     }
 
     // Store ballots
-    Ballot[] public ballots;
+    Ballot[] ballots;
 
     // Model a election Data
     struct ElectionData{
         uint id;
-        address owner;
-        string title;
-        string description;
-        string[] public_keys;
-        ECPoint[] EC_public_keys;
-        uint candidateCount;
-        uint voterCount;
-        Candidate[] candidates;
         uint post_time;
         uint key_gen_end_time;
         uint vote_end_time;
         uint secret_upload_end_time;
         uint min_shares;
-        bool isTallyed;
-        uint256 L;
-        ECPoint H;
+        uint candidateCount;
+        uint voterCount;
+        uint totalVoteCount;
+        uint totatKeygenValueSentCount;
+        uint totalSubSecretSentCount;
+        uint256 L; 
+        string title;
+        string description;
+        string[] public_keys;
+        Utils.ECPoint H;
+        Utils.ECPoint[] EC_public_keys;
+        Candidate[] candidates;
+        bool isVoteTallied;
+        address owner;
     }
 
-    function concateArray(uint256[] memory nums) public pure returns(uint256 n){
-        for(uint i=0;i<nums.length;i++){
-            n = addmod(n,nums[i],NN);
-        }
-        return n;
-    }
+    // new Vote Event
+    event newVoteEvent(uint totalVoteCount);
+    // add Keygen value Event
+    event addKeygenValueEvent(uint totatKeygenValueSentCount);
+    // add SubSecret Event
+    event addSubSecretEvent(uint totalSubSecretSentCount);
+    // tally vote Event
+    event tallyVoteEvent(Candidate[] candidates, Ballot[] ballots);
 
-    function hash1(uint256 message) public pure returns (uint256){
-        return uint256(keccak256(abi.encode(message))) % NN;
-    }
-
-    function hash2(uint256 message) public pure returns (ECPoint memory){
-        (uint256 x, uint256 y) = EllipticCurve.ecMul(hash1(message),GX,GY,AA,PP);
-        return ECPoint(x,y);
-    }
-
-    function pointMul(uint256 Px,uint256 Py, uint256 a) public pure returns (ECPoint memory){
-        (uint256 x, uint256 y) = EllipticCurve.ecMul(a,Px,Py,AA,PP);
-        return ECPoint(x,y);
-    }
-
-    function pointAdd(ECPoint memory p1, ECPoint memory p2) public pure returns (ECPoint memory){
-        (uint256 x, uint256 y) = EllipticCurve.ecAdd(p1.x,p1.y,p2.x,p2.y,AA,PP);
-        return ECPoint(x,y);
-    }
 
     function setTitle(string memory _title) public{
         require(!isTitleSet,"title is already set.");
@@ -138,24 +147,20 @@ contract Election {
         isVoterCount = true;
     }
 
-    function addMod(uint256 a, uint256 b, uint256 c) public pure returns(uint256){
-        return addmod(a,b,c);
-    }
-
-    function setECpublickeys(ECPoint[] memory _EC_public_keys) public{
+    function setECpublickeys(Utils.ECPoint[] memory _EC_public_keys) public{
         require(!isECPublic_keysSet,"EC Public_keys is already set.");
         L = 0;
         uint256 tmp;
         for(uint i=0;i<_EC_public_keys.length;i++){
             // store EC public keys 
-            EC_public_keys.push(ECPoint(_EC_public_keys[i].x,_EC_public_keys[i].y));
+            EC_public_keys.push(Utils.ECPoint(_EC_public_keys[i].x,_EC_public_keys[i].y));
             // compute L = sum of (PubKey.X + PubKey.Y);
-            tmp = addmod(_EC_public_keys[i].x,_EC_public_keys[i].y,NN);
-            L = addmod(L,tmp,NN);
+            tmp = addmod(_EC_public_keys[i].x,_EC_public_keys[i].y,Utils.NN);
+            L = addmod(L,tmp,Utils.NN);
             
         }
         // compute H
-        H = hash2(L);
+        H = Utils.hash2(L);
 
         isECPublic_keysSet = true;
     }
@@ -188,64 +193,194 @@ contract Election {
 
     }
 
-    function verifyLRS(uint256 _message, uint256 _U0,uint256[] memory _V,ECPoint memory _K) 
-    public view returns(bool){
-        uint256 M = hash1(_message);
-        uint256 U = _U0;
-        uint256 n;
-
-        ECPoint memory vG_add_uY;
-        ECPoint memory vH_add_uK;
-
+    function getVotePublicKey() external view returns (Utils.ECPoint memory){
+        Utils.ECPoint memory votePublicKey;
+        
+        bytes20 h; 
+        Utils.ECPoint[] memory _P = new Utils.ECPoint[](voterCount);
         for(uint i=0;i<voterCount;i++){
-            vG_add_uY = pointAdd(pointMul(GX,GY,_V[i]),pointMul(EC_public_keys[i].x,EC_public_keys[i].y,U));
-            vH_add_uK = pointAdd(pointMul(H.x, H.y, _V[i]),pointMul(_K.x, _K.y, U));
-            
-            n = 0;
-            n = addmod(n,L,NN);
-            n = addmod(n,addmod(_K.x, _K.y, NN),NN);
-            n = addmod(n,M,NN);
-            n = addmod(n,addmod(vG_add_uY.x, vG_add_uY.y, NN),NN);
-            n = addmod(n,addmod(vH_add_uK.x, vH_add_uK.y, NN),NN);
-
-            U = hash1(n);
+        h = ripemd160(abi.encodePacked(i,uint256(0)));
+        _P[i] = F_2d[h].p;
         }
-
-        return U == _U0;
+        votePublicKey = Utils.setVotePublicKey(_P);
+        
+        return votePublicKey; 
     }
 
-    function addVote(uint _candidateID,uint256 _message, uint256 _U0,uint256[] memory _V,ECPoint memory _K) 
-    public{
-        // verify vote peroid: key_gen_end_time <= now < vote_end_time
-        // require(key_gen_end_time<= block.timestamp && block.timestamp < vote_end_time,"invalid vote time");
-        // hash of _K
-        bytes32 h = keccak256(abi.encodePacked(_K.x,_K.y));
-        // hash of _K should not exit in K_list
-        require(K_list[h] == false);
-        // verify linkable ring signature
-        require(verifyLRS(_message,_U0,_V,_K) == true,"invalid signature");
+    function getBallot() external view returns(Ballot[] memory){
+        return ballots;
+    }
+
+    function addSubSecret(Utils.SubSecretWithSig calldata _s) external{
+        // verify secret upload peroid: vote end time <= now < secret_upload_end_time
+        // require(vote_end_time<=block.timestamp &&block.timestamp < secret_upload_end_time,"invalid subscret upload time");
+        uint256 h = uint256(keccak256(abi.encodePacked(_s.subSecret,_s.i)));
+        require(h == _s.h,"the subSecret or i wast modified.");
+        require(isSubSecrets[h] == false,"Your subSecret was uploaded.");
         
+        bool isValidSig = Utils.ecdsa_verify(Utils.ECDSA_parameters(_s.sig.r, _s.sig.s, h, 
+        EC_public_keys[_s.i].x, EC_public_keys[_s.i].y));
+        require(isValidSig == true,"Invaluid ECDSA Signature");
+
+        subSecrets.push(_s);
+        isSubSecrets[_s.i] = true;
+        totalSubSecretSentCount++;
+
+        emit addSubSecretEvent(totalSubSecretSentCount);
+    }
+
+    function getSubSecrets() external view returns(Utils.SubSecretWithSig[] memory){
+        return subSecrets;
+    }
+
+    function getF0() external view returns(F[] memory){
+        bytes20 h; 
+        F[] memory _F = new F[](voterCount);
+        for(uint i=0;i<voterCount;i++){
+           h = ripemd160(abi.encodePacked(i,uint256(0)));
+           _F[i] = F_2d[h];
+        }
+        return _F; 
+    }
+
+    function getF(uint _publicKeyIndex) external view returns(F[] memory){
+        bytes20 h; 
+        F[] memory _F = new F[](voterCount); 
+        for(uint i=0;i<voterCount;i++){
+           h = ripemd160(abi.encodePacked(i,_publicKeyIndex+1));
+           _F[i] = F_2d[h];
+        }
+          
+        return _F;
+    }
+
+    function getf(uint _publicKeyIndex) external view returns(f[] memory){
+        bytes20 h; 
+        f[] memory _f = new f[](voterCount); 
+        for(uint i=0;i<voterCount;i++){
+           h = ripemd160(abi.encodePacked(i,_publicKeyIndex+1));
+           _f[i] = f_2d[h];
+        }
+          
+        return _f;
+    }
+
+    function addKeyGenVal(F[] memory _F, f[] memory _f) external{
+        // verify key gen peroid: now < key_gen_end_time
+        // require(block.timestamp < key_gen_end_time,"invalid key generation time");
+        bytes20 h;
+        uint256 hm; // hashed message
+        bool isValidSig;
+        for(uint z;z<min_shares;z++){
+            hm = uint256(keccak256(abi.encodePacked(
+                _F[z].p.x,_F[z].p.y,_F[z].i,_F[z].j
+                )));
+            require(hm == _F[z].h,"the values was modified");
+            isValidSig = Utils.ecdsa_verify(Utils.ECDSA_parameters(
+                _F[z].sig.r,_F[z].sig.s,hm,
+                EC_public_keys[_F[z].i].x,EC_public_keys[_F[z].i].y
+                ));
+            require(isValidSig == true,"Invalid ECDSA Signature");
+            h = ripemd160(abi.encodePacked(_F[z].i,_F[z].j));
+            require(isF_2d[h] == false,"You already uploaded your values");
+            isF_2d[h] = true;
+            F_2d[h] = _F[z];
+        }
+        for(uint z;z<voterCount;z++){
+            hm = uint256(keccak256(abi.encodePacked(
+                _f[z].ciphertext.C.x,_f[z].ciphertext.C.y,
+                _f[z].ciphertext.D.x,_f[z].ciphertext.D.y
+                ,_f[z].i,_f[z].j
+                )));
+            require(hm == _f[z].h,"the values was modified");
+            isValidSig = Utils.ecdsa_verify(Utils.ECDSA_parameters(
+                _f[z].sig.r,_f[z].sig.s,hm,
+                EC_public_keys[_f[z].i].x,EC_public_keys[_f[z].i].y
+                ));
+            require(isValidSig == true,"Invalid ECDSA Signature");
+            h = ripemd160(abi.encodePacked(_f[z].i,_f[z].j));
+            require(isf_2d[h] == false,"You already uploaded your values");
+            isf_2d[h] = true;
+            f_2d[h] = _f[z];
+        }
+        totatKeygenValueSentCount++;
+        emit addKeygenValueEvent(totatKeygenValueSentCount);
+    }
+
+    function addVote(Utils.Elgamal_ciphertext memory _encVote,uint256 _encVoteHash,
+    uint256 _U0, uint256[] calldata _V, Utils.ECPoint memory _K) 
+    external{
+        // verify vote peroid: key_gen_end_time <= now < vote_end_time
+        require(key_gen_end_time<= block.timestamp && block.timestamp < vote_end_time,"invalid vote time");
+        
+        // hash of _K
+        bytes20 h = ripemd160(abi.encodePacked(_K.x,_K.y));
+
+        // hash of _K should not exit in K_list
+        require(K_list[h] == false,"you are already voted");
+        
+        // verify encrypted vote does not modified.
+        uint256 evh; // hashed enc vote
+        evh = uint256(keccak256(abi.encodePacked(
+            _encVote.C.x, _encVote.C.y,  
+            _encVote.D.x, _encVote.D.y
+            )));
+        require(evh == _encVoteHash,"encrypted Vote was modified.");
+
+        // verify linkable ring signature
+        bool U = Utils.verifyLRS(Utils.LRS_parameters(_encVoteHash,_U0,L,_V,H,_K,EC_public_keys));
+
+        require(U == true,"invalid linkable ring signature");
+
         // add ballot
+        ballots.push(Ballot(totalVoteCount,block.timestamp,-1,_encVoteHash,_U0,_V,_K,_encVote));
         totalVoteCount++;
-        ballots.push(Ballot(totalVoteCount,_candidateID));
 
         // add _K into K_list
         K_list[h] = true;
 
+        emit newVoteEvent(totalVoteCount);
     }
 
-    function tallyVote() public{
+    function getVotePrivateKey() public view returns(uint256){
         // verify tally time : vote_end_time <= now 
-        require(vote_end_time<= block.timestamp,"invalid tally time");
+        // require(vote_end_time<= block.timestamp,"invalid tally time");
 
-        for(uint i=1;i<=totalVoteCount;i++){
-            uint _candidate_id = ballots[i].candidate_id;
-            candidates[_candidate_id].voteCount++;
+        return Utils.setVotePrivateKey(subSecrets,min_shares);
+    }
+
+    function decryptVote(Utils.Elgamal_ciphertext calldata _encVote
+    , uint256 _votePrvKey) external pure returns(uint256){
+        return Utils.elgamal_decrypt(_encVote,_votePrvKey);
+    }
+
+    function tallyVote() external{
+        // verify tally time : vote_end_time <= now 
+        // require(vote_end_time<= block.timestamp,"invalid tally time");
+
+        // check whether the vote already tallied
+        require(isVoteTallied == false,"the vote already tallied");
+
+        uint256 votePrkKey = Utils.setVotePrivateKey(subSecrets,min_shares); //vote private key
+        uint cID; // candidate ID
+
+        for(uint i=0; i<ballots.length;i++){
+            cID = uint(Utils.elgamal_decrypt(ballots[i].encVote,votePrkKey));
+            ballots[i].candidate_id = int(cID);
+            candidates[cID].voteCount++;
         }
+        
+        isVoteTallied = true;
+
+        emit tallyVoteEvent(candidates,ballots);
     }
 
     function getElectionData() public view returns(ElectionData memory){
-        return ElectionData(id,owner,title,description,public_keys,EC_public_keys,candidateCount,voterCount,candidates,
-        post_time,key_gen_end_time,vote_end_time,secret_upload_end_time,min_shares,isTallyed,L,H);
+        return ElectionData(id,post_time,key_gen_end_time,vote_end_time
+        ,secret_upload_end_time,min_shares,candidateCount,voterCount
+        ,totalVoteCount,totatKeygenValueSentCount,totalSubSecretSentCount,
+        L,title,description,
+        public_keys,H,EC_public_keys,candidates
+        ,isVoteTallied,owner);
     } 
 }
