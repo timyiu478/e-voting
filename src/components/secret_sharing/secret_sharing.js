@@ -30,26 +30,39 @@ export function calcVotePublicKey(Fij_list){
 }
 
 export function reconstructSecret(subSecrets,min_shares){
+    if(min_shares==1){
+        return subSecrets[0].subSecret;
+    }
     let secret = new BigInteger("0",16);
     for(let i=0;i<subSecrets.length;i++){
         let value = new BigInteger(subSecrets[i].subSecret,10);
         // console.log(value.toString(10));
-        const j = subSecrets[i].i+1;
+        const j = parseInt(subSecrets[i].i)+1;
         let z = 1;
         for(let h=1;h<=min_shares;h++){
             if(h != j){
-                z = z * h/(h-j);
+                console.log("h:",h);
+                console.log("j:",j);
+                z = z * (0-h)/(j-h);
                 // console.log(z);
             }
         }
+        console.log(z);
         const frac = new Fraction(z);
         // console.log(frac);
         const numerator = frac.numerator;
         const denominator = frac.denominator;
+        console.log(numerator);
+        console.log(denominator);
+        // const tmp = value.multiply(new BigInteger((-numerator).toString(),10)).mod(N);
+        // console.log(tmp.toString(10));
+        // console.log(N.subtract(value.multiply(new BigInteger((-numerator).toString(),10).abs())).toString(10));
+        // console.log(N.subtract(value.multiply(new BigInteger((-numerator).toString(),10).abs())).divide(new BigInteger(denominator.toString(),10)).toString(10));
         value = value.multiply(new BigInteger(numerator.toString(),10)).mod(N)
             .divide(new BigInteger(denominator.toString(),10));
         // console.log(value.toString(10));
-        secret = secret.add(value);
+        secret = secret.add(value).mod(N);
+        // console.log(secret.toString(10));
     }
     console.log(secret.toString(10));
     return secret.toString(10);

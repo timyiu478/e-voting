@@ -45,8 +45,11 @@ contract VotingApp{
 
     function addElection(ElectionInit calldata _data) external{
         
-        // require minimum number of candidates and voters are 2
-        require(_data.candidates.length > 1 && _data.public_keys.length > 1,"require minimum number of candidates and voters are 2");
+        // require minimum number of candidates , voters and min_shares are 2
+        require(_data.candidates.length > 1 && 
+                _data.public_keys.length > 1 &&
+                _data.min_shares > 1
+        ,"require minimum number of candidates and voters are 2");
 
         uint _post_time = block.timestamp;
         uint _key_gen_end_time = _post_time + calc_time(_data.key_gen_time,_data.key_gen_time_unit); 
@@ -73,11 +76,6 @@ contract VotingApp{
     function getElectionAddresses() external view returns (Election[] memory){
         return electionAddresses;
     }
-
-    // function vote(uint electionID, uint candidateID,uint256 _message, uint256 _U0,uint256[] calldata _V,LRS.ECPoint calldata _K) public{
-    //     Election e = Election(electionAddresses[electionID]);
-    //     // e.addVote(candidateID,Election.LRS_parameters(_message, _U0, _V, _K));
-    // } 
 
     function getElectionData(address electionAddress) external view returns (Election.ElectionData memory){
         Election e = Election(electionAddress);

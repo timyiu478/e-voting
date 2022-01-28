@@ -39,6 +39,7 @@ import Publickeys_table_item from './elections_components/Publickeys_table_item'
 import SubSecretItem from './elections_components/SubSecret';
 import TallyResult from './elections_components/tallyResult';
 import CloseState from './elections_components/CloseState';
+import BigInteger from 'js-jsbn';
 
 export default function Elections({elections,web3,account,electionAddresses}){
 
@@ -176,6 +177,8 @@ export default function Elections({elections,web3,account,electionAddresses}){
                 console.log(receipt);
                 setIsTallied(true);
                 setIsTallying(false);
+                setBallots(receipt.returnValues.ballots);
+                setCandidates(receipt.returnValues.candidates);
                 alert("Tally Result Success!");
             }
         });
@@ -586,22 +589,24 @@ export default function Elections({elections,web3,account,electionAddresses}){
         // const subSecrets = await electionInstance.methods.getSubSecrets().call();
         // console.log(subSecrets);
         // const prkkey = await electionInstance.methods.getVotePrivateKey().call();
+        // // const prkkey = "23982541206328345696989850975008307567132712905467750900113765255400780441145";
         // console.log(prkkey);
-        // // reconstructSecret(subSecrets,min_shares);
+        // const tmp = reconstructSecret(subSecrets,min_shares);
+        // console.log(tmp);
         // const ballots = await electionInstance.methods.getBallot().call();
         // console.log(ballots);
         // const decVote = await electionInstance.methods.decryptVote(ballots[0].encVote,prkkey).call();
         // console.log(decVote);
         // for(let i=0;i<ballots.length;i++){
         //     console.log(ballots[i].encVote);
-        //     const m = elgamal_decrypt(ballots[i].encVote,new BigInteger(prkkey,10).toString(16));
+        //     const m = elgamal_decrypt(ballots[i].encVote,new BigInteger(tmp,10).toString(16));
         //     console.log(m);
         // }
         
         setIsTallied(false);
         setIsTallying(true);
         await electionInstance.methods.tallyVote()
-        .send({from:account, gas:30000000})
+        .send({from:account, gas:300000000})
         .on('error', function(error, receipt){
             setIsTallying(false);
             console.error("error:",error);
@@ -799,8 +804,8 @@ export default function Elections({elections,web3,account,electionAddresses}){
                                                         </Tab.Pane>
 
                                                         <Tab.Pane eventKey="Close" className='operations'>
-                                                            {/* <TallyResult isTallying={isTallying} isTallied={isTallied} handleTally={handleTally} /> */}
-                                                            <CloseState isTallying={isTallying} candidates={candidates} eInstance={electionInstance} publickeys={publickeys} />
+                                                            <TallyResult isTallying={isTallying} isTallied={isTallied} handleTally={handleTally} />
+                                                            <CloseState isTallying={isTallying} isTallied={isTallied} candidates={candidates} eInstance={electionInstance} publickeys={publickeys} />
                                                         </Tab.Pane>
                                                     </Tab.Content>
                                                 </Col>

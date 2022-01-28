@@ -10,10 +10,10 @@ export default function Ballots({isShowBallots,bData}){
     useEffect(()=>{
         setGrid(new Grid({
             columns: [
-                'ID', 
-                'Vote Time',
-                'Vote For',
-                'Verify'
+                {name:'ID'}, 
+                {name:'Vote Time'},
+                {name:'Vote For'},
+                {name:'Verify'}
             ],
             sort: true,
             pagination: {
@@ -21,10 +21,10 @@ export default function Ballots({isShowBallots,bData}){
                 limit: 3,
             },
             fixedHeader: true,
-            height: '300px',
+            resizable:true,
             style: { 
                 table: { 
-                  'white-space': 'nowrap'
+                    'font-size': 15
                 }
             },
             data: bData,
@@ -39,7 +39,7 @@ export default function Ballots({isShowBallots,bData}){
     },[bData]);
 
 
-    return <div className={isShowBallots?'w-100  mt-2':'d-none'} >
+    return <div className={isShowBallots?'mt-2':'d-none'} >
         <div ref={ballotsTable} className='w-100'></div>
     </div>;
 }

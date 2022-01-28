@@ -216,7 +216,7 @@ contract Election {
         // require(vote_end_time<=block.timestamp &&block.timestamp < secret_upload_end_time,"invalid subscret upload time");
         uint256 h = uint256(keccak256(abi.encodePacked(_s.subSecret,_s.i)));
         require(h == _s.h,"the subSecret or i wast modified.");
-        require(isSubSecrets[h] == false,"Your subSecret was uploaded.");
+        require(isSubSecrets[_s.i] == false,"Your subSecret was uploaded.");
         
         bool isValidSig = Utils.ecdsa_verify(Utils.ECDSA_parameters(_s.sig.r, _s.sig.s, h, 
         EC_public_keys[_s.i].x, EC_public_keys[_s.i].y));
@@ -307,6 +307,12 @@ contract Election {
         emit addKeygenValueEvent(totatKeygenValueSentCount);
     }
 
+    function verifyLRS(uint256 _encVoteHash,uint256 _U0,
+     uint256[] calldata _V, Utils.ECPoint memory _K) public view returns(bool){
+        // verify linkable ring signature
+        return Utils.verifyLRS(Utils.LRS_parameters(_encVoteHash,_U0,L,_V,H,_K,EC_public_keys));
+    }
+
     function addVote(Utils.Elgamal_ciphertext memory _encVote,uint256 _encVoteHash,
     uint256 _U0, uint256[] calldata _V, Utils.ECPoint memory _K) 
     external{
@@ -328,7 +334,7 @@ contract Election {
         require(evh == _encVoteHash,"encrypted Vote was modified.");
 
         // verify linkable ring signature
-        bool U = Utils.verifyLRS(Utils.LRS_parameters(_encVoteHash,_U0,L,_V,H,_K,EC_public_keys));
+        bool U = verifyLRS(_encVoteHash,_U0,_V,_K);
 
         require(U == true,"invalid linkable ring signature");
 

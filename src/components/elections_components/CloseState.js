@@ -6,15 +6,20 @@ import Button from 'react-bootstrap/Button';
 import BallotResult from './BallotResult';
 import Ballots from './Ballots';
 import { _ } from "gridjs-react";
-import {decimalStrToHexStr,intTopoint,publicKeyToHex} from '../linkable_ring_signature/utils';
-import {verifySig} from '../linkable_ring_signature/lrs';
+import Spinner from 'react-bootstrap/Spinner';
+import {TiTick} from 'react-icons/ti';
 
 export default function CloseState({isTallied,candidates,eInstance,publickeys}){
     const [isShowResult,setIsShowResult] = useState(false);
     const [isShowBallots,setIsShowBallots] = useState(true);
     const [bData,setBdata] = useState([]);
     const [ballots,setBallots] = useState([]);
-    
+    const [isValidLRSLoading,setIsValidLRSLoading] = useState({});
+    const [isValidLRS,setIsValidLRS] = useState({});
+    const [isVoteOnceOnlyLoading,setIsVoteOnceOnlyLoading] = useState({});
+    const [isVoteOnceOnly,setIsVoteOnceOnly] = useState({});
+        
+
     const handleShowResult = () => {
         setIsShowResult(true);
         setIsShowBallots(false);
@@ -25,39 +30,97 @@ export default function CloseState({isTallied,candidates,eInstance,publickeys}){
         setIsShowBallots(true);
     }
 
-    const handleVerfiyLRS = (ballot,publickeys) =>{
-        console.log(publickeys);
-        const sig = {
-            U0: decimalStrToHexStr(ballot.U0),
-            V: ballot.V.map(v => decimalStrToHexStr(v)),
-            K: "04" + ballot.K.x + ballot.K.y
-        }
-        console.log(sig);
-        const message = decimalStrToHexStr(ballot.encVoteHash);
-        console.log(message);
-        const isValidSig = verifySig(message,publickeys,sig);
-        console.log(isValidSig);
+    const handleVerfiyLRS = async (ballot,id) =>{
+        setIsValidLRS((prev)=>({
+            ...prev,
+            [id]:false
+        }));
+
+        setIsValidLRSLoading((prev)=>({
+            ...prev,
+            [id]:true
+        }));
+
+        const isValidLRS = await eInstance.methods.verifyLRS(
+            ballot.encVoteHash,ballot.U0,ballot.V,ballot.K
+            ).call();
+        
+        setIsValidLRS((prev)=>({
+            ...prev,
+            [id]:isValidLRS
+        }));
+
+        setIsValidLRSLoading((prev)=>({
+            ...prev,
+            [id]:false
+        }));
+
+        // console.log(isValidLRS);
     } 
 
-    useEffect(async()=>{
-        if(isTallied||1==1){
-            const ballots = await eInstance.methods.getBallot().call();
-            console.log(ballots);
+    const handleVerifyVoteOnlyOnce = async (K,id) =>{
+        setIsVoteOnceOnly((prev)=>({
+            ...prev,
+            [id]:false
+        }));
+        
+        setIsVoteOnceOnlyLoading((prev)=>({
+            ...prev,
+            [id]:true
+        }));
 
+        let count = 0;
+        // const ballots = await eInstance.methods.getBallot().call();
+        const Ks = ballots.map(b=>b.K);
+        // console.log(Ks);
+        for(let i=0;i<Ks.length;i++){
+            if(Ks[i].x == K.x && Ks[i].y == K.y){count++;}
+        }
+        console.log(count);
+        if(count == 1){
+            setIsVoteOnceOnly((prev)=>({
+                ...prev,
+                [id]:true
+            }));
+            setIsVoteOnceOnlyLoading((prev)=>({
+                ...prev,
+                [id]:false
+            }));
+        }   
+    }
+
+    useEffect(async()=>{
+        if(isTallied){
+            const ballots = await eInstance.methods.getBallot().call();
             setBallots(ballots);
+            console.log(ballots);
+        }
+    },[]);
+
+    useEffect(async()=>{
+        // console.log(candidates);
+        if(ballots.length!=0&&candidates.length!=0){
             setBdata(ballots.map(b=>[
-                b.id,
+                `${b.id}`,
                 timestampToDate(b.voteTime),
-                `${candidates[b.candidate_id].name} (id: ${b.candidate_id})`,
+                `${candidates[b.candidate_id].name} ( id: ${b.candidate_id} )`,
                 _(
                     <span className='w-100'>
-                        <Button size="sm" variant="outline-secondary" className='me-1' onClick={()=>{handleVerfiyLRS(b,publickeys)}}>Signature</Button>
-                        <Button size="sm" variant="outline-secondary" className='me'>Uniqueness</Button>
+                        <Button size="sm" variant={isValidLRS[b.id]?"success":"outline-secondary"} className='me-1' onClick={()=>{handleVerfiyLRS(b,b.id)}}>
+                            {isValidLRSLoading[b.id]?<Spinner animation="border" size="sm" />:""}
+                            {isValidLRS[b.id]&&isValidLRSLoading[b.id]==false?<TiTick fontSize={"1.1rem"} />:""}
+                            Signature
+                        </Button>
+                        <Button size="sm" variant={isVoteOnceOnly[b.id]?"success":"outline-secondary"} className='me' onClick={()=>{handleVerifyVoteOnlyOnce(b.K,b.id)}}>
+                            {isVoteOnceOnlyLoading[b.id]?<Spinner animation="border" size="sm" />:""}
+                            {isVoteOnceOnly[b.id]&&isVoteOnceOnlyLoading[b.id]==false?<TiTick fontSize={"1.1rem"} />:""}
+                            Uniqueness
+                        </Button>
                     </span>
                 )
             ]));
         }
-    },[]);
+    },[ballots,isValidLRS,isVoteOnceOnly,isValidLRSLoading,isVoteOnceOnlyLoading]);
 
     const timestampToDate = (timestamp) => {
         // console.log(timestamp);
@@ -66,8 +129,7 @@ export default function CloseState({isTallied,candidates,eInstance,publickeys}){
         return date.toString().slice(0,21);
     }
 
-    // return  <Container className={(isTallied)?"p-2 mt-2":"d-none"}>
-    return <Container>
+    return  <Container className={(isTallied)?"mt-2":"d-none"}>
         <Row>
             <div>
                 <Button className="float-end" variant={isShowBallots?"dark":"outline-dark"} onClick={handleShowBallots}>
@@ -80,7 +142,7 @@ export default function CloseState({isTallied,candidates,eInstance,publickeys}){
         </Row>
         <Row>
             <Col className="d-flex justify-content-center">
-                <BallotResult candidates={candidates} isShowResult={isShowResult} voteRate={0.5} />
+                <BallotResult voteRate={ballots.length + "/" + publickeys.length} candidates={candidates} isShowResult={isShowResult} />
                 <Ballots candidates={candidates} bData={bData} isShowBallots={isShowBallots}  />
             </Col>
         </Row>

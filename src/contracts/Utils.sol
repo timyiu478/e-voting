@@ -142,15 +142,20 @@ library Utils{
         }
     }
 
+    function modNeg(uint256 _neg, uint256 _n) internal pure returns (uint256){
+
+    }
+
     function setVotePrivateKey(SubSecretWithSig[] calldata _subSecrets, uint256 _min_shares) 
     external pure returns(uint256){
         uint256 votePrvKey;
         uint256 tmp;
-        uint256[] memory neg = new uint256[](_subSecrets.length);
-        uint negCount;
         uint j;
         uint mul;
         int divide;
+        if(_min_shares == 1){
+            return _subSecrets[0].subSecret;
+        }
         for(uint i=0;i<_subSecrets.length;i++){
             j = _subSecrets[i].i+1;
             tmp = _subSecrets[i].subSecret;
@@ -162,17 +167,13 @@ library Utils{
                     divide = divide * (int(h) - int(j));
                 }
             }
-            tmp = mulmod(tmp,mul,NN) / abs(divide);
-            if(divide >= 0){
-                votePrvKey += tmp;
+            if(divide > 0){
+                tmp = mulmod(tmp,mul,NN) / abs(divide);
             }
             else{
-                neg[negCount] = tmp;
-                negCount++;                    
+                tmp = ((NN - (mulmod(tmp,mul,NN))) / abs(divide));
             }
-        }
-        for(uint i=0;i<negCount;i++){
-            votePrvKey -= neg[i];
+            votePrvKey = addmod(tmp,votePrvKey,NN);      
         }
         return votePrvKey;
     }
@@ -192,6 +193,6 @@ library Utils{
         (CC_neg.x, CC_neg.y) = EllipticCurve.ecInv(CC.x, CC.y, PP);
         (Pm.x,Pm.y) = EllipticCurve.ecAdd(_ciphertext.D.x,_ciphertext.D.y,CC_neg.x,CC_neg.y,AA,PP);
         
-        return (Pm.x - uint256(1));
+        return (Pm.x - uint256(11));
     }
 }

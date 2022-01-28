@@ -12,7 +12,7 @@ const N = ec_params.getN();
 export function elgamal_encrypt(message,receiver_publickeyHex){
     // console.log(message);
     // Hex to BigInt
-    const m = new BigInteger(message,10).add(new BigInteger("1",10));
+    const m = new BigInteger(message,10).add(new BigInteger("11",10));
     console.log(m.toString(10));
     // Hex to EC Point, Y = receiver's publickey = x*G where x is secret
     const Y = hexToPublicKey(receiver_publickeyHex);
@@ -24,6 +24,7 @@ export function elgamal_encrypt(message,receiver_publickeyHex){
     const CC = Y.multiply(k);
     // map m to EC Point, Pm = m*G
     const Pm = mapToCurve(m);
+    console.log(Pm.getX().toBigInteger().toString(10));
     console.log(publicKeyToHex(Pm));
     // D = CC + Pm
     const D = CC.add(Pm);
@@ -44,7 +45,7 @@ export function elgamal_decrypt(ciphertext,privateKeyHex){
     const Pm = D.add(CC.negate());
     // console.log(publicKeyToHex(Pm));
     // console.log(Pm.getX().toBigInteger().toString(10));
-    const m = Pm.getX().toBigInteger().subtract(new BigInteger("1",10)).toString(10);
+    const m = Pm.getX().toBigInteger().subtract(new BigInteger("11",10)).toString(10);
     return m;
 }
 
