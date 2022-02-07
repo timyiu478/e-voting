@@ -27,7 +27,19 @@
 
 .fit_content{
     width:fit-content;
-    height: fit-content;
+}
+
+.badge_abs{
+    position: absolute;
+    bottom: 5px;
+}
+
+.state{
+    left: 60px;
+}
+
+.min_shares{
+    left: 105px;
 }
 
 .table_height{

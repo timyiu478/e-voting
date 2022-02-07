@@ -4,6 +4,8 @@ import {getSECCurveByName} from '../linkable_ring_signature/lib/sec.js';
 import {pointToXYInt,intTopoint,getRandomIntModN,
     hexToPublicKey,publicKeyToHex,mapToCurve} from '../linkable_ring_signature/utils.js';
 
+import {CPprove} from '../CPNIZKP/cpnizkp';
+
 const BN = Web3.utils.BN;
 const ec_params = getSECCurveByName('secp256r1');
 const G = ec_params.getG();
@@ -12,7 +14,7 @@ const N = ec_params.getN();
 export function elgamal_encrypt(message,receiver_publickeyHex){
     // console.log(message);
     // Hex to BigInt
-    const m = new BigInteger(message,10).add(new BigInteger("11",10));
+    const m = new BigInteger(message,10).add(new BigInteger("1",10));
     console.log(m.toString(10));
     // Hex to EC Point, Y = receiver's publickey = x*G where x is secret
     const Y = hexToPublicKey(receiver_publickeyHex);
@@ -33,11 +35,14 @@ export function elgamal_encrypt(message,receiver_publickeyHex){
     return [pointToXYInt(C),pointToXYInt(D)];
 }
 
-export function elgamal_decrypt(ciphertext,privateKeyHex){
+export function elgamal_decrypt(ciphertext,privateKeyHex,publicKeyHex){
     const C = intTopoint(ciphertext[0][0],ciphertext[0][1]);
     const D = intTopoint(ciphertext[1][0],ciphertext[1][1]);
+    
     // Hex to BigInt, x = privateKey
     const x = new BigInteger(privateKeyHex,16);
+    const y = hexToPublicKey(publicKeyHex);
+
     // CC = x*C = x*k*G
     const CC = C.multiply(x);
     console.log(CC);
@@ -45,8 +50,12 @@ export function elgamal_decrypt(ciphertext,privateKeyHex){
     const Pm = D.add(CC.negate());
     // console.log(publicKeyToHex(Pm));
     // console.log(Pm.getX().toBigInteger().toString(10));
-    const m = Pm.getX().toBigInteger().subtract(new BigInteger("11",10)).toString(10);
-    return m;
+    const m = Pm.getX().toBigInteger().subtract(new BigInteger("1",10)).toString(10);
+    
+    // return m , CP proof , CC = x*k*G
+    return [m,
+        CPprove(G,C,x),
+        [CC.getX().toBigInteger().toString(10),CC.getY().toBigInteger().toString(10)]];
 }
 
 function test(){
@@ -55,7 +64,7 @@ function test(){
     const pubKey = "043c91f9524d38ebcd96ce5e6038f3dc4d5bd5d0085cd0038e3ac17711a1a7c6621933488377c145a2e821d475246214dcede3d084694f1e0650b983d53f7f4f77";
     
     const ciphertext = elgamal_encrypt(message,pubKey);
-    const m = elgamal_decrypt(ciphertext,prkKey);
+    const m = elgamal_decrypt(ciphertext,prkKey,pubKey)[0];
     console.log(m);
     console.log(message);
     console.log("recover: ",m==message);

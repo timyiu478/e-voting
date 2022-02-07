@@ -50,10 +50,8 @@ const App = () => {
       if(eAddresses!=null){
         eAddresses.forEach(address => {
           vApp.methods.getElectionData(address).call().then((data)=>{
-            setElections((elections)=>[data, ...elections]);
-            console.log(data);
+            setElections((elections)=>[...elections, data]);
           });
-          
         });
       }
 
@@ -68,8 +66,8 @@ const App = () => {
                 const eData = receipt.returnValues.eData;
                 const eAddress = receipt.returnValues.eAddress;
                 // console.log(result);
-                setElections((elections)=>[eData, ...elections]);
-                setElectionAddresses((eAddresses)=>[eAddress, ...eAddresses]);
+                setElections((elections)=>[...elections, eData]);
+                setElectionAddresses((eAddresses)=>[...eAddresses, eAddress]);
 
                 alert("Create New Election success");
             }

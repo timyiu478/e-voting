@@ -1,7 +1,9 @@
 import BigInteger from '../linkable_ring_signature/lib/jsbn.js';
 import {getSECCurveByName} from '../linkable_ring_signature/lib/sec.js';
 import {Fraction} from 'fractional';
-import {pointToInt,intTopoint,hexToPublicKey,publicKeyToHex,mapToCurve} from '../linkable_ring_signature/utils.js';
+import {getPublicKeyHex,pointToInt,intTopoint,hexToPublicKey,publicKeyToHex,mapToCurve} from '../linkable_ring_signature/utils.js';
+import Web3 from 'web3';
+import Big from 'big.js';
 
 const ec_params = getSECCurveByName('secp256r1');
 const N = ec_params.getN();
@@ -29,49 +31,46 @@ export function calcVotePublicKey(Fij_list){
     return publicKeyToHex(sum);
 }
 
+
 export function reconstructSecret(subSecrets,min_shares){
-    if(min_shares==1){
-        return subSecrets[0].subSecret;
-    }
-    let secret = new BigInteger("0",16);
-    for(let i=0;i<subSecrets.length;i++){
-        let value = new BigInteger(subSecrets[i].subSecret,10);
+    const n = new Big (N.toString(10));
+    
+    console.log(subSecrets);
+    const H = subSecrets.map(s=>parseInt(s.i)+1);
+    let secret = new Big ("0");
+    for(let i=0;i<min_shares;i++){
+        let value = new Big (subSecrets[i].subSecret.toString());
         // console.log(value.toString(10));
         const j = parseInt(subSecrets[i].i)+1;
-        let z = 1;
-        for(let h=1;h<=min_shares;h++){
-            if(h != j){
-                console.log("h:",h);
-                console.log("j:",j);
-                z = z * (0-h)/(j-h);
+        let z = 1; 
+        for(let h=0;h<min_shares;h++){
+            // console.log("i:",i);
+            if(H[h] != j){
+                // console.log("h:",H[h]);
+                // console.log("j:",j);
+                z = z * H[h] / (H[h]-j);
                 // console.log(z);
             }
         }
         console.log(z);
-        const frac = new Fraction(z);
-        // console.log(frac);
-        const numerator = frac.numerator;
-        const denominator = frac.denominator;
-        console.log(numerator);
-        console.log(denominator);
-        // const tmp = value.multiply(new BigInteger((-numerator).toString(),10)).mod(N);
-        // console.log(tmp.toString(10));
-        // console.log(N.subtract(value.multiply(new BigInteger((-numerator).toString(),10).abs())).toString(10));
-        // console.log(N.subtract(value.multiply(new BigInteger((-numerator).toString(),10).abs())).divide(new BigInteger(denominator.toString(),10)).toString(10));
-        value = value.multiply(new BigInteger(numerator.toString(),10)).mod(N)
-            .divide(new BigInteger(denominator.toString(),10));
-        // console.log(value.toString(10));
-        secret = secret.add(value).mod(N);
-        // console.log(secret.toString(10));
+        value = value.times(new Big(z.toString()));
+        secret = secret.plus(value);     
     }
-    console.log(secret.toString(10));
-    return secret.toString(10);
+    
+    if(secret.lt(new Big(0))){
+        secret = n.minus(secret.abs().mod(n));
+    }
+
+    secret = secret.mod(n).round().toFixed().toString(10);
+    console.log(secret);
+    console.log("PubKey:",getPublicKeyHex(secret));
+    return secret;
 }
 
 export function sumOFfiOFJ(values){
     let sum = new BigInteger("0",10);
     for(let i=0;i<values.length;i++){
-        sum = sum.add(new BigInteger(values[i]),10);
+        sum = sum.add(new BigInteger(values[i].toString(),10));
     }
     sum = sum.mod(N);
     console.log(sum.toString(10));
@@ -88,13 +87,36 @@ export function calcPolynomialOfXModP(X,polynomial,P){
     return tmp.toString(10);
 }
 
+export function verifyfi_ofJ(fi_ofJ,Fij_list,i,min_shares){
+    // console.log(Fij_list);
+    let rhs;
+    for(let l=0;l<min_shares;l++){
+        const F = intTopoint(Fij_list[l].p.x,Fij_list[l].p.y);
+        // console.log(Fij_list[l]);
+        console.log(i.toString(),Fij_list[l].j.toString());
+        i = new BigInteger(i.toString(),10);
+        const j = new BigInteger(Fij_list[l].j.toString(),10);
+        // console.log(i.pow(j).toString(10));
+        if(l==0){
+            rhs = F.multiply(i.pow(j));
+        }else{
+            rhs = rhs.add(F.multiply(i.pow(j)));
+        }
+    }
+    // console.log(fi_ofJ);
+    const lhs = G.multiply(new BigInteger(fi_ofJ,10));
+    // console.log(lhs.equals(rhs));
+
+    return lhs.equals(rhs);
+}
+
 function test(){
     // const polynomial = [120,-10,3];
     // calcPolynomialOfXModP(4,polynomial,"ffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551");
     const sumOFfiOFJval = [
-        sumOFfiOFJ(["69258752223284674009422629570085538449723758296629691274916082715351431263802","1243201215700474681302263772287066353410771561941296666528319198178235953578","48958848534770202080737061424562713408221754772056664544542808547833154507506"]),
-        sumOFfiOFJ(["74066025048073252657516189565891944914484058893082189191140986683749137777155","44796766521570016199654169345299056005402425150362284344501126933126386903831","55512378762753309849267394000207734479746660994437111506069957556375496482693"]),
-        sumOFfiOFJ(["66533068707483902577564854984925362059477354764481826091228830699946661713513","60258279894690932703460312843800131581389105523257859200161979883002513283479","2182637780088375481964064605263764260537693952837856524823577271649937696592"])
+        "103512933505582254678488296736776303071223307690861869161636576740978413898863", 
+        "100678200993634215467152872313277313886866317070620302918844083923785284681287",
+        "24929851752775209751567011669356329451354953494511897872728697417882731459116"
     ];
     console.log(sumOFfiOFJval);
 
@@ -115,9 +137,9 @@ function test(){
     // const pubKey = calcVotePublicKey(Fij_list);
 
     const xi = [
-        new BigInteger('52111250233118166633284174997506142665196452975124332342554118794753542173454',10),
-        new BigInteger('45389673187438556911102043074171736155411099982130656508665815739226572477089',10),
-        new BigInteger('98314136306495300939070513827736274575959930509832275982664389307091423815400',10)
+        new BigInteger('14949099788353303707800889399671507645571066715461472951355284088200842960096',10),
+        new BigInteger('36581782869174500100563687655162286227225873325952089055983111988164041136363',10),
+        new BigInteger('52110549631875710053651718253462747329230546497604453224792623479074986012330',10)
     ];
     let tmp = new BigInteger("0",10);
     tmp = tmp.add(xi[0]).add(xi[1]).add(xi[2]).mod(N);

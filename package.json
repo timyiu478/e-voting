@@ -7,6 +7,8 @@
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "big-integer": "^1.6.51",
+    "big.js": "^6.1.1",
+    "bigfloat": "^0.1.1",
     "bigi": "^1.1.0",
     "bn.js": "^5.2.0",
     "bootstrap": "^5.1.3",

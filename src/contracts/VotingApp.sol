@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 <0.9.0;
 
-import './Utils.sol';
+import './Secp256r1.sol';
 import "./Election.sol";
 
 contract VotingApp{
@@ -19,12 +19,14 @@ contract VotingApp{
         string title;
         string description;
         string[] public_keys;
-        Utils.ECPoint[] EC_public_keys;
+        Secp256r1.ECPoint[] EC_public_keys;
         string[] candidates;
         uint key_gen_time;
+        uint key_ver_time;
         uint vote_time;
         uint secret_upload_time;
         uint key_gen_time_unit;
+        uint key_ver_time_unit;
         uint vote_time_unit;
         uint secret_upload_time_unit;
         uint min_shares;
@@ -53,19 +55,19 @@ contract VotingApp{
 
         uint _post_time = block.timestamp;
         uint _key_gen_end_time = _post_time + calc_time(_data.key_gen_time,_data.key_gen_time_unit); 
-        uint _vote_end_time = _key_gen_end_time + calc_time(_data.vote_time,_data.vote_time_unit); 
+        uint _key_ver_end_time = _key_gen_end_time + calc_time(_data.key_ver_time,_data.key_ver_time_unit); 
+        uint _vote_end_time = _key_ver_end_time + calc_time(_data.vote_time,_data.vote_time_unit); 
         uint _secret_upload_end_time = _vote_end_time + calc_time(_data.secret_upload_time,_data.secret_upload_time_unit); 
         
         electionAddresses.push(new Election(msg.sender,electionCount,
-        _post_time,_key_gen_end_time,_vote_end_time,_secret_upload_end_time));
+        _data.title,_data.description,_data.min_shares,
+        _post_time,_key_gen_end_time,_key_ver_end_time,
+        _vote_end_time,_secret_upload_end_time));
 
         Election e = Election(electionAddresses[electionCount]);
-        e.setTitle(_data.title);
-        e.setDescription(_data.description);
         e.setPublicKeys(_data.public_keys);
         e.setECpublickeys(_data.EC_public_keys);
         e.setCandidates(_data.candidates);
-        e.setMinShares(_data.min_shares);
 
         electionCount++;
 

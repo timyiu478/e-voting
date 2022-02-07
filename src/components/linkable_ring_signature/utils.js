@@ -36,7 +36,11 @@ export function getPublicKeyXY(privateKeyString){
     return [X,Y];
 }
 
-
+export function getPublicKeyHex(privateKeyString){
+    const prvKey = new BigInteger(privateKeyString,10);
+    const pubKey = G.multiply(prvKey);
+    return publicKeyToHex(pubKey);
+}
 
 export function genKeyPair(){
     let privateKey = getRandomInt();

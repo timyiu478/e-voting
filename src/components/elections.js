@@ -33,13 +33,12 @@ import ElectionABI from '../abis/Election.json';
 import { saveAs } from 'file-saver';
 import {ec_sign} from './ecdsa/ecdsa';
 import {elgamal_encrypt,elgamal_decrypt} from './elgamal/elgamal';
-import {calcVotePublicKey,calcPolynomialOfXModP,sumOFfiOFJ,reconstructSecret} from './secret_sharing/secret_sharing';
+import {calcVotePublicKey,calcPolynomialOfXModP,sumOFfiOFJ,reconstructSecret,verifyfi_ofJ} from './secret_sharing/secret_sharing';
 import Candidates_table_item from './elections_components/Candidates_table_item';
 import Publickeys_table_item from './elections_components/Publickeys_table_item';
 import SubSecretItem from './elections_components/SubSecret';
 import TallyResult from './elections_components/tallyResult';
 import CloseState from './elections_components/CloseState';
-import BigInteger from 'js-jsbn';
 
 export default function Elections({elections,web3,account,electionAddresses}){
 
@@ -52,6 +51,7 @@ export default function Elections({elections,web3,account,electionAddresses}){
     const [post_date,setPostdate] = useState("");
     const [vote_end_date,setVoteenddate] = useState("");
     const [key_gen_end_date,setKeygenenddate] = useState("");
+    const [key_ver_end_date,setKeygenverdate] = useState("");
     const [secret_upload_end_date,setSecretuploadenddate] = useState("");
     const [privateKey,setPrivateKey] = useState("");
     const [selectedState,setSelectedState] = useState("");
@@ -73,6 +73,8 @@ export default function Elections({elections,web3,account,electionAddresses}){
     const [fi_ofJ_list_signed,setfi_ofJ_list_signed] = useState([]);
     const [subSecretwithSig,setSubSecretWithSig] = useState([]);
     const [ballots,setBallots] = useState([]);
+    const [disqualifiedVoters,setDisqualifiedVoters] = useState([]);
+    const [disqualifiedVotersReportPar,setDisqualifiedVotersReportPar] = useState([]);
 
     const [elecitonID,setElecitonID] = useState(-1);
     const [publickeyIndex,setPublickeyIndex] = useState(0);
@@ -100,6 +102,9 @@ export default function Elections({elections,web3,account,electionAddresses}){
     const [isSendSubSecretLoading,setIsSendSubSecretLoading] = useState(false);
     const [isTallied,setIsTallied] = useState(false);
     const [isTallying,setIsTallying] = useState(false);
+    const [isKeyValValid,setIsKeyValValid] = useState(false);
+    const [isKeyValVerifying,setIsKeyValVerifying] = useState(false);
+    const [isReportingVoters,setIsReportingVoters] = useState(false);
 
     const [electionInstance,setelectionInstace] = useState(null);
     const [LRSignature,setLRSignature] = useState(null);
@@ -109,15 +114,16 @@ export default function Elections({elections,web3,account,electionAddresses}){
         setTitle(e.title);
         setDescription(e.description);
         setOwner(e.owner);
-        setState(determineState(e.key_gen_end_time,e.vote_end_time,e.secret_upload_end_time));
+        setState(determineState(e.key_gen_end_time,e.key_ver_end_time,e.vote_end_time,e.secret_upload_end_time));
         setPostdate(timestampToDate(e.post_time));
         setVoteenddate(timestampToDate(e.vote_end_time));
         setKeygenenddate(timestampToDate(e.key_gen_end_time));
+        setKeygenverdate(timestampToDate(e.key_ver_end_time));
         setSecretuploadenddate(timestampToDate(e.secret_upload_end_time));
         setPublickeys(e.public_keys);
         setCandidates(e.candidates);
         setIsselectedelection(true);
-        setSelectedState(determineState(e.key_gen_end_time,e.vote_end_time,e.secret_upload_end_time));
+        setSelectedState(determineState(e.key_gen_end_time,e.key_ver_end_time,e.vote_end_time,e.secret_upload_end_time));
         setElecitonID(e.id);
         setElectionAddress(electionAddresses[e.id]);
         setMinShares(e.min_shares);
@@ -125,12 +131,22 @@ export default function Elections({elections,web3,account,electionAddresses}){
         setTotalSubSecretSentCount(e.totalSubSecretSentCount);
         setIsTallied(e.isVoteTallied);
         setTotalVoteCount(e.totalVoteCount);
+        if(e.isVoteTallied){
+            setBallots(e.ballots);
+        }
+        
+        setDisqualifiedVoters(e.illegitimate_voter_indeces);
 
         const eInstance = new web3.eth.Contract(ElectionABI['abi'],electionAddresses[e.id]);
         setelectionInstace(eInstance);
-        
+    }
+
+    useEffect(()=>{
+        if(electionInstance == null){
+            return;
+        }
         // new Vote event 
-        eInstance.events.newVoteEvent({},async (error, receipt)=>{
+        electionInstance.events.newVoteEvent({},async (error, receipt)=>{
             if(error){
                 console.error(error);
                 setIsSendVoteLoading(false);
@@ -143,20 +159,20 @@ export default function Elections({elections,web3,account,electionAddresses}){
             }
         });
         // new add KeygenValue event 
-        eInstance.events.addKeygenValueEvent({},async (error, receipt)=>{
+        electionInstance.events.addKeygenValueEvent({},async (error, receipt)=>{
             if(error){
                 console.error(error);
                 setIsSendValueLoading(false);
-                alert("Add KeyGen Values Failed");
+                alert("Add Shares Failed");
             }else{
                 // console.log(receipt);
                 setkeyGenValueSentVoterCount(receipt.returnValues.totatKeygenValueSentCount);
                 setIsSendValueLoading(false);
-                alert("Add KeyGen Values Success!");
+                alert("Add Shares Success!");
             }
         });
         // new add SubSecret event 
-        eInstance.events.addSubSecretEvent({},async (error, receipt)=>{
+        electionInstance.events.addSubSecretEvent({},async (error, receipt)=>{
             if(error){
                 console.error(error);
                 setIsSendSubSecretLoading(false);
@@ -169,7 +185,7 @@ export default function Elections({elections,web3,account,electionAddresses}){
             }
         });
         // new tally election result event 
-        eInstance.events.tallyVoteEvent({},async (error, receipt)=>{
+        electionInstance.events.tallyVoteEvent({},async (error, receipt)=>{
             if(error){
                 console.error(error);
                 alert("Tally Result Failed");
@@ -182,20 +198,34 @@ export default function Elections({elections,web3,account,electionAddresses}){
                 alert("Tally Result Success!");
             }
         });
-    }
+        // report voters event 
+        electionInstance.events.verifySharesEvent({},async (error, receipt)=>{
+            if(error){
+                console.error(error);
+                alert("Report Voter Failed");
+            }else{
+                console.log(receipt);
+                setIsReportingVoters(false);
+                setDisqualifiedVoters(receipt.returnValues.illegitimate_voter_indeces);
+                alert("Disqualified Voters Indece Updated");
+            }
+        });
+    },[electionInstance,elections,electionAddresses]);
 
     const state_color_mapping = {
-        'Key Gen': 'primary',
-        'Vote': 'warning',
+        'Shares Distribution': 'primary',
+        'Shares Verification': 'warning',
+        'Vote': 'success',
         'Secret Upload': 'danger',
         'Close': 'info'
     }
 
-    const determineState = (key_gen_end_time,vote_end_time,secret_upload_end_time) =>{
+    const determineState = (key_gen_end_time,key_ver_end_time,vote_end_time,secret_upload_end_time) =>{
         const now = Date.now();
         // console.log(now);
         // console.log(key_gen_end_time);
-        if(now < key_gen_end_time*1000) return 'Key Gen';
+        if(now < key_gen_end_time*1000) return 'Shares Distribution';
+        if(now < key_ver_end_time*1000) return 'Shares Verification';
         if(now < vote_end_time*1000) return 'Vote';
         if(now < secret_upload_end_time*1000) return 'Secret Upload';
         return 'Close';
@@ -319,7 +349,7 @@ export default function Elections({elections,web3,account,electionAddresses}){
                     ciphertext,
                     fi_ofJ_list[z][1],  // i
                     fi_ofJ_list[z][2],  // j
-                    h
+                    h   // hash of (ciphertext + i + j)
                 ]); 
             }catch{
                 setIsEncryptedValuesLoading(false);
@@ -341,19 +371,6 @@ export default function Elections({elections,web3,account,electionAddresses}){
             alert(error.message);
             // console.error("error:",error);
         });
-    }
-
-    const getF0 = async () =>{
-        const F0 = await electionInstance.methods.getF0().call();
-        console.log(F0);
-        return F0;
-    }
-
-    const getF = async () =>{
-        const j = publickeyIndex;
-        const F = await electionInstance.methods.getF(j).call();
-        console.log(F);
-        return F;
     }
 
     const getfi_OFJ = async () => {
@@ -380,21 +397,13 @@ export default function Elections({elections,web3,account,electionAddresses}){
         const tmp = await getfi_OFJ();
         console.log(tmp.length);
         for(let i=0;i<tmp.length;i++){
-            const m = elgamal_decrypt(tmp[i].ciphertext,privateKey);
+            const m = elgamal_decrypt(tmp[i].ciphertext,privateKey,publickeys[publickeyIndex])[0];
             console.log(m);
             values.push(m);
         }
         // console.log(values);
         return values;
     }
-
-    const getVotePublicKey = async () =>{
-        const F0 = await getF0();
-        const votePubKey = calcVotePublicKey(F0);
-        setVotePubKey(votePubKey);
-        return votePubKey;
-    }
-
 
     const handleSendKeyGenValues = async () => {
         
@@ -472,8 +481,8 @@ export default function Elections({elections,web3,account,electionAddresses}){
                         election={e} 
                         post_date = {timestampToDate(e.post_time)}
                         close_date = {timestampToDate(e.secret_upload_end_time)}
-                        state_badge = {state_color_mapping[determineState(e.key_gen_end_time,e.vote_end_time,e.secret_upload_end_time)]}
-                        state = {determineState(e.key_gen_end_time,e.vote_end_time,e.secret_upload_end_time)}           
+                        state_badge = {state_color_mapping[determineState(e.key_gen_end_time,e.key_ver_end_time,e.vote_end_time,e.secret_upload_end_time)]}
+                        state = {determineState(e.key_gen_end_time,e.key_ver_end_time,e.vote_end_time,e.secret_upload_end_time)}           
                     />
                 </div>
     });
@@ -586,13 +595,14 @@ export default function Elections({elections,web3,account,electionAddresses}){
     }
 
     const handleTally = async () =>{
-        // const subSecrets = await electionInstance.methods.getSubSecrets().call();
-        // console.log(subSecrets);
-        // const prkkey = await electionInstance.methods.getVotePrivateKey().call();
-        // // const prkkey = "23982541206328345696989850975008307567132712905467750900113765255400780441145";
-        // console.log(prkkey);
-        // const tmp = reconstructSecret(subSecrets,min_shares);
-        // console.log(tmp);
+        const subSecrets = await electionInstance.methods.getSubSecrets().call();
+        console.log(subSecrets);
+        const tmp = reconstructSecret(subSecrets,min_shares);
+        console.log(tmp);
+        const testPrkKey = await electionInstance.methods.verfiyVotePrivateKey(tmp)
+        .call();
+        console.log(testPrkKey);
+        console.log("VotePubKey:",votePubKey);
         // const ballots = await electionInstance.methods.getBallot().call();
         // console.log(ballots);
         // const decVote = await electionInstance.methods.decryptVote(ballots[0].encVote,prkkey).call();
@@ -605,12 +615,57 @@ export default function Elections({elections,web3,account,electionAddresses}){
         
         setIsTallied(false);
         setIsTallying(true);
-        await electionInstance.methods.tallyVote()
+        await electionInstance.methods.tallyVote(tmp)
         .send({from:account, gas:300000000})
         .on('error', function(error, receipt){
             setIsTallying(false);
             console.error("error:",error);
         });
+    }
+
+    const handleVerKeyGenValues = async () =>{
+        if(privateKey == ""){
+            alert("Please input your private key");
+            return;
+        }
+        setIsKeyValVerifying(true);
+        setIsKeyValValid(false);
+        let inValid = [];
+        const f = await getfi_OFJ();
+        console.log(f);
+        for(let i=0;i<publickeys.length;i++){
+            const Fij_list = await electionInstance.methods.getF(i).call();
+            // console.log(Fij_list);
+            // console.log(f.find(fi_ofJ=>fi_ofJ.i==i).ciphertext);
+            const tmp = elgamal_decrypt(
+                f.find(fi_ofJ=>fi_ofJ.i==i).ciphertext,
+                privateKey,publickeys[publickeyIndex]);
+            const fi_ofJ = tmp[0];
+            const CPproof = tmp[1];
+            const H2 = tmp[2];
+            console.log(fi_ofJ);
+            console.log(CPproof);
+            console.log(H2);
+            if(!verifyfi_ofJ(fi_ofJ,Fij_list,parseInt(publickeyIndex)+1,min_shares)){
+                inValid.push([H2,i,parseInt(publickeyIndex)+1,CPproof]);
+            }
+            setDisqualifiedVotersReportPar(inValid);
+        }
+        setIsKeyValVerifying(false);
+        if(inValid.length == 0){
+            setIsKeyValValid(true);
+        }else{
+            alert("Disqualified Voters found!\nPlease report them!");
+        }
+        
+        console.log(inValid);
+    }
+
+    const handleReportVoters = async () =>{
+        setIsReportingVoters(true);
+        await electionInstance.methods.setDisqualifiedPubKeyIndece(
+            disqualifiedVotersReportPar
+            ).send({from: account,gas:30000000});
     }
 
     return (
@@ -647,17 +702,19 @@ export default function Elections({elections,web3,account,electionAddresses}){
                                         <Row className="p-1"><strong>Title:</strong><small className='fit_content'>{title}</small></Row>
                                         <Row className="p-1"><strong>Description:</strong><small className='fit_content'>{description}</small></Row>
                                         <Row className="p-1"><strong>Owner:</strong><small className='fit_content'>{owner}</small></Row>
-                                        <Row className="p-1"><strong className='fit_content pe-0'>State:</strong><small className='fit_content'><Badge bg={state_color_mapping[state]}>{state}</Badge></small></Row>
+                                        <Row className="p-1" style={{position: "relative"}}><strong className='fit_content pe-0'>State:</strong><small className='fit_content badge_abs state'><Badge bg={state_color_mapping[state]}>{state}</Badge></small></Row>
+                                        <Row className="p-1" style={{position: "relative"}}><strong className='fit_content pe-0'>Min Shares:</strong><small className='fit_content badge_abs min_shares'><Badge bg={"secondary"}>{min_shares}</Badge></small></Row>
                                     </Col>
                                     <Col xs={6} className=''>
-                                        <Row className="p-1"><strong>Key Generation Period:</strong> <small className="text-muted">{post_date} - {key_gen_end_date}</small></Row>
-                                        <Row className="p-1"><strong>Vote Period:</strong> <small className="text-muted">{key_gen_end_date} - {vote_end_date}</small> </Row>
+                                        <Row className="p-1"><strong>Shares Distribution Period:</strong> <small className="text-muted">{post_date} - {key_gen_end_date}</small></Row>
+                                        <Row className="p-1"><strong>Shares Verification Period:</strong> <small className="text-muted">{key_gen_end_date} - {key_ver_end_date}</small></Row>
+                                        <Row className="p-1"><strong>Vote Period:</strong> <small className="text-muted">{key_ver_end_date} - {vote_end_date}</small> </Row>
                                         <Row className="p-1"><strong >Secret Upload Period:</strong> <small className="text-muted">{vote_end_date} - {secret_upload_end_date}</small></Row>
                                     </Col>
                                 </Row>
                                 <Row className="pt-2">
                                     <Col className='table_height'>
-                                        <strong className="p-1">Candidates: </strong>
+                                        <strong className="p-1">Candidates:</strong>
                                         <Scrollbars
                                             autoHide
                                             autoHideTimeout={1000}
@@ -679,7 +736,7 @@ export default function Elections({elections,web3,account,electionAddresses}){
                                 </Row>
                                 <Row className='mt-3 pt-2'>
                                     <Col className='table_height'>
-                                        <strong className="p-1">Voter Public keys: </strong>
+                                        <strong className="p-1">Voter Public keys: <span>(<span className='text-danger text-decoration-line-through'>Index,Key</span> =  Disqualified)</span></strong>
                                         <Scrollbars
                                             autoHide
                                             autoHideTimeout={1000}
@@ -693,7 +750,7 @@ export default function Elections({elections,web3,account,electionAddresses}){
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <Publickeys_table_item publickeys={publickeys} />
+                                                        <Publickeys_table_item publickeys={publickeys} disqualifiedVoters={disqualifiedVoters} />
                                                     </tbody>
                                             </Table>
                                         </Scrollbars>   
@@ -711,8 +768,13 @@ export default function Elections({elections,web3,account,electionAddresses}){
                                                 <Col sm={2}>
                                                     <Nav fill variant='pills' className="flex-column">
                                                         <Nav.Item>
-                                                            <Nav.Link eventKey="Key Gen">
-                                                                Key Generation
+                                                            <Nav.Link eventKey="Shares Distribution">
+                                                                Shares Distribution
+                                                            </Nav.Link>
+                                                        </Nav.Item>
+                                                        <Nav.Item>
+                                                            <Nav.Link eventKey="Shares Verification">
+                                                                Shares Verification
                                                             </Nav.Link>
                                                         </Nav.Item>
                                                         <Nav.Item>
@@ -734,7 +796,7 @@ export default function Elections({elections,web3,account,electionAddresses}){
                                                 </Col>
                                                 <Col sm={10} className="p-0">
                                                     <Tab.Content className=''>
-                                                        <Tab.Pane eventKey="Key Gen" className='operations'>
+                                                        <Tab.Pane eventKey="Shares Distribution" className='operations'>
                                                             <PrivateKey_item k="vote_priv" privateKey={privateKey} handlePrivateKeyChange={handlePrivateKeyChange} />
                                                             <Row>
                                                                 <Col>
@@ -757,6 +819,24 @@ export default function Elections({elections,web3,account,electionAddresses}){
                                                             <Badge_item isLoading={isKeyGenSignatureLoading} isDone={isKeyGenSignature} text="Personal Signature" />
                                                             <Badge_item isDone={isEncryptedValues} isLoading={isEncryptedValuesLoading} text="Encrypted Values" />
                                                         </Tab.Pane> 
+
+                                                        <Tab.Pane eventKey="Shares Verification" className='operations'>
+                                                            <PrivateKey_item k="vote_priv" privateKey={privateKey} handlePrivateKeyChange={handlePrivateKeyChange} />
+                                                            <Row>
+                                                                <Col sm={6}>
+                                                                    <Publickey_index_item k="keygen_pub" publickeyIndex={publickeyIndex} handlePublicKeyIndexChange={handlePublicKeyIndexChange} publickeys={publickeys} />
+                                                                </Col>
+                                                            </Row>
+                                                            <div className='mt-4 mb-5'>
+                                                                <Button className=" me-2" variant="light" onClick={handleVerKeyGenValues}>Ver Values</Button>
+                                                                <Button className="me-2" variant="dark" onClick={handleReportVoters} disabled={isReportingVoters} >
+                                                                    {(isReportingVoters)?<span><Spinner animation="border" size="sm" /> Reporting</span>
+                                                                    : "Report Voter(s)"}
+                                                                </Button>
+                                                            </div>
+                                                            # of Disqualified voter : <strong>{disqualifiedVoters.length}</strong>
+                                                            <Badge_item isLoading={isKeyValVerifying} isDone={isKeyValValid} text="Valid Values" />
+                                                        </Tab.Pane>
 
                                                         <Tab.Pane eventKey="Vote" className='operations'>
                                                             <PrivateKey_item k="vote_priv" privateKey={privateKey} handlePrivateKeyChange={handlePrivateKeyChange} />
@@ -805,7 +885,7 @@ export default function Elections({elections,web3,account,electionAddresses}){
 
                                                         <Tab.Pane eventKey="Close" className='operations'>
                                                             <TallyResult isTallying={isTallying} isTallied={isTallied} handleTally={handleTally} />
-                                                            <CloseState isTallying={isTallying} isTallied={isTallied} candidates={candidates} eInstance={electionInstance} publickeys={publickeys} />
+                                                            <CloseState isTallying={isTallying} ballots={ballots} isTallied={isTallied} candidates={candidates} eInstance={electionInstance} publickeys={publickeys} />
                                                         </Tab.Pane>
                                                     </Tab.Content>
                                                 </Col>

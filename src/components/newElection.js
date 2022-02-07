@@ -22,9 +22,11 @@ export default function NewElection({handleCloseNewElection, votingApp, account}
     const [voter_options,setVoterOptions] = useState([]);
     const [min_shares,set_min_shares] = useState(0); 
     const [key_generation_time,set_key_generation_time] = useState(0); 
+    const [key_verification_time,set_key_verification_time] = useState(0); 
     const [vote_time,set_vote_time] = useState(0); 
     const [secret_upload_time,set_secret_upload_time] = useState(0); 
     const [key_generation_time_unit,set_key_generation_time_unit] = useState(0); 
+    const [key_verification_time_unit,set_key_verification_time_unit] = useState(0); 
     const [vote_time_unit,set_vote_time_unit] = useState(0); 
     const [secret_upload_time_unit,set_secret_upload_time_unit] = useState(0); 
 
@@ -48,6 +50,11 @@ export default function NewElection({handleCloseNewElection, votingApp, account}
         // console.log(e.target.value);
     }
 
+    const handleKegVerTimeChange = (e)=>{
+        set_key_verification_time(e.target.value);
+        // console.log(e.target.value);
+    }
+
     const handleVoteTimeChange = (e)=>{
         set_vote_time(e.target.value);
         // console.log(e.target.value);
@@ -60,6 +67,11 @@ export default function NewElection({handleCloseNewElection, votingApp, account}
 
     const handleKegGenTimeUnitChange = (e)=>{
         set_key_generation_time_unit(e.target.value);
+        // console.log(e.target.value);
+    }
+
+    const handleKegVerTimeUnitChange = (e)=>{
+        set_key_verification_time_unit(e.target.value);
         // console.log(e.target.value);
     }
 
@@ -110,8 +122,8 @@ export default function NewElection({handleCloseNewElection, votingApp, account}
         console.log(ec_publickeys);
         votingApp.methods.addElection(
             [title, description,voters,ec_publickeys, candidates, 
-            key_generation_time,vote_time,secret_upload_time,
-            key_generation_time_unit,vote_time_unit,secret_upload_time_unit,min_shares]
+            key_generation_time,key_verification_time,vote_time,secret_upload_time,
+            key_generation_time_unit,key_verification_time_unit,vote_time_unit,secret_upload_time_unit,min_shares]
         ).send({from: account, gas:300000000})
         .on('error', function(error, receipt){
             console.error("error:",error); 
@@ -181,11 +193,24 @@ export default function NewElection({handleCloseNewElection, votingApp, account}
 
                 <div className='row g-3'>
                     <div className='col-md'>
-                        <strong className='ps-1'>Key Generation Time</strong>
+                        <strong className='ps-1'>Shares Distribution Time</strong>
                         <InputGroup className='mt-1 mb-4'>
                             <Form.Control value={key_generation_time} type="number"  min={0} onChange={handleKegGenTimeChange} />
                             <FloatingLabel label="Unit">
                                 <Form.Select value={key_generation_time_unit} onChange={handleKegGenTimeUnitChange}  aria-label="Time Unit of key generation">
+                                    <option value={0}>Minutes</option>
+                                    <option value={1}>Hours</option>
+                                    <option value={2}>Days</option>
+                                </Form.Select>
+                            </FloatingLabel>
+                        </InputGroup>
+                    </div>
+                    <div className='col-md'>
+                        <strong className='ps-1'>Shares Verification Time</strong>
+                        <InputGroup className='mt-1 mb-4'>
+                            <Form.Control value={key_verification_time} type="number"  min={0} onChange={handleKegVerTimeChange} />
+                            <FloatingLabel label="Unit">
+                                <Form.Select value={key_verification_time_unit} onChange={handleKegVerTimeUnitChange}  aria-label="Time Unit of key generation">
                                     <option value={0}>Minutes</option>
                                     <option value={1}>Hours</option>
                                     <option value={2}>Days</option>
