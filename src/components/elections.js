@@ -39,8 +39,9 @@ import Publickeys_table_item from './elections_components/Publickeys_table_item'
 import SubSecretItem from './elections_components/SubSecret';
 import TallyResult from './elections_components/tallyResult';
 import CloseState from './elections_components/CloseState';
+import Alert_item from './elections_components/Alert_item';
 
-export default function Elections({elections,web3,account,electionAddresses}){
+export default function Elections({electionInstances,web3,account,electionAddresses}){
 
     const msg_scrollbar = useRef(null);
 
@@ -61,7 +62,7 @@ export default function Elections({elections,web3,account,electionAddresses}){
     const [encyptedVote,setEncyptedVote] = useState("");
     const [encVoteHash,setEncVoteHash] = useState("");
     
-
+    const [elections,setElections] = useState([]);
     const [publickeys,setPublickeys] = useState([]);
     const [candidates,setCandidates] = useState([]);
     const [polynomial,setPolynomial] = useState([]);
@@ -75,6 +76,7 @@ export default function Elections({elections,web3,account,electionAddresses}){
     const [ballots,setBallots] = useState([]);
     const [disqualifiedVoters,setDisqualifiedVoters] = useState([]);
     const [disqualifiedVotersReportPar,setDisqualifiedVotersReportPar] = useState([]);
+    const [publickeysAfterVerified,setPublickeysAfterVerified] = useState([]);
 
     const [elecitonID,setElecitonID] = useState(-1);
     const [publickeyIndex,setPublickeyIndex] = useState(0);
@@ -105,41 +107,69 @@ export default function Elections({elections,web3,account,electionAddresses}){
     const [isKeyValValid,setIsKeyValValid] = useState(false);
     const [isKeyValVerifying,setIsKeyValVerifying] = useState(false);
     const [isReportingVoters,setIsReportingVoters] = useState(false);
+    const [isVotePubKeySet,setIsVotePubKeySet] = useState(false);
+    const [isVotePubKeySeting,setIsVotePubKeySeting] = useState(false);
+    const [isSetUp,seIsSetUp] = useState(false);
 
     const [electionInstance,setelectionInstace] = useState(null);
     const [LRSignature,setLRSignature] = useState(null);
 
 
-    const handleSelectedElectionDataChange = (e) => {
+    const handleSelectedElectionDataChange = (e,index) => {
         setTitle(e.title);
         setDescription(e.description);
         setOwner(e.owner);
-        setState(determineState(e.key_gen_end_time,e.key_ver_end_time,e.vote_end_time,e.secret_upload_end_time));
+        setState(determineState(e.isSetUp,e.share_end_time,e.ver_end_time,e.vote_end_time,e.secret_upload_end_time));
         setPostdate(timestampToDate(e.post_time));
         setVoteenddate(timestampToDate(e.vote_end_time));
-        setKeygenenddate(timestampToDate(e.key_gen_end_time));
-        setKeygenverdate(timestampToDate(e.key_ver_end_time));
+        setKeygenenddate(timestampToDate(e.share_end_time));
+        setKeygenverdate(timestampToDate(e.ver_end_time));
         setSecretuploadenddate(timestampToDate(e.secret_upload_end_time));
         setPublickeys(e.public_keys);
+        setPublickeysAfterVerified(e.public_keys);
         setCandidates(e.candidates);
         setIsselectedelection(true);
-        setSelectedState(determineState(e.key_gen_end_time,e.key_ver_end_time,e.vote_end_time,e.secret_upload_end_time));
+        setSelectedState(determineState(e.isSetUp,e.share_end_time,e.ver_end_time,e.vote_end_time,e.secret_upload_end_time));
         setElecitonID(e.id);
-        setElectionAddress(electionAddresses[e.id]);
+        setElectionAddress(electionAddresses[index]);
         setMinShares(e.min_shares);
-        setkeyGenValueSentVoterCount(e.totatKeygenValueSentCount);
+        setkeyGenValueSentVoterCount(e.totatSharesSentCount);
         setTotalSubSecretSentCount(e.totalSubSecretSentCount);
         setIsTallied(e.isVoteTallied);
-        setTotalVoteCount(e.totalVoteCount);
+        setTotalVoteCount(e.ballots.length);
+        setIsVotePubKeySet(e.isVotePubKeySet);
+        seIsSetUp(e.isSetUp);
+
         if(e.isVoteTallied){
             setBallots(e.ballots);
         }
         
         setDisqualifiedVoters(e.illegitimate_voter_indeces);
 
-        const eInstance = new web3.eth.Contract(ElectionABI['abi'],electionAddresses[e.id]);
-        setelectionInstace(eInstance);
+        setelectionInstace(electionInstances[index]);
     }
+
+    useEffect(async ()=>{
+        let tmp = [];
+        for(let i=0;i<electionInstances.length;i++){
+            const e = await electionInstances[i].methods.getElectionData().call();
+            tmp.push(e);
+        }
+        setElections(tmp);
+    },[electionInstances]);
+
+    useEffect(()=>{
+        if(disqualifiedVoters.length>0){
+            let tmp = [];
+            for(let i=0;i<publickeysAfterVerified.length;i++){
+                if(disqualifiedVoters.find(v=> v != i.toString())){
+                    tmp.push(publickeysAfterVerified[i]);
+                }
+            }
+            console.log(tmp);
+            setPublickeysAfterVerified(tmp);
+        }
+    },[disqualifiedVoters]);
 
     useEffect(()=>{
         if(electionInstance == null){
@@ -166,7 +196,7 @@ export default function Elections({elections,web3,account,electionAddresses}){
                 alert("Add Shares Failed");
             }else{
                 // console.log(receipt);
-                setkeyGenValueSentVoterCount(receipt.returnValues.totatKeygenValueSentCount);
+                setkeyGenValueSentVoterCount(receipt.returnValues.totatSharesSentCount);
                 setIsSendValueLoading(false);
                 alert("Add Shares Success!");
             }
@@ -210,9 +240,22 @@ export default function Elections({elections,web3,account,electionAddresses}){
                 alert("Disqualified Voters Indece Updated");
             }
         });
+        // set vote pubKey event  
+        electionInstance.events.setVotePubKeyEvent({},async (error, receipt)=>{
+            if(error){
+                console.error(error);
+                alert("Set vote pubKey failed");
+            }else{
+                console.log(receipt);
+                setIsVotePubKeySeting(false);
+                setIsVotePubKeySet(receipt.returnValues.isVotePubKeySet);
+                alert("Set vote pubKey success");
+            }
+        });
     },[electionInstance,elections,electionAddresses]);
 
     const state_color_mapping = {
+        'Set Up': "secondary",
         'Shares Distribution': 'primary',
         'Shares Verification': 'warning',
         'Vote': 'success',
@@ -220,12 +263,12 @@ export default function Elections({elections,web3,account,electionAddresses}){
         'Close': 'info'
     }
 
-    const determineState = (key_gen_end_time,key_ver_end_time,vote_end_time,secret_upload_end_time) =>{
+    const determineState = (isSetUp,shares_end_time,ver_end_time,vote_end_time,secret_upload_end_time) =>{
+        if(!isSetUp) return 'Set Up';
         const now = Date.now();
         // console.log(now);
-        // console.log(key_gen_end_time);
-        if(now < key_gen_end_time*1000) return 'Shares Distribution';
-        if(now < key_ver_end_time*1000) return 'Shares Verification';
+        if(now < shares_end_time*1000) return 'Shares Distribution';
+        if(now < ver_end_time*1000) return 'Shares Verification';
         if(now < vote_end_time*1000) return 'Vote';
         if(now < secret_upload_end_time*1000) return 'Secret Upload';
         return 'Close';
@@ -234,9 +277,9 @@ export default function Elections({elections,web3,account,electionAddresses}){
     const handleEncVote = async () =>{
         setIsEncryptLoading(true);
         setIsEncrypted(false);
-        
-        // const VotePubKey = await getVotePublicKey();
-        let VotePubKey = await electionInstance.methods.getVotePublicKey().call();
+
+
+        let VotePubKey = await electionInstance.methods.votePubKey().call();
         VotePubKey = intTopoint(VotePubKey.x,VotePubKey.y);
         VotePubKey = publicKeyToHex(VotePubKey);
         console.log(VotePubKey);
@@ -473,19 +516,6 @@ export default function Elections({elections,web3,account,electionAddresses}){
         // console.log(date);
         return date.toString().slice(0,21);
     }
- 
-
-    const elections_card = elections.map((e)=>{
-        return  <div onClick={()=>{handleSelectedElectionDataChange(e);}} key={e.id} >
-                    <Election 
-                        election={e} 
-                        post_date = {timestampToDate(e.post_time)}
-                        close_date = {timestampToDate(e.secret_upload_end_time)}
-                        state_badge = {state_color_mapping[determineState(e.key_gen_end_time,e.key_ver_end_time,e.vote_end_time,e.secret_upload_end_time)]}
-                        state = {determineState(e.key_gen_end_time,e.key_ver_end_time,e.vote_end_time,e.secret_upload_end_time)}           
-                    />
-                </div>
-    });
 
     const handlePrivateKeyChange = (e) => {
         setPrivateKey(e.target.value);
@@ -512,7 +542,7 @@ export default function Elections({elections,web3,account,electionAddresses}){
         setIsLRS(false);
     };
 
-    const handleGenLRS = () =>{
+    const handleGenLRS = async () =>{
         if(privateKey == "") {
             alert("Please input your private key.");
             return;
@@ -521,9 +551,10 @@ export default function Elections({elections,web3,account,electionAddresses}){
             alert("Please encrypt your vote.");
             return;
         }
-        try{
+        try{            
             setLRSLoading(true);
             setIsLRS(false);
+
             const encyptedVoteHash = web3.utils.soliditySha3(
                 {t:'uint256',v:encyptedVote[0][0]},
                 {t:'uint256',v:encyptedVote[0][1]},
@@ -532,8 +563,8 @@ export default function Elections({elections,web3,account,electionAddresses}){
             );
             setEncVoteHash(encyptedVoteHash);
             console.log(encyptedVoteHash);
-            const sig = genSig(encyptedVoteHash,publickeys,privateKey,publickeyIndex);
-            if(sig == -1||verifySig(encyptedVoteHash,publickeys,sig) == false){
+            const sig = genSig(encyptedVoteHash,publickeysAfterVerified,privateKey,publickeyIndex);
+            if(sig == -1||verifySig(encyptedVoteHash,publickeysAfterVerified,sig) == false){
                 setLRSLoading(false);
                 setIsLRS(false);
                 return;
@@ -665,7 +696,25 @@ export default function Elections({elections,web3,account,electionAddresses}){
         setIsReportingVoters(true);
         await electionInstance.methods.setDisqualifiedPubKeyIndece(
             disqualifiedVotersReportPar
-            ).send({from: account,gas:30000000});
+            ).send({from: account,gas:30000000})
+            .on('error', function(error, receipt){
+                setIsReportingVoters(false);
+                alert(error.message);
+                // console.error("error:",error);
+            });
+    }
+
+    const handleSetVotePubKey = async () =>{
+        setIsVotePubKeySeting(true);
+        if(!isVotePubKeySet){
+            await electionInstance.methods.setVotePublicKey()
+            .send({from:account,gas:3000000})
+            .on('error', function(error, receipt){
+                setIsVotePubKeySeting(false);
+                alert(error.message);
+                // console.error("error:",error);
+            });
+        }
     }
 
     return (
@@ -678,7 +727,19 @@ export default function Elections({elections,web3,account,electionAddresses}){
                     autoHideTimeout={1000}
                     autoHideDuration={200}
                 >
-                    {elections_card}
+                    {
+                        elections.map((e,i)=>{
+                            return  <div onClick={()=>{handleSelectedElectionDataChange(e,i);}} key={e.id,i} >
+                                        <Election 
+                                            election={e} 
+                                            post_date = {timestampToDate(e.post_time)}
+                                            close_date = {timestampToDate(e.secret_upload_end_time)}
+                                            state_badge = {state_color_mapping[determineState(e.isSetUp,e.share_end_time,e.ver_end_time,e.vote_end_time,e.secret_upload_end_time)]}
+                                            state = {determineState(e.isSetUp,e.share_end_time,e.ver_end_time,e.vote_end_time,e.secret_upload_end_time)}           
+                                        />
+                                    </div>
+                        })
+                    }
                 </Scrollbars>
             </div>
             <div className='right_box'>
@@ -746,11 +807,12 @@ export default function Elections({elections,web3,account,electionAddresses}){
                                                     <thead>
                                                         <tr>
                                                             <th>Index</th>
+                                                            <th>Index(Vote)</th>
                                                             <th>Public keys</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <Publickeys_table_item publickeys={publickeys} disqualifiedVoters={disqualifiedVoters} />
+                                                        <Publickeys_table_item publickeys={publickeys} publickeysAfterVerified={publickeysAfterVerified} disqualifiedVoters={disqualifiedVoters} />
                                                     </tbody>
                                             </Table>
                                         </Scrollbars>   
@@ -839,26 +901,33 @@ export default function Elections({elections,web3,account,electionAddresses}){
                                                         </Tab.Pane>
 
                                                         <Tab.Pane eventKey="Vote" className='operations'>
-                                                            <PrivateKey_item k="vote_priv" privateKey={privateKey} handlePrivateKeyChange={handlePrivateKeyChange} />
-                                                            <Row>
-                                                                <Col>
-                                                                    <Publickey_index_item k="keygen_pub" publickeyIndex={publickeyIndex} handlePublicKeyIndexChange={handlePublicKeyIndexChange} publickeys={publickeys} />
-                                                                </Col>
-                                                                <Col className='mt-2'>
-                                                                    <SelectCandidate_item k="vote_cand" selectedCandidateID={selectedCandidateID} handleSelectedCandidateIDChange={handleSelectedCandidateIDChange} candidates={candidates} />
-                                                                </Col>
-                                                            </Row>
-                                                            <div className='mt-4 mb-5'>
-                                                                <Button className="me-2" variant="light" onClick={handleEncVote}>Enc Vote</Button>
-                                                                <Button className=" me-2" variant="light" onClick={handleGenLRS}>Gen Sig</Button>
-                                                                <Button className="me-2" variant="dark" onClick={handleSendVote} disabled={isSendVoteLoading} >
-                                                                    {(isSendVoteLoading)?<span><Spinner animation="border" size="sm" /> Voting</span>
-                                                                    : "Send Vote"}
-                                                                </Button>
-                                                            </div>
-                                                            Vote Count : <strong>{totalVoteCount}</strong>
-                                                            <Badge_item isLoading={isLRSLoading} isDone={isLRS} text="Linkable Ring Signature" />
-                                                            <Badge_item isDone={isEncrypted} isLoading={isEncryptLoading} text="Encrypted Vote" />
+                                                            {
+                                                                (!isVotePubKeySet)?
+                                                                    <Alert_item handleDone={handleSetVotePubKey} isDoing={isVotePubKeySeting} isDone={isVotePubKeySet} alertMsg={"Please compute the vote public key and other variables for verifying LRS."} doName={"Compute"} doingName={"Computing"} />
+                                                                :
+                                                                    <div className='w-100 h-100'>
+                                                                        <PrivateKey_item k="vote_priv" privateKey={privateKey} handlePrivateKeyChange={handlePrivateKeyChange} />
+                                                                        <Row>
+                                                                            <Col>
+                                                                                <Publickey_index_item k="keygen_pub" publickeyIndex={publickeyIndex} handlePublicKeyIndexChange={handlePublicKeyIndexChange} publickeys={publickeysAfterVerified} />
+                                                                            </Col>
+                                                                            <Col className='mt-2'>
+                                                                                <SelectCandidate_item k="vote_cand" selectedCandidateID={selectedCandidateID} handleSelectedCandidateIDChange={handleSelectedCandidateIDChange} candidates={candidates} />
+                                                                            </Col>
+                                                                        </Row>
+                                                                        <div className='mt-4 mb-5'>
+                                                                            <Button className="me-2" variant="light" onClick={handleEncVote}>Enc Vote</Button>
+                                                                            <Button className=" me-2" variant="light" onClick={handleGenLRS}>Gen Sig</Button>
+                                                                            <Button className="me-2" variant="dark" onClick={handleSendVote} disabled={isSendVoteLoading} >
+                                                                                {(isSendVoteLoading)?<span><Spinner animation="border" size="sm" /> Voting</span>
+                                                                                : "Send Vote"}
+                                                                            </Button>
+                                                                        </div>
+                                                                        Vote Count : <strong>{totalVoteCount}</strong>
+                                                                        <Badge_item isLoading={isLRSLoading} isDone={isLRS} text="Linkable Ring Signature" />
+                                                                        <Badge_item isDone={isEncrypted} isLoading={isEncryptLoading} text="Encrypted Vote" />
+                                                                    </div>
+                                                            }
                                                         </Tab.Pane>
 
                                                         <Tab.Pane eventKey="Secret Upload" className='operations'>
@@ -884,7 +953,7 @@ export default function Elections({elections,web3,account,electionAddresses}){
                                                         </Tab.Pane>
 
                                                         <Tab.Pane eventKey="Close" className='operations'>
-                                                            <TallyResult isTallying={isTallying} isTallied={isTallied} handleTally={handleTally} />
+                                                            <Alert_item isDoing={isTallying} isDone={isTallied} handleDone={handleTally} alertMsg={"Please tally the election ballots."} doName={"Tally"} doingName={"Tallying"} />
                                                             <CloseState isTallying={isTallying} ballots={ballots} isTallied={isTallied} candidates={candidates} eInstance={electionInstance} publickeys={publickeys} />
                                                         </Tab.Pane>
                                                     </Tab.Content>

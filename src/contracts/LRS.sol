@@ -6,7 +6,6 @@ import "./EllipticCurve.sol";
 import './Secp256r1.sol';
 
 library LRS{
-
     // linkable ring signature parameters
     struct LRS_parameters{
         uint256 message; 
@@ -16,6 +15,21 @@ library LRS{
         Secp256r1.ECPoint H;
         Secp256r1.ECPoint K;
         Secp256r1.ECPoint[] EC_public_keys;  
+    }
+
+    function calcLAndH(Secp256r1.ECPoint[] calldata _P) 
+    external pure returns (uint256 L, Secp256r1.ECPoint memory H){
+        uint256 t; 
+        uint256 t2; 
+        for(uint i=0;i<_P.length;i++){
+            // compute L = sum of (PubKey.X + PubKey.Y);
+            t = addmod(_P[i].x,_P[i].y,Secp256r1.NN);
+            L = addmod(L,t,Secp256r1.NN);
+        }
+        // compute H
+        t2 = uint256(keccak256(abi.encode(L))) % Secp256r1.NN;
+        (uint256 x, uint256 y) = EllipticCurve.ecMul(t2,Secp256r1.GX,Secp256r1.GY,Secp256r1.AA,Secp256r1.PP);
+        H = Secp256r1.ECPoint(x,y);
     }
 
     function verifyLRS(LRS_parameters calldata _LRS) 

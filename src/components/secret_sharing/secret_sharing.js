@@ -68,6 +68,7 @@ export function reconstructSecret(subSecrets,min_shares){
 }
 
 export function sumOFfiOFJ(values){
+    console.log("----------------------",values);
     let sum = new BigInteger("0",10);
     for(let i=0;i<values.length;i++){
         sum = sum.add(new BigInteger(values[i].toString(),10));
@@ -148,3 +149,20 @@ function test(){
 }
 
 test();
+
+function testPubKey(){
+    let f0_1 = "41836335270698052477718032730712665703294014957479345575038805081713310752001";
+    let f0_2 = "25518477145161304021006227418575290157620201379952442178997935612692473323773";
+
+    f0_1 = new BigInteger(f0_1,10);
+    f0_2 = new BigInteger(f0_2,10);
+    
+    let F1 = G.multiply(f0_1);
+    let F2 = G.multiply(f0_2);
+    let pubKey = F1.add(F2);
+
+    pubKey = publicKeyToHex(pubKey);
+    console.log(pubKey);
+}
+
+testPubKey();

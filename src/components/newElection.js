@@ -1,8 +1,6 @@
 import React, { Component, useState, useEffect, useRef}  from 'react';
-import $ from 'jquery';
 import './newElection.css';
 import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import { InputTags } from 'react-bootstrap-tagsinput';
 import 'react-bootstrap-tagsinput/dist/index.css';
@@ -11,24 +9,26 @@ import makeAnimated from 'react-select/animated';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import {MdOutlineFileUpload} from 'react-icons/md';
-import Spinner from 'react-bootstrap/Spinner';
+import ElectionABI from '../abis/Election.json';
 
-export default function NewElection({handleCloseNewElection, votingApp, account}){
+export default function NewElection({electionAddresses,web3,newElectioAddress,handleCloseNewElection, votingApp, account}){
 
     const [title,setTitle] = useState("");
     const [description,setDescription] = useState("");
     const [candidates,setCandidates] = useState([]);
     const [voters,setVoters] = useState([]);
     const [voter_options,setVoterOptions] = useState([]);
+    const [ec_publickeys,setECPubKeys] = useState([]);
     const [min_shares,set_min_shares] = useState(0); 
-    const [key_generation_time,set_key_generation_time] = useState(0); 
-    const [key_verification_time,set_key_verification_time] = useState(0); 
+    const [shares_dis_time,set_shares_dis_time] = useState(0); 
+    const [shares_ver_time,set_shares_ver_time] = useState(0); 
     const [vote_time,set_vote_time] = useState(0); 
     const [secret_upload_time,set_secret_upload_time] = useState(0); 
-    const [key_generation_time_unit,set_key_generation_time_unit] = useState(0); 
-    const [key_verification_time_unit,set_key_verification_time_unit] = useState(0); 
+    const [shares_dis_time_unit,set_shares_dis_time_unit] = useState(0); 
+    const [shares_ver_time_unit,set_shares_ver_time_unit] = useState(0); 
     const [vote_time_unit,set_vote_time_unit] = useState(0); 
     const [secret_upload_time_unit,set_secret_upload_time_unit] = useState(0); 
+    const [newEAddr,setNewEAddr] = useState(newElectioAddress);
 
     const handleTitleChange = (e)=>{
         setTitle(e.target.value);
@@ -46,12 +46,12 @@ export default function NewElection({handleCloseNewElection, votingApp, account}
     }
 
     const handleKegGenTimeChange = (e)=>{
-        set_key_generation_time(e.target.value);
+        set_shares_dis_time(e.target.value);
         // console.log(e.target.value);
     }
 
     const handleKegVerTimeChange = (e)=>{
-        set_key_verification_time(e.target.value);
+        set_shares_ver_time(e.target.value);
         // console.log(e.target.value);
     }
 
@@ -66,12 +66,12 @@ export default function NewElection({handleCloseNewElection, votingApp, account}
     }
 
     const handleKegGenTimeUnitChange = (e)=>{
-        set_key_generation_time_unit(e.target.value);
+        set_shares_dis_time_unit(e.target.value);
         // console.log(e.target.value);
     }
 
     const handleKegVerTimeUnitChange = (e)=>{
-        set_key_verification_time_unit(e.target.value);
+        set_shares_ver_time_unit(e.target.value);
         // console.log(e.target.value);
     }
 
@@ -88,6 +88,10 @@ export default function NewElection({handleCloseNewElection, votingApp, account}
     const handleVotersChange = (voter_options) =>{
         setVoters(voter_options.map(obj => obj.value));
         // console.log(voters);
+    }
+
+    const handleSelectElectionAddress = (e) =>{
+        setNewEAddr(e.target.value);
     }
 
     const animatedComponents = makeAnimated();
@@ -119,24 +123,39 @@ export default function NewElection({handleCloseNewElection, votingApp, account}
         // console.log(votingApp);
 
         const ec_publickeys = voters.map(v => ["0x"+v.slice(2,66),"0x"+v.slice(66,)]);
+        setECPubKeys(ec_publickeys);
         console.log(ec_publickeys);
-        votingApp.methods.addElection(
-            [title, description,voters,ec_publickeys, candidates, 
-            key_generation_time,key_verification_time,vote_time,secret_upload_time,
-            key_generation_time_unit,key_verification_time_unit,vote_time_unit,secret_upload_time_unit,min_shares]
-        ).send({from: account, gas:300000000})
+        votingApp.methods.addElection().send({from: account, gas:30000000})
         .on('error', function(error, receipt){
             console.error("error:",error); 
         });
     }
     
+    const handleSetUP = async () =>{
+        console.log(newEAddr);
+        if(newEAddr.length!=0){
+            const e = new web3.eth.Contract(ElectionABI['abi'],newEAddr);
+            const result = await e.methods.setElectionInfo(
+                [
+                    title,description,voters,candidates,ec_publickeys,
+                    min_shares,shares_dis_time,shares_ver_time,
+                    vote_time,secret_upload_time,shares_dis_time_unit,
+                    shares_ver_time_unit,vote_time_unit,secret_upload_time_unit
+                ]
+            ).send({from: account, gas:3000000});
+            console.log(result);
+            if(result.status == true){
+                alert("Set up success!");
+            }
+        }
+        
+    }
 
 
     return (
         <div className='newElection_container'>
             <div className='form_container p-3 mt-2 shadow-lg bg-body rounded'>
-                <h4 className='p-pb-4'><strong >Create New Election</strong></h4>
-
+                <h4 className='p-pb-4 w-50'><strong >Create/Set Up New Election</strong></h4>
                 <strong className='ps-1'>Title</strong>
                 <Form.Control value={title} className='mt-1 mb-4' type="text" placeholder='title' required id="titleInput" onChange={handleTitleChange} />
 
@@ -195,9 +214,9 @@ export default function NewElection({handleCloseNewElection, votingApp, account}
                     <div className='col-md'>
                         <strong className='ps-1'>Shares Distribution Time</strong>
                         <InputGroup className='mt-1 mb-4'>
-                            <Form.Control value={key_generation_time} type="number"  min={0} onChange={handleKegGenTimeChange} />
+                            <Form.Control value={shares_dis_time} type="number"  min={0} onChange={handleKegGenTimeChange} />
                             <FloatingLabel label="Unit">
-                                <Form.Select value={key_generation_time_unit} onChange={handleKegGenTimeUnitChange}  aria-label="Time Unit of key generation">
+                                <Form.Select value={shares_dis_time_unit} onChange={handleKegGenTimeUnitChange}  aria-label="Time Unit of key generation">
                                     <option value={0}>Minutes</option>
                                     <option value={1}>Hours</option>
                                     <option value={2}>Days</option>
@@ -208,9 +227,9 @@ export default function NewElection({handleCloseNewElection, votingApp, account}
                     <div className='col-md'>
                         <strong className='ps-1'>Shares Verification Time</strong>
                         <InputGroup className='mt-1 mb-4'>
-                            <Form.Control value={key_verification_time} type="number"  min={0} onChange={handleKegVerTimeChange} />
+                            <Form.Control value={shares_ver_time} type="number"  min={0} onChange={handleKegVerTimeChange} />
                             <FloatingLabel label="Unit">
-                                <Form.Select value={key_verification_time_unit} onChange={handleKegVerTimeUnitChange}  aria-label="Time Unit of key generation">
+                                <Form.Select value={shares_ver_time_unit} onChange={handleKegVerTimeUnitChange}  aria-label="Time Unit of key generation">
                                     <option value={0}>Minutes</option>
                                     <option value={1}>Hours</option>
                                     <option value={2}>Days</option>
@@ -245,8 +264,18 @@ export default function NewElection({handleCloseNewElection, votingApp, account}
                         </InputGroup>
                     </div>
                 </div>
-                <Button variant="outline-dark" className='mt-3 me-1' onClick={handleCloseNewElection}>Canceal</Button> 
-                <Button variant="dark" className=' mt-3 me-1' onClick={handleSend}>Send</Button>
+                <Button variant="light" className='mt-3 me-1' onClick={handleCloseNewElection}>Canceal</Button> 
+                <Button variant="outline-dark" className=' mt-3 me-1' onClick={handleSend}>Create</Button>
+                <Button variant="dark" className=' mt-3 me-1' onClick={handleSetUP}>Set Up</Button>
+                <FloatingLabel label="Election Address" className="w-50 float-end">
+                    <Form.Select value={newEAddr} onChange={handleSelectElectionAddress} aria-label="Election Address">
+                        {
+                            electionAddresses.map((addr)=>{
+                                return <option key={addr} value={addr}>{addr}</option>
+                            })
+                        }
+                    </Form.Select>
+                </FloatingLabel>
             </div> 
         </div>
         

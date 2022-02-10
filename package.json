@@ -39,6 +39,7 @@
     "react-scripts": "^3.0.1",
     "react-select": "^5.2.1",
     "trs-js": "^0.2.0",
+    "truffle-contract-size": "^2.0.1",
     "web-vitals": "^2.1.2",
     "web3": "^1.6.1"
   },

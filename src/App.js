@@ -9,18 +9,20 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import NewElection from './components/newElection';
 import Elections from './components/elections';
-import {genSig,verifySig,test} from './components/linkable_ring_signature/lrs';
+import ElectionABI from './abis/Election.json';
 
 const App = () => {
   const [web3,setWeb3] = useState(null);
   const [account,setAccount] = useState('');
-  const [loading,setLoading] = useState(false);
+  const [newElectioAddress,setNewElectionAddress] = useState('');
   const [votingApp,setVotingApp] = useState(null);
-  const [elections,setElections] = useState([]);
+  const [electionInstances,setElectionInstances] = useState([]);
   const [electionAddresses,setElectionAddresses] = useState([]);
   const [isNewElection,setisNewElection] = useState(false);
   const handleCloseNewElection = () => setisNewElection(false);
   const handleOpenNewElection = () => setisNewElection(true);
+
+
 
   const blockchainInstance = async () => {
     const web3 = new Web3(Web3.givenProvider|| 'http://localhost:8545');
@@ -49,9 +51,8 @@ const App = () => {
       // get Elections data
       if(eAddresses!=null){
         eAddresses.forEach(address => {
-          vApp.methods.getElectionData(address).call().then((data)=>{
-            setElections((elections)=>[...elections, data]);
-          });
+          const e = new web3.eth.Contract(ElectionABI['abi'],address);
+          setElectionInstances((electionInstance)=>[e,...electionInstance]);
         });
       }
 
@@ -63,13 +64,16 @@ const App = () => {
                 alert("Create New Election Failed");
             }else{
                 // console.log(receipt);
-                const eData = receipt.returnValues.eData;
+                // const eData = receipt.returnValues.eData;
                 const eAddress = receipt.returnValues.eAddress;
-                // console.log(result);
-                setElections((elections)=>[...elections, eData]);
+                // // console.log(result);
+                // setElections((elections)=>[...elections, eData]);
                 setElectionAddresses((eAddresses)=>[...eAddresses, eAddress]);
-
-                alert("Create New Election success");
+                const e = new web3.eth.Contract(ElectionABI['abi'],eAddress);
+                setElectionInstances((electionInstance)=>[e,...electionInstance]);
+                console.log(e);
+                setNewElectionAddress(eAddress);
+                alert("Create New Election success\nPlease Set up the election.");
             }
         }            
       );
@@ -112,9 +116,9 @@ const App = () => {
       <div className='main'>
         {
           (isNewElection)? 
-          <NewElection handleCloseNewElection={handleCloseNewElection} votingApp={votingApp} account={account} />
+          <NewElection web3={web3} newElectioAddress={newElectioAddress} electionAddresses={electionAddresses} handleCloseNewElection={handleCloseNewElection} votingApp={votingApp} account={account} />
           : 
-          <Elections elections={elections} web3={web3} account={account} electionAddresses={electionAddresses}  />
+          <Elections electionInstances={electionInstances} web3={web3} account={account} electionAddresses={electionAddresses}  />
         }
       </div>
 

@@ -95,6 +95,7 @@ module.exports = {
     }
   },
 
+  plugins: ["truffle-contract-size"],
   // Truffle DB is currently disabled by default; to enable it, change enabled:
   // false to enabled: true. The default storage location can also be
   // overridden by specifying the adapter settings, as shown in the commented code below.

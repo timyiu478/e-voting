@@ -18,20 +18,24 @@ contract Election {
     string[] public public_keys;
 
     uint public id;
-    uint public candidateCount;
-    uint public voterCount;
     uint public post_time;
-    uint public key_gen_end_time;
-    uint public key_ver_end_time;
+    uint public share_end_time;
+    uint public ver_end_time;
     uint public vote_end_time;
     uint public secret_upload_end_time;
-    uint public totalVoteCount;
     uint public min_shares;
-    uint public totatKeygenValueSentCount;
+    uint public totatSharesSentCount;
     uint public totalSubSecretSentCount;
 
     bool public isVoteTallied;
+    bool public isBasicInfoSet;
+    bool public isSetUp;
+    bool public isVotePubKeySet;
+    bool public isECPubKeysAftVerSet;
 
+
+    Secp256r1.ECPoint public votePubKey;
+    
     // store Disqualified public key indece
     mapping(bytes20 => bool) isDisqualifiedPubKeyIndece;
 
@@ -40,7 +44,7 @@ contract Election {
     Secp256r1.ECPoint public H;
     mapping(bytes20 => bool) K_list;
     Secp256r1.ECPoint[] public EC_public_keys;
-    Secp256r1.ECPoint[] public EC_public_keysAfterVerified;
+    Secp256r1.ECPoint[] public ECPubKeysAftVer;
     
     // illegitimate voter : did not upload shares / upload wrong shares
     uint[] public illegitimate_voter_indeces;
@@ -86,39 +90,95 @@ contract Election {
     struct ElectionData{
         uint id;
         uint post_time;
-        uint key_gen_end_time;
-        uint key_ver_end_time;
+        uint share_end_time;
+        uint ver_end_time;
         uint vote_end_time;
         uint secret_upload_end_time;
         uint min_shares;
-        uint candidateCount;
-        uint voterCount;
-        uint totalVoteCount;
-        uint totatKeygenValueSentCount;
+        uint totatSharesSentCount;
         uint totalSubSecretSentCount;
-        uint256 L; 
         uint[] illegitimate_voter_indeces;
         string title;
         string description;
         string[] public_keys;
-        Secp256r1.ECPoint H;
-        Secp256r1.ECPoint[] EC_public_keys;
         Candidate[] candidates;
         bool isVoteTallied;
+        bool isVotePubKeySet;
+        bool isECPubKeysAftVerSet;
+        bool isSetUp;
         address owner;
         Ballot[] ballots;
+    }
+
+    struct ElectionSetUpData{
+        string  title;
+        string  des; 
+        string[]  pubKeys;
+        string[]  candidates;
+        Secp256r1.ECPoint[]  EC_public_keys;
+        uint minShares;
+        uint sharesTime;
+        uint verTime; 
+        uint voteTime; 
+        uint secUploadTime;
+        uint sharesTimeUnit; 
+        uint verTimeUnit; 
+        uint voteTimeUnit;
+        uint secUploadTimeUnit;
     }
 
     // new Vote Event
     event newVoteEvent(uint totalVoteCount);
     // add Keygen value Event
-    event addKeygenValueEvent(uint totatKeygenValueSentCount);
+    event addKeygenValueEvent(uint totatSharesSentCount);
     // add SubSecret Event
     event addSubSecretEvent(uint totalSubSecretSentCount);
     // tally vote Event
     event tallyVoteEvent(Candidate[] candidates, Ballot[] ballots);
     // verify shares event 
     event verifySharesEvent(uint[] illegitimate_voter_indeces);
+    // set vote pubKey event 
+    event setVotePubKeyEvent(bool isVotePubKeySet);
+
+    constructor (uint _id, address _owner){
+        id = _id;
+        owner = _owner;
+    }
+
+
+    function setElectionInfo(
+        ElectionSetUpData calldata _data
+    ) external returns(bool){
+        require(msg.sender==owner,"YouAreNotOwner");
+        require(isSetUp==false,"AlreadySet");
+        // require minimum number of candidates , voters and min_shares are 2
+        require(_data.candidates.length > 1 && 
+                _data.pubKeys.length > 1 &&
+                _data.minShares > 1
+        ,"MinNumOfCandidatesAndVotersAre2");
+        title = _data.title;
+        description = _data.des;
+        for(uint i=0;i<_data.candidates.length;i++){
+            candidates.push(Candidate(i,_data.candidates[i],0));
+        }
+        for(uint i=0;i<_data.pubKeys.length;i++){
+            public_keys.push(_data.pubKeys[i]);
+            EC_public_keys.push(_data.EC_public_keys[i]);
+        }
+        min_shares = _data.minShares;
+
+        post_time = block.timestamp;
+        share_end_time = post_time + Utils.calc_time(_data.sharesTime,_data.sharesTimeUnit); 
+        ver_end_time = share_end_time + Utils.calc_time(_data.verTime,_data.verTimeUnit); 
+        vote_end_time = ver_end_time + Utils.calc_time(_data.voteTime,_data.voteTimeUnit); 
+        secret_upload_end_time = vote_end_time + Utils.calc_time(_data.secUploadTime,_data.secUploadTimeUnit); 
+        
+        isSetUp = true;
+
+        return true;
+    }
+
+
 
     // Verifying fi(j)*G == Fi,0 + Fi,1 * j + ... + Fi,2 * j^(t-1)
     function setDisqualifiedPubKeyIndece(Shares.VerSharesPar[] calldata _Par) 
@@ -174,56 +234,29 @@ contract Election {
         emit verifySharesEvent(illegitimate_voter_indeces);
     }
 
-
-    function setPublicKeys(string[] memory _public_keys) external{
-        public_keys = _public_keys;
-        voterCount = public_keys.length;
-    }
-
-    function setECpublickeys(Secp256r1.ECPoint[] memory _EC_public_keys) external{
-        L = 0;
-        uint256 tmp;
-        for(uint i=0;i<_EC_public_keys.length;i++){
-            // store EC public keys 
-            EC_public_keys.push(Secp256r1.ECPoint(_EC_public_keys[i].x,_EC_public_keys[i].y));
-            // compute L = sum of (PubKey.X + PubKey.Y);
-            tmp = addmod(_EC_public_keys[i].x,_EC_public_keys[i].y,Secp256r1.NN);
-            L = addmod(L,tmp,Secp256r1.NN);
-            
+    function setVotePublicKey() external {
+        require(isVotePubKeySet==false,"AlreadySet");
+        Secp256r1.ECPoint memory P;
+        bool isFirst;
+        for(uint i=0;i<public_keys.length;i++){
+            if(!illegitimate_voters[i]){
+                // calc vote public key of valid voters
+                P = F_2d[ripemd160(abi.encodePacked(i,uint256(0)))].p;
+                if(!isFirst){
+                    votePubKey = P;
+                    isFirst = true;
+                }else{
+                    (votePubKey.x, votePubKey.y) = EllipticCurve.ecAdd(votePubKey.x, votePubKey.y, P.x, P.y, Secp256r1.AA, Secp256r1.PP);
+                }
+                // filter invalid voter's pubkeys 
+                ECPubKeysAftVer.push(EC_public_keys[i]);
+            }
         }
-        // compute H
-        H = Utils.hash2(L);
-    }
+        // cal L and H for verify LRS
+        (L,H) = LRS.calcLAndH(ECPubKeysAftVer);
+        isVotePubKeySet = true;
 
-    function setCandidates(string[] memory _candidates) external{
-        for(uint i=0;i<_candidates.length;i++){
-            candidates.push(Candidate(i,_candidates[i],0));
-        }
-        candidateCount = candidates.length;
-    }
-
-    constructor(address _onwer,uint _id,string memory _title,
-    string memory _description, uint _min_shares,
-    uint _post_time, uint _key_gen_end_time,uint _key_ver_end_time,
-    uint _vote_end_time, uint _secret_upload_end_time){
-        owner = _onwer;
-        id = _id;
-        title = _title;
-        description = _description;
-        min_shares = _min_shares;
-        post_time = _post_time;
-        key_gen_end_time = _key_gen_end_time;
-        key_ver_end_time = _key_ver_end_time;
-        vote_end_time = _vote_end_time;
-        secret_upload_end_time = _secret_upload_end_time;
-    }
-
-    function getVotePublicKey() public view returns (Secp256r1.ECPoint memory){
-        Secp256r1.ECPoint[] memory _P = new Secp256r1.ECPoint[](voterCount);
-        for(uint i=0;i<voterCount;i++){
-            _P[i] = F_2d[ripemd160(abi.encodePacked(i,uint256(0)))].p;
-        }
-        return Utils.setVotePublicKey(_P); 
+        emit setVotePubKeyEvent(isVotePubKeySet);
     }
 
     function getBallot() external view returns(Ballot[] memory){
@@ -262,14 +295,18 @@ contract Election {
     }
 
     function getf(uint _publicKeyIndex) public view returns(Shares.f[] memory){
-        Shares.f[] memory _f = new Shares.f[](voterCount); 
-        for(uint i=0;i<voterCount;i++){
-           _f[i] = f_2d[ripemd160(abi.encodePacked(i,_publicKeyIndex+1))];
+        Shares.f[] memory _f = new Shares.f[](public_keys.length-illegitimate_voter_indeces.length);
+        uint c; 
+        for(uint i=0;i<public_keys.length;i++){
+            if(!illegitimate_voters[i]){
+                _f[c] = f_2d[ripemd160(abi.encodePacked(i,_publicKeyIndex+1))];
+                c++;
+            }
         }   
         return _f;
     }
 
-    function addKeyGenVal(Shares.F[] memory _F, Shares.f[] memory _f) external{
+    function addKeyGenVal(Shares.F[] calldata _F, Shares.f[] calldata _f) external{
         // verify key gen peroid: now < key_gen_end_time
         // require(block.timestamp < key_gen_end_time,"invalid key generation time");
         bytes20 h;
@@ -290,7 +327,7 @@ contract Election {
             isF_2d[h] = true;
             F_2d[h] = _F[z];
         }
-        for(uint z;z<voterCount;z++){
+        for(uint z;z<public_keys.length;z++){
             hm = uint256(keccak256(abi.encodePacked(
                 _f[z].ciphertext.C.x,_f[z].ciphertext.C.y,
                 _f[z].ciphertext.D.x,_f[z].ciphertext.D.y
@@ -307,22 +344,24 @@ contract Election {
             isf_2d[h] = true;
             f_2d[h] = _f[z];
         }
-        totatKeygenValueSentCount++;
-        emit addKeygenValueEvent(totatKeygenValueSentCount);
+        totatSharesSentCount++;
+        emit addKeygenValueEvent(totatSharesSentCount);
     }
 
     function verifyLRS(uint256 _encVoteHash,uint256 _U0,
-     uint256[] calldata _V, Secp256r1.ECPoint memory _K) public view returns(bool){
+     uint256[] calldata _V, Secp256r1.ECPoint calldata _K) public view returns(bool){
         // verify linkable ring signature
-        return LRS.verifyLRS(LRS.LRS_parameters(_encVoteHash,_U0,L,_V,H,_K,EC_public_keys));
+        return LRS.verifyLRS(LRS.LRS_parameters(_encVoteHash,_U0,L,_V,H,_K,ECPubKeysAftVer));
     }
 
-    function addVote(Elgamal.Elgamal_ciphertext memory _encVote,uint256 _encVoteHash,
-    uint256 _U0, uint256[] calldata _V, Secp256r1.ECPoint memory _K) 
+    function addVote(Elgamal.Elgamal_ciphertext calldata _encVote,uint256 _encVoteHash,
+    uint256 _U0, uint256[] calldata _V, Secp256r1.ECPoint calldata _K) 
     external{
         // verify vote peroid: key_ver_end_time <= now < vote_end_time
-        require(key_ver_end_time<= block.timestamp && block.timestamp < vote_end_time,"WrongVoteTime");
+        require(ver_end_time<= block.timestamp && block.timestamp < vote_end_time,"WrongVoteTime");
         
+        require(isVotePubKeySet==true,"SetVotePubKeyFirst");
+
         // hash of _K
         bytes20 h = ripemd160(abi.encodePacked(_K.x,_K.y));
 
@@ -343,17 +382,16 @@ contract Election {
         require(U == true,"WrongSignature");
 
         // add ballot
-        ballots.push(Ballot(totalVoteCount,block.timestamp,-1,_encVoteHash,_U0,_V,_K,_encVote));
-        totalVoteCount++;
+        ballots.push(Ballot(ballots.length,block.timestamp,-1,_encVoteHash,_U0,_V,_K,_encVote));
 
         // add _K into K_list
         K_list[h] = true;
 
-        emit newVoteEvent(totalVoteCount);
+        emit newVoteEvent(ballots.length);
     }
 
     function verfiyVotePrivateKey(uint256 _votePrvKey) public view returns(bool){
-        return Utils.verfiyVotePrivateKey(_votePrvKey,getVotePublicKey());
+        return Utils.verfiyVotePrivateKey(_votePrvKey,votePubKey);
     }
 
     function decryptVote(Elgamal.Elgamal_ciphertext calldata _encVote
@@ -363,7 +401,7 @@ contract Election {
 
     function tallyVote(uint256 _votePrvKey) external{
         // verify tally time : vote_end_time <= now 
-        // require(vote_end_time<= block.timestamp,"invalid tally time");
+        // require(vote_end_time<= block.timestamp,"WrongTallyTime");
 
         // check whether the vote already tallied
         require(isVoteTallied == false,"Tallied");
@@ -385,11 +423,12 @@ contract Election {
     }
 
     function getElectionData() external view returns(ElectionData memory){
-        return ElectionData(id,post_time,key_gen_end_time,key_ver_end_time,
-        vote_end_time,secret_upload_end_time,min_shares,candidateCount,voterCount
-        ,totalVoteCount,totatKeygenValueSentCount,totalSubSecretSentCount,
-        L,illegitimate_voter_indeces,title,description,
-        public_keys,H,EC_public_keys,candidates
-        ,isVoteTallied,owner,ballots);
+        return ElectionData(id,post_time,share_end_time,ver_end_time,
+        vote_end_time,secret_upload_end_time,min_shares,
+        totatSharesSentCount,totalSubSecretSentCount,
+        illegitimate_voter_indeces,title,description,
+        public_keys,candidates
+        ,isVoteTallied,isVotePubKeySet,isECPubKeysAftVerSet,
+        isSetUp,owner,ballots);
     } 
 }
