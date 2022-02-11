@@ -14,7 +14,6 @@ import ElectionABI from './abis/Election.json';
 const App = () => {
   const [web3,setWeb3] = useState(null);
   const [account,setAccount] = useState('');
-  const [newElectioAddress,setNewElectionAddress] = useState('');
   const [votingApp,setVotingApp] = useState(null);
   const [electionInstances,setElectionInstances] = useState([]);
   const [electionAddresses,setElectionAddresses] = useState([]);
@@ -72,7 +71,6 @@ const App = () => {
                 const e = new web3.eth.Contract(ElectionABI['abi'],eAddress);
                 setElectionInstances((electionInstance)=>[e,...electionInstance]);
                 console.log(e);
-                setNewElectionAddress(eAddress);
                 alert("Create New Election success\nPlease Set up the election.");
             }
         }            
@@ -116,7 +114,7 @@ const App = () => {
       <div className='main'>
         {
           (isNewElection)? 
-          <NewElection web3={web3} newElectioAddress={newElectioAddress} electionAddresses={electionAddresses} handleCloseNewElection={handleCloseNewElection} votingApp={votingApp} account={account} />
+          <NewElection web3={web3} electionAddresses={electionAddresses} handleCloseNewElection={handleCloseNewElection} votingApp={votingApp} account={account} />
           : 
           <Elections electionInstances={electionInstances} web3={web3} account={account} electionAddresses={electionAddresses}  />
         }

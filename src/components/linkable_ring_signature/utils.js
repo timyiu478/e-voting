@@ -57,7 +57,7 @@ export function genKeyPair(){
     };
 }
 
-export function genKetPairs(num){
+export function genKeyPairs(num){
     let tmp = [];
     for(let i=0;i<num;i++){
         tmp.push(genKeyPair());
@@ -70,6 +70,12 @@ export function publicKeyToHex(publicKey){
     // if (publicKey.isInfinity()) return "00";
     let x = publicKey.getX().toBigInteger().toString(16);
     let y = publicKey.getY().toBigInteger().toString(16);
+    for(let i=0;i<(64-x.length);i++){
+        x+="0";
+    }
+    for(let i=0;i<(64-y.length);i++){
+        y+="0";
+    }
     let hex = "04" + x + y;
     // console.log(hex);
     return hex;

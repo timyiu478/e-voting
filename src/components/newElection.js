@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/Button';
 import {MdOutlineFileUpload} from 'react-icons/md';
 import ElectionABI from '../abis/Election.json';
 
-export default function NewElection({electionAddresses,web3,newElectioAddress,handleCloseNewElection, votingApp, account}){
+export default function NewElection({electionAddresses,web3,handleCloseNewElection, votingApp, account}){
 
     const [title,setTitle] = useState("");
     const [description,setDescription] = useState("");
@@ -28,7 +28,9 @@ export default function NewElection({electionAddresses,web3,newElectioAddress,ha
     const [shares_ver_time_unit,set_shares_ver_time_unit] = useState(0); 
     const [vote_time_unit,set_vote_time_unit] = useState(0); 
     const [secret_upload_time_unit,set_secret_upload_time_unit] = useState(0); 
-    const [newEAddr,setNewEAddr] = useState(newElectioAddress);
+    const [newEAddr,setNewEAddr] = useState(electionAddresses[electionAddresses.length-1]);
+    const [eInstance,setEInstance] = useState(null);
+    const [isSetUp,setIsSetUp] = useState(false);
 
     const handleTitleChange = (e)=>{
         setTitle(e.target.value);
@@ -90,9 +92,40 @@ export default function NewElection({electionAddresses,web3,newElectioAddress,ha
         // console.log(voters);
     }
 
-    const handleSelectElectionAddress = (e) =>{
-        setNewEAddr(e.target.value);
-    }
+    useEffect(()=>{
+        if(eInstance!=null){
+            // listen new election event
+            eInstance.events.setElectionInfoEvent({},
+                async function(error, receipt) {
+                    if(error){
+                        console.error(error);
+                        alert("Set Up Election Failed");
+                    }else{
+                        setIsSetUp(receipt.returnValues.isSetUp);
+                        alert("Set Up Election success");
+                    }
+                }            
+            );
+        }
+
+    },[eInstance])
+
+    useEffect(()=>{
+        if(electionAddresses.length>0){
+            setNewEAddr(electionAddresses[electionAddresses.length-1]);
+            const eIn = new web3.eth.Contract(ElectionABI['abi'],electionAddresses[electionAddresses.length-1]);
+            setEInstance(eIn);
+        }
+    },[electionAddresses]);
+
+    // const handleSelectElectionAddress = (e) =>{
+    //     if(e.target.value == ""){
+    //         setEInstance(null);
+    //     }else{
+    //         setNewEAddr(e.target.value);
+
+    //     }
+    // }
 
     const animatedComponents = makeAnimated();
 
@@ -121,21 +154,23 @@ export default function NewElection({electionAddresses,web3,newElectioAddress,ha
     const handleSend = () => {
         // console.log(account);
         // console.log(votingApp);
-
+        if(isSetUp){
+            alert("This eleciton already set up.");
+            return;
+        }
         const ec_publickeys = voters.map(v => ["0x"+v.slice(2,66),"0x"+v.slice(66,)]);
         setECPubKeys(ec_publickeys);
         console.log(ec_publickeys);
-        votingApp.methods.addElection().send({from: account, gas:30000000})
+        votingApp.methods.addElection().send({from: account, gas:300000000})
         .on('error', function(error, receipt){
             console.error("error:",error); 
         });
     }
     
     const handleSetUP = async () =>{
-        console.log(newEAddr);
-        if(newEAddr.length!=0){
-            const e = new web3.eth.Contract(ElectionABI['abi'],newEAddr);
-            const result = await e.methods.setElectionInfo(
+        console.log(eInstance);
+        if(eInstance!=null){
+            const result = await eInstance.methods.setElectionInfo(
                 [
                     title,description,voters,candidates,ec_publickeys,
                     min_shares,shares_dis_time,shares_ver_time,
@@ -268,12 +303,11 @@ export default function NewElection({electionAddresses,web3,newElectioAddress,ha
                 <Button variant="outline-dark" className=' mt-3 me-1' onClick={handleSend}>Create</Button>
                 <Button variant="dark" className=' mt-3 me-1' onClick={handleSetUP}>Set Up</Button>
                 <FloatingLabel label="Election Address" className="w-50 float-end">
-                    <Form.Select value={newEAddr} onChange={handleSelectElectionAddress} aria-label="Election Address">
-                        {
-                            electionAddresses.map((addr)=>{
-                                return <option key={addr} value={addr}>{addr}</option>
-                            })
-                        }
+                    <Form.Select value={newEAddr} aria-label="Election Address">
+                        <option key={electionAddresses[electionAddresses.length-1]} 
+                            value={electionAddresses[electionAddresses.length-1]}>
+                                {electionAddresses[electionAddresses.length-1]}
+                        </option>
                     </Form.Select>
                 </FloatingLabel>
             </div> 

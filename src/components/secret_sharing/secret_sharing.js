@@ -41,27 +41,27 @@ export function reconstructSecret(subSecrets,min_shares){
     for(let i=0;i<min_shares;i++){
         let value = new Big (subSecrets[i].subSecret.toString());
         // console.log(value.toString(10));
-        const j = parseInt(subSecrets[i].i)+1;
         let z = 1; 
         for(let h=0;h<min_shares;h++){
             // console.log("i:",i);
-            if(H[h] != j){
+            if(H[h] != H[i]){
                 // console.log("h:",H[h]);
                 // console.log("j:",j);
-                z = z * H[h] / (H[h]-j);
+                z = z * H[h] / (H[h]-H[i]);
                 // console.log(z);
             }
         }
-        console.log(z);
-        value = value.times(new Big(z.toString()));
-        secret = secret.plus(value);     
-    }
-    
+        // console.log(z);
+        // console.log(z.toString());
+        z = new Big(z);
+        value = value.times(z);
+        secret = secret.plus(value);
+    }     
     if(secret.lt(new Big(0))){
-        secret = n.minus(secret.abs().mod(n));
+        secret = secret.mod(n).plus(n).mod(n);
     }
-
-    secret = secret.mod(n).round().toFixed().toString(10);
+    console.log(secret.mod(n).round(0,Big.roundUp).toFixed(0).toString(10));
+    secret = secret.mod(n).round(0,Big.roundUp).toFixed(0).toString(10);
     console.log(secret);
     console.log("PubKey:",getPublicKeyHex(secret));
     return secret;
@@ -146,6 +146,10 @@ function test(){
     tmp = tmp.add(xi[0]).add(xi[1]).add(xi[2]).mod(N);
     console.log(tmp.toString(10));
     console.log(prvKey.toString(10));
+
+
+    let z = new Big(0.5).plus(new Big(-0.4)).times(new Big(-101.03));
+    console.log(z.toString(10));
 }
 
 test();

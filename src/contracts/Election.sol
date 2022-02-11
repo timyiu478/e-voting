@@ -32,7 +32,7 @@ contract Election {
     bool public isSetUp;
     bool public isVotePubKeySet;
     bool public isECPubKeysAftVerSet;
-
+    bool public isNoSendSharesCheck;
 
     Secp256r1.ECPoint public votePubKey;
     
@@ -65,7 +65,7 @@ contract Election {
     mapping(bytes20 => Shares.f) f_2d;
     mapping(bytes20 => bool) isF_2d;
     mapping(bytes20 => bool) isf_2d;
-
+    mapping(uint => bool) isPiUploadShares;
 
     Utils.SubSecretWithSig[] subSecrets;
     mapping(uint => bool) isSubSecrets; 
@@ -106,6 +106,7 @@ contract Election {
         bool isVotePubKeySet;
         bool isECPubKeysAftVerSet;
         bool isSetUp;
+        bool isNoSendSharesCheck;
         address owner;
         Ballot[] ballots;
     }
@@ -136,9 +137,11 @@ contract Election {
     // tally vote Event
     event tallyVoteEvent(Candidate[] candidates, Ballot[] ballots);
     // verify shares event 
-    event verifySharesEvent(uint[] illegitimate_voter_indeces);
+    event verifySharesEvent(bool isNoSendShares,uint[] illegitimate_voter_indeces);
     // set vote pubKey event 
-    event setVotePubKeyEvent(bool isVotePubKeySet);
+    event setVotePubKeyEvent(bool isVotePubKeySet, uint[] illegitimate_voter_indeces);
+    // set election info event
+    event setElectionInfoEvent(bool isSetUp);
 
     constructor (uint _id, address _owner){
         id = _id;
@@ -148,7 +151,7 @@ contract Election {
 
     function setElectionInfo(
         ElectionSetUpData calldata _data
-    ) external returns(bool){
+    ) external{
         require(msg.sender==owner,"YouAreNotOwner");
         require(isSetUp==false,"AlreadySet");
         // require minimum number of candidates , voters and min_shares are 2
@@ -175,10 +178,8 @@ contract Election {
         
         isSetUp = true;
 
-        return true;
+        emit setElectionInfoEvent(isSetUp);
     }
-
-
 
     // Verifying fi(j)*G == Fi,0 + Fi,1 * j + ... + Fi,2 * j^(t-1)
     function setDisqualifiedPubKeyIndece(Shares.VerSharesPar[] calldata _Par) 
@@ -230,14 +231,39 @@ contract Election {
             }
 
         }
-        
-        emit verifySharesEvent(illegitimate_voter_indeces);
+        isNoSendSharesCheck = true;
+        emit verifySharesEvent(isNoSendSharesCheck,illegitimate_voter_indeces);
+    }
+
+    function setNoSendSharesVoters() external{
+        for(uint i=0;i<public_keys.length;i++){
+            // check whether voter sends his polynomail coefficient
+            for(uint j=0;j<min_shares;j++){
+                if(isF_2d[ripemd160(abi.encodePacked(i,j))] == false){
+                    if(!illegitimate_voters[i]){
+                        illegitimate_voters[i] = true;
+                        illegitimate_voter_indeces.push(i);
+                    }
+                }
+            }
+            // check whether voter sends his shares to others
+            for(uint k=1;k<=public_keys.length;k++){
+                if(isf_2d[ripemd160(abi.encodePacked(i,k))] == false){
+                    if(!illegitimate_voters[i]){
+                        illegitimate_voters[i] = true;
+                        illegitimate_voter_indeces.push(i);
+                    }
+                }
+            }
+        }
+        emit verifySharesEvent(isNoSendSharesCheck,illegitimate_voter_indeces);
     }
 
     function setVotePublicKey() external {
         require(isVotePubKeySet==false,"AlreadySet");
         Secp256r1.ECPoint memory P;
         bool isFirst;
+
         for(uint i=0;i<public_keys.length;i++){
             if(!illegitimate_voters[i]){
                 // calc vote public key of valid voters
@@ -256,7 +282,7 @@ contract Election {
         (L,H) = LRS.calcLAndH(ECPubKeysAftVer);
         isVotePubKeySet = true;
 
-        emit setVotePubKeyEvent(isVotePubKeySet);
+        emit setVotePubKeyEvent(isVotePubKeySet, illegitimate_voter_indeces);
     }
 
     function getBallot() external view returns(Ballot[] memory){
@@ -265,6 +291,7 @@ contract Election {
 
     function addSubSecret(Utils.SubSecretWithSig calldata _s) external{
         require(illegitimate_voters[_s.i] == false,"DisqualifiedVoter");
+        require(ECPubKeysAftVer.length>=min_shares,"InsufficientVoters");
         // verify secret upload peroid: vote end time <= now < secret_upload_end_time
         // require(vote_end_time<=block.timestamp &&block.timestamp < secret_upload_end_time,"invalid subscret upload time");
         uint256 h = uint256(keccak256(abi.encodePacked(_s.subSecret,_s.i)));
@@ -306,13 +333,14 @@ contract Election {
         return _f;
     }
 
-    function addKeyGenVal(Shares.F[] calldata _F, Shares.f[] calldata _f) external{
-        // verify key gen peroid: now < key_gen_end_time
-        // require(block.timestamp < key_gen_end_time,"invalid key generation time");
+    function addShares(Shares.F[] calldata _F, Shares.f[] calldata _f) external{
+        // check share distribution peroid: now < key_gen_end_time
+        // require(block.timestamp < share_end_time,"invalid key generation time");
+
         bytes20 h;
         uint256 hm; // hashed message
         bool isValidSig;
-        for(uint z;z<min_shares;z++){
+        for(uint z=0;z<min_shares;z++){
             hm = uint256(keccak256(abi.encodePacked(
                 _F[z].p.x,_F[z].p.y,_F[z].i,_F[z].j
                 )));
@@ -327,7 +355,7 @@ contract Election {
             isF_2d[h] = true;
             F_2d[h] = _F[z];
         }
-        for(uint z;z<public_keys.length;z++){
+        for(uint z=0;z<public_keys.length;z++){
             hm = uint256(keccak256(abi.encodePacked(
                 _f[z].ciphertext.C.x,_f[z].ciphertext.C.y,
                 _f[z].ciphertext.D.x,_f[z].ciphertext.D.y
@@ -361,6 +389,8 @@ contract Election {
         require(ver_end_time<= block.timestamp && block.timestamp < vote_end_time,"WrongVoteTime");
         
         require(isVotePubKeySet==true,"SetVotePubKeyFirst");
+
+        require(ECPubKeysAftVer.length>=min_shares,"InsufficientVoters");
 
         // hash of _K
         bytes20 h = ripemd160(abi.encodePacked(_K.x,_K.y));
@@ -406,6 +436,8 @@ contract Election {
         // check whether the vote already tallied
         require(isVoteTallied == false,"Tallied");
 
+        require(ECPubKeysAftVer.length>=min_shares,"InsufficientVoters");
+
         // require valid vote private key
         require(verfiyVotePrivateKey(_votePrvKey)==true,"WrongPrvKey");
 
@@ -429,6 +461,6 @@ contract Election {
         illegitimate_voter_indeces,title,description,
         public_keys,candidates
         ,isVoteTallied,isVotePubKeySet,isECPubKeysAftVerSet,
-        isSetUp,owner,ballots);
+        isSetUp,isNoSendSharesCheck,owner,ballots);
     } 
 }

@@ -37,7 +37,6 @@ import {calcVotePublicKey,calcPolynomialOfXModP,sumOFfiOFJ,reconstructSecret,ver
 import Candidates_table_item from './elections_components/Candidates_table_item';
 import Publickeys_table_item from './elections_components/Publickeys_table_item';
 import SubSecretItem from './elections_components/SubSecret';
-import TallyResult from './elections_components/tallyResult';
 import CloseState from './elections_components/CloseState';
 import Alert_item from './elections_components/Alert_item';
 
@@ -110,6 +109,7 @@ export default function Elections({electionInstances,web3,account,electionAddres
     const [isVotePubKeySet,setIsVotePubKeySet] = useState(false);
     const [isVotePubKeySeting,setIsVotePubKeySeting] = useState(false);
     const [isSetUp,seIsSetUp] = useState(false);
+    const [isNoSendSharesCheck,setIsNoSendSharesCheck] = useState(false);
 
     const [electionInstance,setelectionInstace] = useState(null);
     const [LRSignature,setLRSignature] = useState(null);
@@ -139,6 +139,7 @@ export default function Elections({electionInstances,web3,account,electionAddres
         setTotalVoteCount(e.ballots.length);
         setIsVotePubKeySet(e.isVotePubKeySet);
         seIsSetUp(e.isSetUp);
+        setIsNoSendSharesCheck(e.isNoSendSharesCheck);
 
         if(e.isVoteTallied){
             setBallots(e.ballots);
@@ -159,10 +160,11 @@ export default function Elections({electionInstances,web3,account,electionAddres
     },[electionInstances]);
 
     useEffect(()=>{
+        console.log(disqualifiedVoters);
         if(disqualifiedVoters.length>0){
             let tmp = [];
             for(let i=0;i<publickeysAfterVerified.length;i++){
-                if(disqualifiedVoters.find(v=> v != i.toString())){
+                if(!disqualifiedVoters.find(v=> parseInt(v) == i)){
                     tmp.push(publickeysAfterVerified[i]);
                 }
             }
@@ -249,6 +251,7 @@ export default function Elections({electionInstances,web3,account,electionAddres
                 console.log(receipt);
                 setIsVotePubKeySeting(false);
                 setIsVotePubKeySet(receipt.returnValues.isVotePubKeySet);
+                setDisqualifiedVoters(receipt.returnValues.illegitimate_voter_indeces);
                 alert("Set vote pubKey success");
             }
         });
@@ -462,7 +465,7 @@ export default function Elections({electionInstances,web3,account,electionAddres
         // saveKeyGenValues();
         setIsSendValueLoading(true);
         
-        electionInstance.methods.addKeyGenVal(Fij_list,fi_ofJ_list_signed).send({from: account,gas:30000000})
+        electionInstance.methods.addShares(Fij_list,fi_ofJ_list_signed).send({from: account,gas:30000000})
         .on('error', function(error, receipt){
             setIsSendValueLoading(false);
             alert(error.message);
@@ -655,6 +658,13 @@ export default function Elections({electionInstances,web3,account,electionAddres
     }
 
     const handleVerKeyGenValues = async () =>{
+        if(!isNoSendSharesCheck){
+            await electionInstance.methods.setNoSendSharesVoters()
+            .send({from:account,gas:300000000});
+            return;
+        }
+
+
         if(privateKey == ""){
             alert("Please input your private key");
             return;
@@ -665,9 +675,14 @@ export default function Elections({electionInstances,web3,account,electionAddres
         const f = await getfi_OFJ();
         console.log(f);
         for(let i=0;i<publickeys.length;i++){
+            if(disqualifiedVoters.find(v=>parseInt(v)==i)){
+                console.log(i);
+                continue;
+            }
             const Fij_list = await electionInstance.methods.getF(i).call();
             // console.log(Fij_list);
             // console.log(f.find(fi_ofJ=>fi_ofJ.i==i).ciphertext);
+            // console.log(f.find(fi_ofJ=>fi_ofJ.i==i));
             const tmp = elgamal_decrypt(
                 f.find(fi_ofJ=>fi_ofJ.i==i).ciphertext,
                 privateKey,publickeys[publickeyIndex]);
@@ -688,7 +703,6 @@ export default function Elections({electionInstances,web3,account,electionAddres
         }else{
             alert("Disqualified Voters found!\nPlease report them!");
         }
-        
         console.log(inValid);
     }
 
@@ -890,7 +904,7 @@ export default function Elections({electionInstances,web3,account,electionAddres
                                                                 </Col>
                                                             </Row>
                                                             <div className='mt-4 mb-5'>
-                                                                <Button className=" me-2" variant="light" onClick={handleVerKeyGenValues}>Ver Values</Button>
+                                                                <Button className=" me-2" variant="light" onClick={handleVerKeyGenValues}>{(!isNoSendSharesCheck)?"Check Unsent Voters":"Ver Values"}</Button>
                                                                 <Button className="me-2" variant="dark" onClick={handleReportVoters} disabled={isReportingVoters} >
                                                                     {(isReportingVoters)?<span><Spinner animation="border" size="sm" /> Reporting</span>
                                                                     : "Report Voter(s)"}

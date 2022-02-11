@@ -2,7 +2,7 @@ import BigInteger from 'js-jsbn';
 import {getSECCurveByName} from './lib/sec.js';
 import {sha256} from './lib/sha256.js';
 import {getRandomInt,genKeyPair,publicKeyToHex,hexToPublicKey,hash1,
-    hash2,concateArray,pointToInt,messageToInt,genKetPairs} from './utils.js';
+    hash2,concateArray,pointToInt,messageToInt,genKeyPairs} from './utils.js';
 
 const ec_params = getSECCurveByName('secp256r1');
 const P = new BigInteger("FFFFFFFF00000000FFFFFFFFFFFFFFFFBCE6FAADA7179E84F3B9CAC2FC632551",16);
@@ -181,4 +181,4 @@ export function test(){
 }
 
 // test();
-// genKetPairs(3);
+console.log(genKeyPairs(2));
