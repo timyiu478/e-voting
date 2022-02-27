@@ -1,6 +1,8 @@
 import React, { Component, useState, useEffect, useRef}  from 'react';
 import { Chart as ChartJS } from 'chart.js/auto';
 import { Doughnut } from 'react-chartjs-2';
+import Web3 from 'web3';
+import {removePadding} from '../linkable_ring_signature/utils';
 
 export default function BallotResult({candidates,isShowResult,voteRate}){
     const options = {
@@ -33,7 +35,7 @@ export default function BallotResult({candidates,isShowResult,voteRate}){
         }
     }
     
-    const labels = candidates.map(c=>c.name);
+    const labels = candidates.map(c=>removePadding(Web3.utils.hexToAscii(c.name)));
 
     // https://www.codegrepper.com/code-examples/javascript/generate+colors+for+react-chartjs-2
     const randColor = () =>{

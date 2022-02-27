@@ -212,3 +212,14 @@ export function mapToCurve(x){
         }
     }
 }
+
+export function paddingStr(str){
+    while(str.length<32){
+        str = str+'\0';
+    }
+    return str;
+}
+
+export function removePadding(str){
+    return str.split("\0")[0];
+}

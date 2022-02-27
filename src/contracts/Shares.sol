@@ -12,7 +12,7 @@ library Shares{
     struct VerSharesPar{
         Secp256r1.ECPoint H2;
         uint i;
-        uint j; // public key index + 1
+        uint j; // public key index + 2
         CPProof.CPproof proof;
     }
 
@@ -29,6 +29,13 @@ library Shares{
         uint i;
         uint j;
         uint256 h;
+        ECDSA.ECDSA_Sig sig;
+    }
+
+    struct SubSecretWithSig{
+        uint256 h;
+        uint256 subSecret;
+        uint i;
         ECDSA.ECDSA_Sig sig;
     }
 
@@ -52,6 +59,15 @@ library Shares{
         }else{
             return false;
         }
+    }
+
+    function calcSubSecrets(uint256[] calldata _shares)
+    external pure returns(uint256){
+        uint256 t;
+        for(uint i=0;i<_shares.length;i++){
+            t = addmod(t,_shares[i],Secp256r1.NN);
+        }
+        return t;
     }
 
 }

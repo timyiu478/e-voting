@@ -55,5 +55,5 @@ export function CPverify(G1,h1,G2,h2,proof){
     console.log(c.toString(16));
     console.log(cc.toString(16));
 
-    return ;
+    return cc.compareTo(c) == 0;
 }

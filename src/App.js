@@ -14,6 +14,7 @@ import ElectionABI from './abis/Election.json';
 const App = () => {
   const [web3,setWeb3] = useState(null);
   const [account,setAccount] = useState('');
+  const [searchName,setsearchName] = useState('');
   const [votingApp,setVotingApp] = useState(null);
   const [electionInstances,setElectionInstances] = useState([]);
   const [electionAddresses,setElectionAddresses] = useState([]);
@@ -90,6 +91,11 @@ const App = () => {
     blockchainInstance();
   },[]);
 
+  const handleSeach = (e) =>{
+    setsearchName(e.target.value);
+    console.log(e.target.value);
+  }
+
   return (
     <>
       <div>
@@ -104,6 +110,8 @@ const App = () => {
                     placeholder="Search"
                     className="me-3"
                     aria-label="Search"
+                    value={searchName}
+                    onChange={handleSeach}
                   />
                 </Form>
                 <Button variant="outline-light" onClick={()=>{ handleOpenNewElection(); }}>New Election</Button>
@@ -116,7 +124,7 @@ const App = () => {
           (isNewElection)? 
           <NewElection web3={web3} electionAddresses={electionAddresses} handleCloseNewElection={handleCloseNewElection} votingApp={votingApp} account={account} />
           : 
-          <Elections electionInstances={electionInstances} web3={web3} account={account} electionAddresses={electionAddresses}  />
+          <Elections searchName={searchName} electionInstances={electionInstances} web3={web3} account={account} electionAddresses={electionAddresses}  />
         }
       </div>
 

@@ -7,7 +7,7 @@ let Shares = artifacts.require("Shares");
 let CPProof = artifacts.require("CPProof");
 let VotingApp = artifacts.require("VotingApp");
 let Election = artifacts.require("Election");
-
+let Commitment = artifacts.require("Commitment");
 
 module.exports = async function(deployer) {
 
@@ -18,6 +18,7 @@ module.exports = async function(deployer) {
     await deployer.deploy(Shares);
     await deployer.deploy(CPProof);
     await deployer.deploy(Utils);
+    await deployer.deploy(Commitment);
     await deployer.link(ECDSA,[VotingApp,Election]);
     await deployer.link(Elgamal,[VotingApp,Election]);
     await deployer.link(LRS,[VotingApp,Election]);
@@ -25,6 +26,6 @@ module.exports = async function(deployer) {
     await deployer.link(CPProof,[VotingApp,Election]);
     await deployer.link(Utils,[VotingApp,Election]);
     await deployer.link(Secp256r1,[VotingApp,Election]);
+    await deployer.link(Commitment,[VotingApp,Election]);
     await deployer.deploy(VotingApp);
-    await deployer.link(VotingApp,[Election]);
 };

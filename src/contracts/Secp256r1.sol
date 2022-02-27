@@ -11,6 +11,9 @@ library Secp256r1 {
 
     // secp256r1 parameters
     // https://neuromancer.sk/std/secg/secp256r1#
+        // base point H = G * 10
+    uint256 public constant HX = 0xCEF66D6B2A3A993E591214D1EA223FB545CA6C471C48306E4C36069404C5723F;
+    uint256 public constant HY = 0x878662A229AAAE906E123CDD9D3B4C10590DED29FE751EEECA34BBAA44AF0773;
     uint256 public constant GX = 0x6b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c296;
     uint256 public constant GY = 0x4fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5;
     uint256 public constant AA = 0xffffffff00000001000000000000000000000000fffffffffffffffffffffffc;

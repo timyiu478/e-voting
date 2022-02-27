@@ -7,9 +7,14 @@
     margin: auto;
 }
 
-input[type="file"] {
+/* input[type="file"] {
     display: none;
+} */
+
+.register_switch{
+    left: 335px;
 }
+
 
 .pointer:hover{
     cursor: pointer;

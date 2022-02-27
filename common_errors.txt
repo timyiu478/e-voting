@@ -8,4 +8,10 @@ heap out of memory		set/export NODE_OPTIONS=--max_old_space_size=4096,
 
 out of gas				increase gas limit				
 
-libiraries				https://ethereum.stackexchange.com/questions/39372/you-must-deploy-and-link-the-following-libraries-before-you-can-deploy-a-new-ver/39623				
+libiraries				https://ethereum.stackexchange.com/questions/39372/you-must-deploy-and-link-the-following-libraries-before-you-can-deploy-a-new-ver/39623
+
+exceed contract size	use libiraries,
+						use shorter str name;
+						use 256bit variables,
+						string -> bytes32
+						

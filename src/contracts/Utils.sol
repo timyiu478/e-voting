@@ -3,16 +3,81 @@
 pragma solidity >=0.5.3 <0.9.0;
 
 import "./EllipticCurve.sol";
-import "./ECDSA.sol";
 import "./Secp256r1.sol";
+import "./Commitment.sol";
+import "./Elgamal.sol";
+
 
 library Utils{
+    // Model a candidate
+    struct Candidate{
+        uint id;
+        uint voteCount;
+        bytes32 name;
+    }
+    // Participant Info (For Registration)
+    struct RegParticipantInfo{
+        Commitment.info name;
+        Commitment.info birthDate;
+        Commitment.info ID;
+    }   
+    // Model a ballot
+    struct Ballot{
+        uint id;
+        uint voteTime;
+        int candidate_id;
+        uint encVoteHash;
+        uint U0;
+        uint[] V;
+        Secp256r1.ECPoint K;
+        Elgamal.Elgamal_ciphertext encVote;
+    }
+    // Model a election Data
+    struct ElectionData{
+        uint id;
+        uint post_time;
+        uint reg_end_time;
+        uint share_end_time;
+        uint ver_end_time;
+        uint vote_end_time;
+        uint secret_upload_end_time;
+        uint min_shares;
+        uint totatSharesSentCount;
+        uint totalSubSecretSentCount;
+        uint[] illegitimate_voter_indeces;
+        bytes32 title;
+        bytes32 description;
+        Candidate[] candidates;
+        bool isVoteTallied;
+        bool isVotePubKeySet;
+        bool isECPubKeysAftVerSet;
+        bool isSetUp;
+        bool isNoSendSharesCheck;
+        bool isRegOn;
+        address owner;
+        Ballot[] ballots;
+        RegParticipantInfo[] regInfo;
+        Secp256r1.ECPoint[] EC_public_keys;
+    }
 
-    struct SubSecretWithSig{
-        uint256 h;
-        uint256 subSecret;
-        uint i;
-        ECDSA.ECDSA_Sig sig;
+    struct ElectionSetUpData{
+        bytes32  title;
+        bytes32  des; 
+        bytes32[]  candidates;
+        Secp256r1.ECPoint[]  EC_public_keys;
+        uint minShares;
+        uint regTime;
+        uint sharesTime;
+        uint verTime; 
+        uint voteTime; 
+        uint secUploadTime;
+        uint regTimeUnit; 
+        uint sharesTimeUnit; 
+        uint verTimeUnit; 
+        uint voteTimeUnit;
+        uint secUploadTimeUnit;
+        bool isRegOn;
+        RegParticipantInfo[] regInfo;
     }
 
     function verfiyVotePrivateKey(uint256 _prvKey,Secp256r1.ECPoint calldata _pubKey) 

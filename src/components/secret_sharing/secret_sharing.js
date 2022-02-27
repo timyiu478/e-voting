@@ -36,7 +36,7 @@ export function reconstructSecret(subSecrets,min_shares){
     const n = new Big (N.toString(10));
     
     console.log(subSecrets);
-    const H = subSecrets.map(s=>parseInt(s.i)+1);
+    const H = subSecrets.map(s=>parseInt(s.i)+2);
     let secret = new Big ("0");
     for(let i=0;i<min_shares;i++){
         let value = new Big (subSecrets[i].subSecret.toString());
@@ -70,11 +70,14 @@ export function reconstructSecret(subSecrets,min_shares){
 export function sumOFfiOFJ(values){
     console.log("----------------------",values);
     let sum = new BigInteger("0",10);
+    let tmp = new BigInteger("0",10);
     for(let i=0;i<values.length;i++){
         sum = sum.add(new BigInteger(values[i].toString(),10));
+        tmp = tmp.add(new BigInteger(values[i].toString(),10)).mod(N);
     }
     sum = sum.mod(N);
     console.log(sum.toString(10));
+    console.log(tmp.toString(10));
     return sum.toString(10);
 }
 

@@ -8,7 +8,7 @@ export default function Publickeys_table_item({publickeys,publickeysAfterVerifie
         let t = [];
         let count = 0;
         for(let i=0;i<publickeys.length;i++){
-            if(publickeysAfterVerified.find(p=>p==publickeys[i])){
+            if(!disqualifiedVoters.find(p=>p==i)){
                 t.push(count);
                 count++;
             }else{
@@ -16,7 +16,7 @@ export default function Publickeys_table_item({publickeys,publickeysAfterVerifie
             }
         }
         SetTmp(t);
-    },[publickeysAfterVerified]);
+    },[publickeysAfterVerified,publickeys]);
 
     return publickeys.map((p,i)=>{
         return <tr key={"publickeys_index " + i}>

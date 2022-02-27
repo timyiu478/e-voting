@@ -10,6 +10,10 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import {MdOutlineFileUpload} from 'react-icons/md';
 import ElectionABI from '../abis/Election.json';
+import FormCheck from 'react-bootstrap/FormCheck';
+import { getVoterInfoCommitment } from './registration/registration.js';
+import Web3 from 'web3';
+import {paddingStr} from '../components/linkable_ring_signature/utils';
 
 export default function NewElection({electionAddresses,web3,handleCloseNewElection, votingApp, account}){
 
@@ -20,10 +24,12 @@ export default function NewElection({electionAddresses,web3,handleCloseNewElecti
     const [voter_options,setVoterOptions] = useState([]);
     const [ec_publickeys,setECPubKeys] = useState([]);
     const [min_shares,set_min_shares] = useState(0); 
+    const [reg_time,set_reg_time] = useState(0); 
     const [shares_dis_time,set_shares_dis_time] = useState(0); 
     const [shares_ver_time,set_shares_ver_time] = useState(0); 
     const [vote_time,set_vote_time] = useState(0); 
     const [secret_upload_time,set_secret_upload_time] = useState(0); 
+    const [reg_time_unit,set_reg_time_unit] = useState(0); 
     const [shares_dis_time_unit,set_shares_dis_time_unit] = useState(0); 
     const [shares_ver_time_unit,set_shares_ver_time_unit] = useState(0); 
     const [vote_time_unit,set_vote_time_unit] = useState(0); 
@@ -31,6 +37,8 @@ export default function NewElection({electionAddresses,web3,handleCloseNewElecti
     const [newEAddr,setNewEAddr] = useState(electionAddresses[electionAddresses.length-1]);
     const [eInstance,setEInstance] = useState(null);
     const [isSetUp,setIsSetUp] = useState(false);
+    const [isRegOn,setIsRegOn] = useState(0);
+    const [regInfo,setRegInfo] = useState([]);
 
     const handleTitleChange = (e)=>{
         setTitle(e.target.value);
@@ -45,6 +53,13 @@ export default function NewElection({electionAddresses,web3,handleCloseNewElecti
     const handleMinSharesChange = (e)=>{
         set_min_shares(e.target.value);
         // console.log(e.target.value);
+    }
+
+    const handleRegTimeChange = (e)=>{
+        if(isRegOn==1){
+            set_reg_time(e.target.value);
+            // console.log(e.target.value);
+        }
     }
 
     const handleKegGenTimeChange = (e)=>{
@@ -64,6 +79,11 @@ export default function NewElection({electionAddresses,web3,handleCloseNewElecti
 
     const handleSecUpTimeChange = (e)=>{
         set_secret_upload_time(e.target.value);
+        // console.log(e.target.value);
+    }
+
+    const handleRegTimeUnitChange = (e)=>{
+        set_reg_time_unit(e.target.value);
         // console.log(e.target.value);
     }
 
@@ -92,6 +112,20 @@ export default function NewElection({electionAddresses,web3,handleCloseNewElecti
         // console.log(voters);
     }
 
+    const handleRegChange = () =>{
+        setIsRegOn((prev)=>(prev +1) % 2);
+        console.log((isRegOn + 1) % 2);
+    }
+
+    const handleRegInfoChange = async (e) =>{
+        if(isRegOn == 1){
+            const file = e.target.files[0];
+            const tmp = await getVoterInfoCommitment(file);
+            console.log(tmp);
+            setRegInfo((prev)=>tmp);
+        }
+    }
+
     useEffect(()=>{
         if(eInstance!=null){
             // listen new election event
@@ -117,15 +151,6 @@ export default function NewElection({electionAddresses,web3,handleCloseNewElecti
             setEInstance(eIn);
         }
     },[electionAddresses]);
-
-    // const handleSelectElectionAddress = (e) =>{
-    //     if(e.target.value == ""){
-    //         setEInstance(null);
-    //     }else{
-    //         setNewEAddr(e.target.value);
-
-    //     }
-    // }
 
     const animatedComponents = makeAnimated();
 
@@ -168,20 +193,18 @@ export default function NewElection({electionAddresses,web3,handleCloseNewElecti
     }
     
     const handleSetUP = async () =>{
-        console.log(eInstance);
         if(eInstance!=null){
-            const result = await eInstance.methods.setElectionInfo(
+            await eInstance.methods.setElectionInfo(
                 [
-                    title,description,voters,candidates,ec_publickeys,
-                    min_shares,shares_dis_time,shares_ver_time,
-                    vote_time,secret_upload_time,shares_dis_time_unit,
-                    shares_ver_time_unit,vote_time_unit,secret_upload_time_unit
+                    Web3.utils.asciiToHex(paddingStr(title)),
+                    Web3.utils.asciiToHex(paddingStr(description)),
+                    candidates.map((c)=>Web3.utils.asciiToHex(paddingStr(c))),ec_publickeys,
+                    min_shares,reg_time,shares_dis_time,shares_ver_time,
+                    vote_time,secret_upload_time,reg_time_unit,shares_dis_time_unit,
+                    shares_ver_time_unit,vote_time_unit,secret_upload_time_unit,
+                    isRegOn, regInfo
                 ]
             ).send({from: account, gas:3000000});
-            console.log(result);
-            if(result.status == true){
-                alert("Set up success!");
-            }
         }
         
     }
@@ -217,14 +240,14 @@ export default function NewElection({electionAddresses,web3,handleCloseNewElecti
                 <div className='row g-3'>
                     <div className='col-9'>
                         <strong className='ps-1'>
-                            Voters
+                            Participants Public Keys
                             <label className="ps-1 pb-2 pointer">
-                                <input type="file" onChange={handlePublicKeysUpload} />
+                                <input type="file" className='d-none' onChange={handlePublicKeysUpload} />
                                 <MdOutlineFileUpload size='1.5rem'/>
                             </label>
                         </strong>
                         <div className='mt-1 mb-4'>
-                            <Form.Control type="file" size="sm" className='mt-1 mb-2' />
+                            <Form.Control type="files" size="sm" className='mt-1 mb-2 d-none' />
                             <Select
                                 closeMenuOnSelect={false}
                                 components={animatedComponents}
@@ -244,14 +267,26 @@ export default function NewElection({electionAddresses,web3,handleCloseNewElecti
                         </div>
                     </div>
                 </div>
+                
+                <div className='row g-3 '>
+                    <div className='col-12'>
+                        <div className="position-relative">
+                            <strong>Participants Information (For Registration)</strong>
+                            <FormCheck type="switch" id="Registration" className='position-absolute top-0 register_switch' onChange={handleRegChange} />
+                        </div>
+                        <Form.Control accept=".xlsx" disabled={!(isRegOn==1)} type="file" size="sm" className="mt-1 mb-4" onChange={handleRegInfoChange} /> 
+                    </div>
+                </div>
+
+
 
                 <div className='row g-3'>
                     <div className='col-md'>
-                        <strong className='ps-1'>Shares Distribution Time</strong>
-                        <InputGroup className='mt-1 mb-4'>
-                            <Form.Control value={shares_dis_time} type="number"  min={0} onChange={handleKegGenTimeChange} />
+                        <strong className='ps-1'>Registration Time</strong>
+                        <InputGroup className='mt-1 mb-4 '>
+                            <Form.Control value={reg_time} type="number"  min={0} onChange={handleRegTimeChange} />
                             <FloatingLabel label="Unit">
-                                <Form.Select value={shares_dis_time_unit} onChange={handleKegGenTimeUnitChange}  aria-label="Time Unit of key generation">
+                                <Form.Select value={reg_time_unit} onChange={handleRegTimeUnitChange}  aria-label="Time Unit of Registration">
                                     <option value={0}>Minutes</option>
                                     <option value={1}>Hours</option>
                                     <option value={2}>Days</option>
@@ -260,11 +295,24 @@ export default function NewElection({electionAddresses,web3,handleCloseNewElecti
                         </InputGroup>
                     </div>
                     <div className='col-md'>
-                        <strong className='ps-1'>Shares Verification Time</strong>
+                        <strong className='ps-1'>Distribution Time</strong>
+                        <InputGroup className='mt-1 mb-4'>
+                            <Form.Control value={shares_dis_time} type="number"  min={0} onChange={handleKegGenTimeChange} />
+                            <FloatingLabel label="Unit">
+                                <Form.Select value={shares_dis_time_unit} onChange={handleKegGenTimeUnitChange}  aria-label="Time Unit of Shares Distribution">
+                                    <option value={0}>Minutes</option>
+                                    <option value={1}>Hours</option>
+                                    <option value={2}>Days</option>
+                                </Form.Select>
+                            </FloatingLabel>
+                        </InputGroup>
+                    </div>
+                    <div className='col-md'>
+                        <strong className='ps-1'>Verification Time</strong>
                         <InputGroup className='mt-1 mb-4'>
                             <Form.Control value={shares_ver_time} type="number"  min={0} onChange={handleKegVerTimeChange} />
                             <FloatingLabel label="Unit">
-                                <Form.Select value={shares_ver_time_unit} onChange={handleKegVerTimeUnitChange}  aria-label="Time Unit of key generation">
+                                <Form.Select value={shares_ver_time_unit} onChange={handleKegVerTimeUnitChange}  aria-label="Time Unit of Shares Verification">
                                     <option value={0}>Minutes</option>
                                     <option value={1}>Hours</option>
                                     <option value={2}>Days</option>
@@ -277,7 +325,7 @@ export default function NewElection({electionAddresses,web3,handleCloseNewElecti
                         <InputGroup className='mt-1 mb-4'>
                             <Form.Control value={vote_time} onChange={handleVoteTimeChange} type="number" min={0} />
                             <FloatingLabel label="Unit">
-                                <Form.Select  value={vote_time_unit} onChange={handleVoteTimeUnitChange}  aria-label="Time Unit of key generation">
+                                <Form.Select  value={vote_time_unit} onChange={handleVoteTimeUnitChange}  aria-label="Time Unit of Vote Time">
                                     <option value={0}>Minutes</option>
                                     <option value={1}>Hours</option>
                                     <option value={2}>Days</option>
@@ -290,7 +338,7 @@ export default function NewElection({electionAddresses,web3,handleCloseNewElecti
                         <InputGroup className='mt-1 mb-4'>
                             <Form.Control value={secret_upload_time} onChange={handleSecUpTimeChange} type="number"  min={0} />
                             <FloatingLabel label="Unit">
-                                <Form.Select value={secret_upload_time_unit} onChange={handleSecUpTimeUnitChange} aria-label="Time Unit of key generation">
+                                <Form.Select value={secret_upload_time_unit} onChange={handleSecUpTimeUnitChange} aria-label="Time Unit of Secret Upload">
                                     <option value={0}>Minutes</option>
                                     <option value={1}>Hours</option>
                                     <option value={2}>Days</option>

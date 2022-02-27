@@ -4,6 +4,8 @@ import Spinner from 'react-bootstrap/Spinner';
 import {TiTick} from 'react-icons/ti';
 import Button from 'react-bootstrap/Button';
 import "gridjs/dist/theme/mermaid.css";
+import Web3 from 'web3';
+import {removePadding} from '../linkable_ring_signature/utils';
 
 export default function Ballots({isShowBallots,ballots,candidates,eInstance}){
     const [isValidLRSLoading,setIsValidLRSLoading] = useState({});
@@ -94,7 +96,7 @@ export default function Ballots({isShowBallots,ballots,candidates,eInstance}){
             data={ballots.map(b=>[
                 b.id,
                 timestampToDate(b.voteTime),
-                `${candidates[b.candidate_id].name} ( id: ${b.candidate_id} )`,
+                `${(b.candidate_id.toString()!='-1')?removePadding(Web3.utils.hexToAscii(candidates[b.candidate_id].name)):"NaN"} ( id: ${b.candidate_id} )`,
                 _(
                     <span className='w-100'>
                         <Button size="sm" variant={isValidLRS[b.id]?"success":"outline-secondary"} className='me-1' onClick={()=>{handleVerfiyLRS(b,b.id)}}>
