@@ -562,7 +562,7 @@
                 }
               ]
             },
-            "name": "abi_decode_tuple_t_struct$_ECPoint_$4222_calldata_ptrt_struct$_ECPoint_$4222_calldata_ptrt_struct$_ECPoint_$4222_calldata_ptrt_struct$_ECPoint_$4222_calldata_ptrt_struct$_CPproof_$8_calldata_ptr",
+            "name": "abi_decode_tuple_t_struct$_ECPoint_$4337_calldata_ptrt_struct$_ECPoint_$4337_calldata_ptrt_struct$_ECPoint_$4337_calldata_ptrt_struct$_ECPoint_$4337_calldata_ptrt_struct$_CPproof_$8_calldata_ptr",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -2156,7 +2156,7 @@
           }
         ]
       },
-      "contents": "{\n    { }\n    function abi_decode_struct_ECPoint_calldata(offset, end) -> value\n    {\n        if slt(sub(end, offset), 64) { revert(0, 0) }\n        value := offset\n    }\n    function abi_decode_tuple_t_struct$_ECPoint_$4222_calldata_ptrt_struct$_ECPoint_$4222_calldata_ptrt_struct$_ECPoint_$4222_calldata_ptrt_struct$_ECPoint_$4222_calldata_ptrt_struct$_CPproof_$8_calldata_ptr(headStart, dataEnd) -> value0, value1, value2, value3, value4\n    {\n        if slt(sub(dataEnd, headStart), 320) { revert(0, 0) }\n        value0 := abi_decode_struct_ECPoint_calldata(headStart, dataEnd)\n        value1 := abi_decode_struct_ECPoint_calldata(add(headStart, 64), dataEnd)\n        value2 := abi_decode_struct_ECPoint_calldata(add(headStart, 128), dataEnd)\n        value3 := abi_decode_struct_ECPoint_calldata(add(headStart, 192), dataEnd)\n        value4 := abi_decode_struct_ECPoint_calldata(add(headStart, 256), dataEnd)\n    }\n    function abi_encode_tuple_t_bool__to_t_bool__fromStack_library_reversed(headStart, value0) -> tail\n    {\n        tail := add(headStart, 32)\n        mstore(headStart, iszero(iszero(value0)))\n    }\n    function abi_encode_tuple_packed_t_uint256_t_uint256_t_uint256_t_uint256__to_t_uint256_t_uint256_t_uint256_t_uint256__nonPadded_inplace_fromStack_reversed(pos, value3, value2, value1, value0) -> end\n    {\n        mstore(pos, value0)\n        mstore(add(pos, 32), value1)\n        mstore(add(pos, 64), value2)\n        mstore(add(pos, 96), value3)\n        end := add(pos, 128)\n    }\n    function panic_error_0x12()\n    {\n        mstore(0, shl(224, 0x4e487b71))\n        mstore(4, 0x12)\n        revert(0, 0x24)\n    }\n    function panic_error_0x11()\n    {\n        mstore(0, shl(224, 0x4e487b71))\n        mstore(4, 0x11)\n        revert(0, 0x24)\n    }\n    function checked_div_t_uint256(x, y) -> r\n    {\n        if iszero(y)\n        {\n            mstore(0, shl(224, 0x4e487b71))\n            mstore(4, 0x12)\n            revert(0, 0x24)\n        }\n        r := div(x, y)\n    }\n    function checked_sub_t_uint256(x, y) -> diff\n    {\n        if lt(x, y) { panic_error_0x11() }\n        diff := sub(x, y)\n    }\n    function panic_error_0x32()\n    {\n        mstore(0, shl(224, 0x4e487b71))\n        mstore(4, 0x32)\n        revert(0, 0x24)\n    }\n    function abi_encode_tuple_t_stringliteral_5fdf44d35b202e4b4a5d1b6167961ee48e84a906ae5e709d7bddb824c86220a6__to_t_string_memory_ptr__fromStack_reversed(headStart) -> tail\n    {\n        mstore(headStart, 32)\n        mstore(add(headStart, 32), 30)\n        mstore(add(headStart, 64), \"Use jacDouble function instead\")\n        tail := add(headStart, 96)\n    }\n    function abi_encode_tuple_t_stringliteral_f10345bf174b7296e0343b593f8b22d6d65d2b16a2522b6b74d9848a96db003a__to_t_string_memory_ptr__fromStack_reversed(headStart) -> tail\n    {\n        mstore(headStart, 32)\n        mstore(add(headStart, 32), 14)\n        mstore(add(headStart, 64), \"Invalid number\")\n        tail := add(headStart, 96)\n    }\n    function checked_mul_t_uint256(x, y) -> product\n    {\n        if and(iszero(iszero(x)), gt(y, div(not(0), x))) { panic_error_0x11() }\n        product := mul(x, y)\n    }\n}",
+      "contents": "{\n    { }\n    function abi_decode_struct_ECPoint_calldata(offset, end) -> value\n    {\n        if slt(sub(end, offset), 64) { revert(0, 0) }\n        value := offset\n    }\n    function abi_decode_tuple_t_struct$_ECPoint_$4337_calldata_ptrt_struct$_ECPoint_$4337_calldata_ptrt_struct$_ECPoint_$4337_calldata_ptrt_struct$_ECPoint_$4337_calldata_ptrt_struct$_CPproof_$8_calldata_ptr(headStart, dataEnd) -> value0, value1, value2, value3, value4\n    {\n        if slt(sub(dataEnd, headStart), 320) { revert(0, 0) }\n        value0 := abi_decode_struct_ECPoint_calldata(headStart, dataEnd)\n        value1 := abi_decode_struct_ECPoint_calldata(add(headStart, 64), dataEnd)\n        value2 := abi_decode_struct_ECPoint_calldata(add(headStart, 128), dataEnd)\n        value3 := abi_decode_struct_ECPoint_calldata(add(headStart, 192), dataEnd)\n        value4 := abi_decode_struct_ECPoint_calldata(add(headStart, 256), dataEnd)\n    }\n    function abi_encode_tuple_t_bool__to_t_bool__fromStack_library_reversed(headStart, value0) -> tail\n    {\n        tail := add(headStart, 32)\n        mstore(headStart, iszero(iszero(value0)))\n    }\n    function abi_encode_tuple_packed_t_uint256_t_uint256_t_uint256_t_uint256__to_t_uint256_t_uint256_t_uint256_t_uint256__nonPadded_inplace_fromStack_reversed(pos, value3, value2, value1, value0) -> end\n    {\n        mstore(pos, value0)\n        mstore(add(pos, 32), value1)\n        mstore(add(pos, 64), value2)\n        mstore(add(pos, 96), value3)\n        end := add(pos, 128)\n    }\n    function panic_error_0x12()\n    {\n        mstore(0, shl(224, 0x4e487b71))\n        mstore(4, 0x12)\n        revert(0, 0x24)\n    }\n    function panic_error_0x11()\n    {\n        mstore(0, shl(224, 0x4e487b71))\n        mstore(4, 0x11)\n        revert(0, 0x24)\n    }\n    function checked_div_t_uint256(x, y) -> r\n    {\n        if iszero(y)\n        {\n            mstore(0, shl(224, 0x4e487b71))\n            mstore(4, 0x12)\n            revert(0, 0x24)\n        }\n        r := div(x, y)\n    }\n    function checked_sub_t_uint256(x, y) -> diff\n    {\n        if lt(x, y) { panic_error_0x11() }\n        diff := sub(x, y)\n    }\n    function panic_error_0x32()\n    {\n        mstore(0, shl(224, 0x4e487b71))\n        mstore(4, 0x32)\n        revert(0, 0x24)\n    }\n    function abi_encode_tuple_t_stringliteral_5fdf44d35b202e4b4a5d1b6167961ee48e84a906ae5e709d7bddb824c86220a6__to_t_string_memory_ptr__fromStack_reversed(headStart) -> tail\n    {\n        mstore(headStart, 32)\n        mstore(add(headStart, 32), 30)\n        mstore(add(headStart, 64), \"Use jacDouble function instead\")\n        tail := add(headStart, 96)\n    }\n    function abi_encode_tuple_t_stringliteral_f10345bf174b7296e0343b593f8b22d6d65d2b16a2522b6b74d9848a96db003a__to_t_string_memory_ptr__fromStack_reversed(headStart) -> tail\n    {\n        mstore(headStart, 32)\n        mstore(add(headStart, 32), 14)\n        mstore(add(headStart, 64), \"Invalid number\")\n        tail := add(headStart, 96)\n    }\n    function checked_mul_t_uint256(x, y) -> product\n    {\n        if and(iszero(iszero(x)), gt(y, div(not(0), x))) { panic_error_0x11() }\n        product := mul(x, y)\n    }\n}",
       "id": 12,
       "language": "Yul",
       "name": "#utility.yul"
@@ -2173,10 +2173,10 @@
         216
       ],
       "EllipticCurve": [
-        3764
+        3879
       ],
       "Secp256r1": [
-        4250
+        4365
       ]
     },
     "id": 217,
@@ -2204,7 +2204,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 217,
-        "sourceUnit": 4251,
+        "sourceUnit": 4366,
         "src": "70:25:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -2216,7 +2216,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 217,
-        "sourceUnit": 3765,
+        "sourceUnit": 3880,
         "src": "97:29:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -2325,7 +2325,7 @@
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
@@ -2335,13 +2335,13 @@
                           "id": 30,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4222,
+                          "referencedDeclaration": 4337,
                           "src": "442:17:0"
                         },
-                        "referencedDeclaration": 4222,
+                        "referencedDeclaration": 4337,
                         "src": "442:17:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
@@ -2369,7 +2369,7 @@
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
@@ -2379,13 +2379,13 @@
                           "id": 36,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4222,
+                          "referencedDeclaration": 4337,
                           "src": "480:17:0"
                         },
-                        "referencedDeclaration": 4222,
+                        "referencedDeclaration": 4337,
                         "src": "480:17:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
@@ -2413,7 +2413,7 @@
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
@@ -2423,13 +2423,13 @@
                           "id": 42,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4222,
+                          "referencedDeclaration": 4337,
                           "src": "518:17:0"
                         },
-                        "referencedDeclaration": 4222,
+                        "referencedDeclaration": 4337,
                         "src": "518:17:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
@@ -2457,7 +2457,7 @@
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
@@ -2467,13 +2467,13 @@
                           "id": 48,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4222,
+                          "referencedDeclaration": 4337,
                           "src": "556:17:0"
                         },
-                        "referencedDeclaration": 4222,
+                        "referencedDeclaration": 4337,
                         "src": "556:17:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
@@ -2501,7 +2501,7 @@
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
@@ -2511,13 +2511,13 @@
                           "id": 54,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4222,
+                          "referencedDeclaration": 4337,
                           "src": "594:17:0"
                         },
-                        "referencedDeclaration": 4222,
+                        "referencedDeclaration": 4337,
                         "src": "594:17:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
@@ -2545,7 +2545,7 @@
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
@@ -2555,13 +2555,13 @@
                           "id": 60,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4222,
+                          "referencedDeclaration": 4337,
                           "src": "632:17:0"
                         },
-                        "referencedDeclaration": 4222,
+                        "referencedDeclaration": 4337,
                         "src": "632:17:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
@@ -2590,7 +2590,7 @@
                             "referencedDeclaration": 32,
                             "src": "673:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -2601,7 +2601,7 @@
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "673:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2617,7 +2617,7 @@
                             "referencedDeclaration": 32,
                             "src": "678:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -2628,7 +2628,7 @@
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "678:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2689,7 +2689,7 @@
                             "referencedDeclaration": 11,
                             "src": "715:3:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
@@ -2700,7 +2700,7 @@
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "715:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2716,7 +2716,7 @@
                             "referencedDeclaration": 11,
                             "src": "721:3:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
@@ -2727,7 +2727,7 @@
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "721:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2740,10 +2740,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "727:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -2754,7 +2754,7 @@
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4237,
+                          "referencedDeclaration": 4352,
                           "src": "727:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2767,10 +2767,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "740:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -2781,7 +2781,7 @@
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4243,
+                          "referencedDeclaration": 4358,
                           "src": "740:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2817,10 +2817,10 @@
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3764,
+                          "referencedDeclaration": 3879,
                           "src": "686:13:0",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3764_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3879_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
@@ -2831,7 +2831,7 @@
                         "lValueRequested": false,
                         "memberName": "ecMul",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3190,
+                        "referencedDeclaration": 3305,
                         "src": "686:19:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
@@ -2881,7 +2881,7 @@
                             "referencedDeclaration": 38,
                             "src": "765:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -2892,7 +2892,7 @@
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "765:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2908,7 +2908,7 @@
                             "referencedDeclaration": 38,
                             "src": "770:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -2919,7 +2919,7 @@
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "770:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2980,7 +2980,7 @@
                             "referencedDeclaration": 17,
                             "src": "807:3:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
@@ -2991,7 +2991,7 @@
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "807:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3007,7 +3007,7 @@
                             "referencedDeclaration": 17,
                             "src": "813:3:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
@@ -3018,7 +3018,7 @@
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "813:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3031,10 +3031,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "819:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -3045,7 +3045,7 @@
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4237,
+                          "referencedDeclaration": 4352,
                           "src": "819:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3058,10 +3058,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "832:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -3072,7 +3072,7 @@
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4243,
+                          "referencedDeclaration": 4358,
                           "src": "832:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3108,10 +3108,10 @@
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3764,
+                          "referencedDeclaration": 3879,
                           "src": "778:13:0",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3764_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3879_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
@@ -3122,7 +3122,7 @@
                         "lValueRequested": false,
                         "memberName": "ecMul",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3190,
+                        "referencedDeclaration": 3305,
                         "src": "778:19:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
@@ -3172,7 +3172,7 @@
                             "referencedDeclaration": 44,
                             "src": "857:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -3183,7 +3183,7 @@
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "857:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3199,7 +3199,7 @@
                             "referencedDeclaration": 44,
                             "src": "862:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -3210,7 +3210,7 @@
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "862:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3271,7 +3271,7 @@
                             "referencedDeclaration": 14,
                             "src": "899:3:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
@@ -3282,7 +3282,7 @@
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "899:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3298,7 +3298,7 @@
                             "referencedDeclaration": 14,
                             "src": "905:3:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
@@ -3309,7 +3309,7 @@
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "905:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3322,10 +3322,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "911:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -3336,7 +3336,7 @@
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4237,
+                          "referencedDeclaration": 4352,
                           "src": "911:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3349,10 +3349,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "924:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -3363,7 +3363,7 @@
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4243,
+                          "referencedDeclaration": 4358,
                           "src": "924:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3399,10 +3399,10 @@
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3764,
+                          "referencedDeclaration": 3879,
                           "src": "870:13:0",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3764_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3879_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
@@ -3413,7 +3413,7 @@
                         "lValueRequested": false,
                         "memberName": "ecMul",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3190,
+                        "referencedDeclaration": 3305,
                         "src": "870:19:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
@@ -3463,7 +3463,7 @@
                             "referencedDeclaration": 50,
                             "src": "949:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -3474,7 +3474,7 @@
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "949:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3490,7 +3490,7 @@
                             "referencedDeclaration": 50,
                             "src": "954:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -3501,7 +3501,7 @@
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "954:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3562,7 +3562,7 @@
                             "referencedDeclaration": 20,
                             "src": "991:3:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
@@ -3573,7 +3573,7 @@
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "991:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3589,7 +3589,7 @@
                             "referencedDeclaration": 20,
                             "src": "997:3:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
@@ -3600,7 +3600,7 @@
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "997:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3613,10 +3613,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "1003:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -3627,7 +3627,7 @@
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4237,
+                          "referencedDeclaration": 4352,
                           "src": "1003:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3640,10 +3640,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "1016:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -3654,7 +3654,7 @@
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4243,
+                          "referencedDeclaration": 4358,
                           "src": "1016:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3690,10 +3690,10 @@
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3764,
+                          "referencedDeclaration": 3879,
                           "src": "962:13:0",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3764_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3879_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
@@ -3704,7 +3704,7 @@
                         "lValueRequested": false,
                         "memberName": "ecMul",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3190,
+                        "referencedDeclaration": 3305,
                         "src": "962:19:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
@@ -3754,7 +3754,7 @@
                             "referencedDeclaration": 56,
                             "src": "1069:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -3765,7 +3765,7 @@
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "1069:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3781,7 +3781,7 @@
                             "referencedDeclaration": 56,
                             "src": "1074:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -3792,7 +3792,7 @@
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "1074:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3826,7 +3826,7 @@
                             "referencedDeclaration": 32,
                             "src": "1102:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -3837,7 +3837,7 @@
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "1102:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3853,7 +3853,7 @@
                             "referencedDeclaration": 32,
                             "src": "1107:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -3864,7 +3864,7 @@
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "1107:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3880,7 +3880,7 @@
                             "referencedDeclaration": 44,
                             "src": "1112:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -3891,7 +3891,7 @@
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "1112:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3907,7 +3907,7 @@
                             "referencedDeclaration": 44,
                             "src": "1117:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -3918,7 +3918,7 @@
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "1117:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3931,10 +3931,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "1122:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -3945,7 +3945,7 @@
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4237,
+                          "referencedDeclaration": 4352,
                           "src": "1122:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3958,10 +3958,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "1135:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -3972,7 +3972,7 @@
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4243,
+                          "referencedDeclaration": 4358,
                           "src": "1135:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4012,10 +4012,10 @@
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3764,
+                          "referencedDeclaration": 3879,
                           "src": "1082:13:0",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3764_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3879_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
@@ -4026,7 +4026,7 @@
                         "lValueRequested": false,
                         "memberName": "ecAdd",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3109,
+                        "referencedDeclaration": 3224,
                         "src": "1082:19:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
@@ -4076,7 +4076,7 @@
                             "referencedDeclaration": 62,
                             "src": "1188:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -4087,7 +4087,7 @@
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "1188:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4103,7 +4103,7 @@
                             "referencedDeclaration": 62,
                             "src": "1193:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -4114,7 +4114,7 @@
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "1193:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4148,7 +4148,7 @@
                             "referencedDeclaration": 38,
                             "src": "1221:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -4159,7 +4159,7 @@
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "1221:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4175,7 +4175,7 @@
                             "referencedDeclaration": 38,
                             "src": "1226:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -4186,7 +4186,7 @@
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "1226:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4202,7 +4202,7 @@
                             "referencedDeclaration": 50,
                             "src": "1231:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -4213,7 +4213,7 @@
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "1231:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4229,7 +4229,7 @@
                             "referencedDeclaration": 50,
                             "src": "1236:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -4240,7 +4240,7 @@
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "1236:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4253,10 +4253,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "1241:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -4267,7 +4267,7 @@
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4237,
+                          "referencedDeclaration": 4352,
                           "src": "1241:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4280,10 +4280,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "1254:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -4294,7 +4294,7 @@
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4243,
+                          "referencedDeclaration": 4358,
                           "src": "1254:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4334,10 +4334,10 @@
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3764,
+                          "referencedDeclaration": 3879,
                           "src": "1201:13:0",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3764_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3879_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
@@ -4348,7 +4348,7 @@
                         "lValueRequested": false,
                         "memberName": "ecAdd",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3109,
+                        "referencedDeclaration": 3224,
                         "src": "1201:19:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
@@ -4435,7 +4435,7 @@
                                     "referencedDeclaration": 56,
                                     "src": "1350:2:0",
                                     "typeDescriptions": {
-                                      "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                                      "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                                       "typeString": "struct Secp256r1.ECPoint memory"
                                     }
                                   },
@@ -4446,7 +4446,7 @@
                                   "lValueRequested": false,
                                   "memberName": "x",
                                   "nodeType": "MemberAccess",
-                                  "referencedDeclaration": 4219,
+                                  "referencedDeclaration": 4334,
                                   "src": "1350:4:0",
                                   "typeDescriptions": {
                                     "typeIdentifier": "t_uint256",
@@ -4462,7 +4462,7 @@
                                     "referencedDeclaration": 56,
                                     "src": "1355:2:0",
                                     "typeDescriptions": {
-                                      "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                                      "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                                       "typeString": "struct Secp256r1.ECPoint memory"
                                     }
                                   },
@@ -4473,7 +4473,7 @@
                                   "lValueRequested": false,
                                   "memberName": "y",
                                   "nodeType": "MemberAccess",
-                                  "referencedDeclaration": 4221,
+                                  "referencedDeclaration": 4336,
                                   "src": "1355:4:0",
                                   "typeDescriptions": {
                                     "typeIdentifier": "t_uint256",
@@ -4489,7 +4489,7 @@
                                     "referencedDeclaration": 62,
                                     "src": "1360:2:0",
                                     "typeDescriptions": {
-                                      "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                                      "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                                       "typeString": "struct Secp256r1.ECPoint memory"
                                     }
                                   },
@@ -4500,7 +4500,7 @@
                                   "lValueRequested": false,
                                   "memberName": "x",
                                   "nodeType": "MemberAccess",
-                                  "referencedDeclaration": 4219,
+                                  "referencedDeclaration": 4334,
                                   "src": "1360:4:0",
                                   "typeDescriptions": {
                                     "typeIdentifier": "t_uint256",
@@ -4516,7 +4516,7 @@
                                     "referencedDeclaration": 62,
                                     "src": "1365:2:0",
                                     "typeDescriptions": {
-                                      "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                                      "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                                       "typeString": "struct Secp256r1.ECPoint memory"
                                     }
                                   },
@@ -4527,7 +4527,7 @@
                                   "lValueRequested": false,
                                   "memberName": "y",
                                   "nodeType": "MemberAccess",
-                                  "referencedDeclaration": 4221,
+                                  "referencedDeclaration": 4336,
                                   "src": "1365:4:0",
                                   "typeDescriptions": {
                                     "typeIdentifier": "t_uint256",
@@ -4707,7 +4707,7 @@
                   "stateVariable": false,
                   "storageLocation": "calldata",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                    "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                     "typeString": "struct Secp256r1.ECPoint"
                   },
                   "typeName": {
@@ -4717,13 +4717,13 @@
                       "id": 9,
                       "name": "Secp256r1.ECPoint",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 4222,
+                      "referencedDeclaration": 4337,
                       "src": "240:17:0"
                     },
-                    "referencedDeclaration": 4222,
+                    "referencedDeclaration": 4337,
                     "src": "240:17:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                      "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                       "typeString": "struct Secp256r1.ECPoint"
                     }
                   },
@@ -4741,7 +4741,7 @@
                   "stateVariable": false,
                   "storageLocation": "calldata",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                    "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                     "typeString": "struct Secp256r1.ECPoint"
                   },
                   "typeName": {
@@ -4751,13 +4751,13 @@
                       "id": 12,
                       "name": "Secp256r1.ECPoint",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 4222,
+                      "referencedDeclaration": 4337,
                       "src": "271:17:0"
                     },
-                    "referencedDeclaration": 4222,
+                    "referencedDeclaration": 4337,
                     "src": "271:17:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                      "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                       "typeString": "struct Secp256r1.ECPoint"
                     }
                   },
@@ -4775,7 +4775,7 @@
                   "stateVariable": false,
                   "storageLocation": "calldata",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                    "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                     "typeString": "struct Secp256r1.ECPoint"
                   },
                   "typeName": {
@@ -4785,13 +4785,13 @@
                       "id": 15,
                       "name": "Secp256r1.ECPoint",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 4222,
+                      "referencedDeclaration": 4337,
                       "src": "308:17:0"
                     },
-                    "referencedDeclaration": 4222,
+                    "referencedDeclaration": 4337,
                     "src": "308:17:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                      "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                       "typeString": "struct Secp256r1.ECPoint"
                     }
                   },
@@ -4809,7 +4809,7 @@
                   "stateVariable": false,
                   "storageLocation": "calldata",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                    "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                     "typeString": "struct Secp256r1.ECPoint"
                   },
                   "typeName": {
@@ -4819,13 +4819,13 @@
                       "id": 18,
                       "name": "Secp256r1.ECPoint",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 4222,
+                      "referencedDeclaration": 4337,
                       "src": "340:17:0"
                     },
-                    "referencedDeclaration": 4222,
+                    "referencedDeclaration": 4337,
                     "src": "340:17:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                      "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                       "typeString": "struct Secp256r1.ECPoint"
                     }
                   },
@@ -4923,10 +4923,10 @@
         216
       ],
       "EllipticCurve": [
-        3764
+        3879
       ],
       "Secp256r1": [
-        4250
+        4365
       ]
     },
     "id": 217,
@@ -4954,7 +4954,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 217,
-        "sourceUnit": 4251,
+        "sourceUnit": 4366,
         "src": "70:25:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -4966,7 +4966,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 217,
-        "sourceUnit": 3765,
+        "sourceUnit": 3880,
         "src": "97:29:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -5075,7 +5075,7 @@
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
@@ -5085,13 +5085,13 @@
                           "id": 30,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4222,
+                          "referencedDeclaration": 4337,
                           "src": "442:17:0"
                         },
-                        "referencedDeclaration": 4222,
+                        "referencedDeclaration": 4337,
                         "src": "442:17:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
@@ -5119,7 +5119,7 @@
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
@@ -5129,13 +5129,13 @@
                           "id": 36,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4222,
+                          "referencedDeclaration": 4337,
                           "src": "480:17:0"
                         },
-                        "referencedDeclaration": 4222,
+                        "referencedDeclaration": 4337,
                         "src": "480:17:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
@@ -5163,7 +5163,7 @@
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
@@ -5173,13 +5173,13 @@
                           "id": 42,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4222,
+                          "referencedDeclaration": 4337,
                           "src": "518:17:0"
                         },
-                        "referencedDeclaration": 4222,
+                        "referencedDeclaration": 4337,
                         "src": "518:17:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
@@ -5207,7 +5207,7 @@
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
@@ -5217,13 +5217,13 @@
                           "id": 48,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4222,
+                          "referencedDeclaration": 4337,
                           "src": "556:17:0"
                         },
-                        "referencedDeclaration": 4222,
+                        "referencedDeclaration": 4337,
                         "src": "556:17:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
@@ -5251,7 +5251,7 @@
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
@@ -5261,13 +5261,13 @@
                           "id": 54,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4222,
+                          "referencedDeclaration": 4337,
                           "src": "594:17:0"
                         },
-                        "referencedDeclaration": 4222,
+                        "referencedDeclaration": 4337,
                         "src": "594:17:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
@@ -5295,7 +5295,7 @@
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
@@ -5305,13 +5305,13 @@
                           "id": 60,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4222,
+                          "referencedDeclaration": 4337,
                           "src": "632:17:0"
                         },
-                        "referencedDeclaration": 4222,
+                        "referencedDeclaration": 4337,
                         "src": "632:17:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
@@ -5340,7 +5340,7 @@
                             "referencedDeclaration": 32,
                             "src": "673:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -5351,7 +5351,7 @@
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "673:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -5367,7 +5367,7 @@
                             "referencedDeclaration": 32,
                             "src": "678:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -5378,7 +5378,7 @@
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "678:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -5439,7 +5439,7 @@
                             "referencedDeclaration": 11,
                             "src": "715:3:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
@@ -5450,7 +5450,7 @@
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "715:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -5466,7 +5466,7 @@
                             "referencedDeclaration": 11,
                             "src": "721:3:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
@@ -5477,7 +5477,7 @@
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "721:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -5490,10 +5490,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "727:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -5504,7 +5504,7 @@
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4237,
+                          "referencedDeclaration": 4352,
                           "src": "727:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -5517,10 +5517,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "740:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -5531,7 +5531,7 @@
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4243,
+                          "referencedDeclaration": 4358,
                           "src": "740:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -5567,10 +5567,10 @@
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3764,
+                          "referencedDeclaration": 3879,
                           "src": "686:13:0",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3764_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3879_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
@@ -5581,7 +5581,7 @@
                         "lValueRequested": false,
                         "memberName": "ecMul",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3190,
+                        "referencedDeclaration": 3305,
                         "src": "686:19:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
@@ -5631,7 +5631,7 @@
                             "referencedDeclaration": 38,
                             "src": "765:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -5642,7 +5642,7 @@
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "765:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -5658,7 +5658,7 @@
                             "referencedDeclaration": 38,
                             "src": "770:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -5669,7 +5669,7 @@
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "770:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -5730,7 +5730,7 @@
                             "referencedDeclaration": 17,
                             "src": "807:3:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
@@ -5741,7 +5741,7 @@
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "807:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -5757,7 +5757,7 @@
                             "referencedDeclaration": 17,
                             "src": "813:3:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
@@ -5768,7 +5768,7 @@
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "813:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -5781,10 +5781,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "819:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -5795,7 +5795,7 @@
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4237,
+                          "referencedDeclaration": 4352,
                           "src": "819:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -5808,10 +5808,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "832:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -5822,7 +5822,7 @@
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4243,
+                          "referencedDeclaration": 4358,
                           "src": "832:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -5858,10 +5858,10 @@
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3764,
+                          "referencedDeclaration": 3879,
                           "src": "778:13:0",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3764_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3879_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
@@ -5872,7 +5872,7 @@
                         "lValueRequested": false,
                         "memberName": "ecMul",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3190,
+                        "referencedDeclaration": 3305,
                         "src": "778:19:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
@@ -5922,7 +5922,7 @@
                             "referencedDeclaration": 44,
                             "src": "857:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -5933,7 +5933,7 @@
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "857:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -5949,7 +5949,7 @@
                             "referencedDeclaration": 44,
                             "src": "862:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -5960,7 +5960,7 @@
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "862:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6021,7 +6021,7 @@
                             "referencedDeclaration": 14,
                             "src": "899:3:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
@@ -6032,7 +6032,7 @@
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "899:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6048,7 +6048,7 @@
                             "referencedDeclaration": 14,
                             "src": "905:3:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
@@ -6059,7 +6059,7 @@
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "905:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6072,10 +6072,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "911:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -6086,7 +6086,7 @@
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4237,
+                          "referencedDeclaration": 4352,
                           "src": "911:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6099,10 +6099,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "924:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -6113,7 +6113,7 @@
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4243,
+                          "referencedDeclaration": 4358,
                           "src": "924:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6149,10 +6149,10 @@
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3764,
+                          "referencedDeclaration": 3879,
                           "src": "870:13:0",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3764_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3879_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
@@ -6163,7 +6163,7 @@
                         "lValueRequested": false,
                         "memberName": "ecMul",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3190,
+                        "referencedDeclaration": 3305,
                         "src": "870:19:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
@@ -6213,7 +6213,7 @@
                             "referencedDeclaration": 50,
                             "src": "949:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -6224,7 +6224,7 @@
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "949:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6240,7 +6240,7 @@
                             "referencedDeclaration": 50,
                             "src": "954:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -6251,7 +6251,7 @@
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "954:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6312,7 +6312,7 @@
                             "referencedDeclaration": 20,
                             "src": "991:3:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
@@ -6323,7 +6323,7 @@
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "991:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6339,7 +6339,7 @@
                             "referencedDeclaration": 20,
                             "src": "997:3:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
@@ -6350,7 +6350,7 @@
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "997:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6363,10 +6363,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "1003:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -6377,7 +6377,7 @@
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4237,
+                          "referencedDeclaration": 4352,
                           "src": "1003:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6390,10 +6390,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "1016:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -6404,7 +6404,7 @@
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4243,
+                          "referencedDeclaration": 4358,
                           "src": "1016:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6440,10 +6440,10 @@
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3764,
+                          "referencedDeclaration": 3879,
                           "src": "962:13:0",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3764_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3879_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
@@ -6454,7 +6454,7 @@
                         "lValueRequested": false,
                         "memberName": "ecMul",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3190,
+                        "referencedDeclaration": 3305,
                         "src": "962:19:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
@@ -6504,7 +6504,7 @@
                             "referencedDeclaration": 56,
                             "src": "1069:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -6515,7 +6515,7 @@
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "1069:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6531,7 +6531,7 @@
                             "referencedDeclaration": 56,
                             "src": "1074:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -6542,7 +6542,7 @@
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "1074:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6576,7 +6576,7 @@
                             "referencedDeclaration": 32,
                             "src": "1102:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -6587,7 +6587,7 @@
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "1102:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6603,7 +6603,7 @@
                             "referencedDeclaration": 32,
                             "src": "1107:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -6614,7 +6614,7 @@
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "1107:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6630,7 +6630,7 @@
                             "referencedDeclaration": 44,
                             "src": "1112:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -6641,7 +6641,7 @@
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "1112:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6657,7 +6657,7 @@
                             "referencedDeclaration": 44,
                             "src": "1117:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -6668,7 +6668,7 @@
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "1117:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6681,10 +6681,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "1122:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -6695,7 +6695,7 @@
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4237,
+                          "referencedDeclaration": 4352,
                           "src": "1122:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6708,10 +6708,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "1135:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -6722,7 +6722,7 @@
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4243,
+                          "referencedDeclaration": 4358,
                           "src": "1135:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6762,10 +6762,10 @@
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3764,
+                          "referencedDeclaration": 3879,
                           "src": "1082:13:0",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3764_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3879_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
@@ -6776,7 +6776,7 @@
                         "lValueRequested": false,
                         "memberName": "ecAdd",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3109,
+                        "referencedDeclaration": 3224,
                         "src": "1082:19:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
@@ -6826,7 +6826,7 @@
                             "referencedDeclaration": 62,
                             "src": "1188:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -6837,7 +6837,7 @@
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "1188:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6853,7 +6853,7 @@
                             "referencedDeclaration": 62,
                             "src": "1193:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -6864,7 +6864,7 @@
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "1193:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6898,7 +6898,7 @@
                             "referencedDeclaration": 38,
                             "src": "1221:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -6909,7 +6909,7 @@
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "1221:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6925,7 +6925,7 @@
                             "referencedDeclaration": 38,
                             "src": "1226:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -6936,7 +6936,7 @@
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "1226:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6952,7 +6952,7 @@
                             "referencedDeclaration": 50,
                             "src": "1231:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -6963,7 +6963,7 @@
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4219,
+                          "referencedDeclaration": 4334,
                           "src": "1231:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -6979,7 +6979,7 @@
                             "referencedDeclaration": 50,
                             "src": "1236:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
@@ -6990,7 +6990,7 @@
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4221,
+                          "referencedDeclaration": 4336,
                           "src": "1236:4:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -7003,10 +7003,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "1241:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -7017,7 +7017,7 @@
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4237,
+                          "referencedDeclaration": 4352,
                           "src": "1241:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -7030,10 +7030,10 @@
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4250,
+                            "referencedDeclaration": 4365,
                             "src": "1254:9:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4250_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4365_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
@@ -7044,7 +7044,7 @@
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4243,
+                          "referencedDeclaration": 4358,
                           "src": "1254:12:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -7084,10 +7084,10 @@
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3764,
+                          "referencedDeclaration": 3879,
                           "src": "1201:13:0",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3764_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3879_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
@@ -7098,7 +7098,7 @@
                         "lValueRequested": false,
                         "memberName": "ecAdd",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3109,
+                        "referencedDeclaration": 3224,
                         "src": "1201:19:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
@@ -7185,7 +7185,7 @@
                                     "referencedDeclaration": 56,
                                     "src": "1350:2:0",
                                     "typeDescriptions": {
-                                      "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                                      "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                                       "typeString": "struct Secp256r1.ECPoint memory"
                                     }
                                   },
@@ -7196,7 +7196,7 @@
                                   "lValueRequested": false,
                                   "memberName": "x",
                                   "nodeType": "MemberAccess",
-                                  "referencedDeclaration": 4219,
+                                  "referencedDeclaration": 4334,
                                   "src": "1350:4:0",
                                   "typeDescriptions": {
                                     "typeIdentifier": "t_uint256",
@@ -7212,7 +7212,7 @@
                                     "referencedDeclaration": 56,
                                     "src": "1355:2:0",
                                     "typeDescriptions": {
-                                      "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                                      "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                                       "typeString": "struct Secp256r1.ECPoint memory"
                                     }
                                   },
@@ -7223,7 +7223,7 @@
                                   "lValueRequested": false,
                                   "memberName": "y",
                                   "nodeType": "MemberAccess",
-                                  "referencedDeclaration": 4221,
+                                  "referencedDeclaration": 4336,
                                   "src": "1355:4:0",
                                   "typeDescriptions": {
                                     "typeIdentifier": "t_uint256",
@@ -7239,7 +7239,7 @@
                                     "referencedDeclaration": 62,
                                     "src": "1360:2:0",
                                     "typeDescriptions": {
-                                      "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                                      "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                                       "typeString": "struct Secp256r1.ECPoint memory"
                                     }
                                   },
@@ -7250,7 +7250,7 @@
                                   "lValueRequested": false,
                                   "memberName": "x",
                                   "nodeType": "MemberAccess",
-                                  "referencedDeclaration": 4219,
+                                  "referencedDeclaration": 4334,
                                   "src": "1360:4:0",
                                   "typeDescriptions": {
                                     "typeIdentifier": "t_uint256",
@@ -7266,7 +7266,7 @@
                                     "referencedDeclaration": 62,
                                     "src": "1365:2:0",
                                     "typeDescriptions": {
-                                      "typeIdentifier": "t_struct$_ECPoint_$4222_memory_ptr",
+                                      "typeIdentifier": "t_struct$_ECPoint_$4337_memory_ptr",
                                       "typeString": "struct Secp256r1.ECPoint memory"
                                     }
                                   },
@@ -7277,7 +7277,7 @@
                                   "lValueRequested": false,
                                   "memberName": "y",
                                   "nodeType": "MemberAccess",
-                                  "referencedDeclaration": 4221,
+                                  "referencedDeclaration": 4336,
                                   "src": "1365:4:0",
                                   "typeDescriptions": {
                                     "typeIdentifier": "t_uint256",
@@ -7457,7 +7457,7 @@
                   "stateVariable": false,
                   "storageLocation": "calldata",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                    "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                     "typeString": "struct Secp256r1.ECPoint"
                   },
                   "typeName": {
@@ -7467,13 +7467,13 @@
                       "id": 9,
                       "name": "Secp256r1.ECPoint",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 4222,
+                      "referencedDeclaration": 4337,
                       "src": "240:17:0"
                     },
-                    "referencedDeclaration": 4222,
+                    "referencedDeclaration": 4337,
                     "src": "240:17:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                      "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                       "typeString": "struct Secp256r1.ECPoint"
                     }
                   },
@@ -7491,7 +7491,7 @@
                   "stateVariable": false,
                   "storageLocation": "calldata",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                    "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                     "typeString": "struct Secp256r1.ECPoint"
                   },
                   "typeName": {
@@ -7501,13 +7501,13 @@
                       "id": 12,
                       "name": "Secp256r1.ECPoint",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 4222,
+                      "referencedDeclaration": 4337,
                       "src": "271:17:0"
                     },
-                    "referencedDeclaration": 4222,
+                    "referencedDeclaration": 4337,
                     "src": "271:17:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                      "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                       "typeString": "struct Secp256r1.ECPoint"
                     }
                   },
@@ -7525,7 +7525,7 @@
                   "stateVariable": false,
                   "storageLocation": "calldata",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                    "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                     "typeString": "struct Secp256r1.ECPoint"
                   },
                   "typeName": {
@@ -7535,13 +7535,13 @@
                       "id": 15,
                       "name": "Secp256r1.ECPoint",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 4222,
+                      "referencedDeclaration": 4337,
                       "src": "308:17:0"
                     },
-                    "referencedDeclaration": 4222,
+                    "referencedDeclaration": 4337,
                     "src": "308:17:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                      "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                       "typeString": "struct Secp256r1.ECPoint"
                     }
                   },
@@ -7559,7 +7559,7 @@
                   "stateVariable": false,
                   "storageLocation": "calldata",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_ECPoint_$4222_calldata_ptr",
+                    "typeIdentifier": "t_struct$_ECPoint_$4337_calldata_ptr",
                     "typeString": "struct Secp256r1.ECPoint"
                   },
                   "typeName": {
@@ -7569,13 +7569,13 @@
                       "id": 18,
                       "name": "Secp256r1.ECPoint",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 4222,
+                      "referencedDeclaration": 4337,
                       "src": "340:17:0"
                     },
-                    "referencedDeclaration": 4222,
+                    "referencedDeclaration": 4337,
                     "src": "340:17:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_ECPoint_$4222_storage_ptr",
+                      "typeIdentifier": "t_struct$_ECPoint_$4337_storage_ptr",
                       "typeString": "struct Secp256r1.ECPoint"
                     }
                   },
@@ -7674,12 +7674,12 @@
     "1337": {
       "events": {},
       "links": {},
-      "address": "0x30f3f1382A46D840fA9bfC4E1f19b422d49D9E24",
-      "transactionHash": "0xb0ceaedaa66f7288cad90d911855624784c13361705281172e877a87d50f58ab"
+      "address": "0x6e5D27fe855260eFfb23F24BD17859222dA8EF02",
+      "transactionHash": "0x409ff2a5eb86baa5e0b2e0baed4086ea73bd17c69d529283cab04d30c1b69964"
     }
   },
   "schemaVersion": "3.4.4",
-  "updatedAt": "2022-02-27T13:45:13.793Z",
+  "updatedAt": "2022-02-27T17:12:49.339Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

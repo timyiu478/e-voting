@@ -1,0 +1,26 @@
+Unused dependencies
+* @testing-library/user-event
+* big-integer
+* bigfloat
+* bigi
+* bn.js
+* ecurve
+* elliptic
+* increase-memory-limit
+* jquery
+* js-sha3
+* js-sha512
+* keccak256
+* number-theory
+* randombytes
+* react-custom-scrollbar
+* react-helmet
+* trs-js
+* truffle-contract-size
+Missing dependencies
+* eslint-config-react-app: .\package.json
+* babel-eslint: .\package.json
+* eslint-plugin-import: .\package.json
+* eslint-plugin-flowtype: .\package.json
+* eslint-plugin-jsx-a11y: .\package.json
+* eslint-plugin-react: .\package.json

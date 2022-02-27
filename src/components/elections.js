@@ -295,8 +295,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
             }else{
                 console.log(receipt);
                 setIsRegistering(false);
-                setPublickeys((prev)=>[...prev,publicKeyToHex(intTopoint(receipt.returnValues.newECPubKey.x,receipt.returnValues.newECPubKey.y))]);
-                saveKeyPair();            
+                setPublickeys((prev)=>[...prev,publicKeyToHex(intTopoint(receipt.returnValues.newECPubKey.x,receipt.returnValues.newECPubKey.y))]);           
                 alert("register success");
             }
         });
@@ -345,8 +344,8 @@ export default function Elections({searchName,electionInstances,web3,account,ele
         while(true){
             const keyPair = genKeyPair();
             // console.log(keyPair);
-            setRegPubKey(keyPair.publicKey);
-            setRegPrvKey(keyPair.privateKey);
+            setRegPubKey((prev)=>keyPair.publicKey);
+            setRegPrvKey((prev)=>keyPair.privateKey);
             if(!publickeys.find((p)=> p === keyPair.publicKey)){
                 return;
             }
@@ -410,6 +409,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
         let regPubKeyEC = pointToXYInt(hexToPublicKey(regPubKey));
         // console.log(regPubKeyEC);
         setIsRegistering(true);
+        saveKeyPair(regPubKey,regPrvKey); 
         await electionInstance.methods.addVoter(
             regPubKeyEC,regR,regX,regInfoIndex
         ).send({from:account,gas:30000000})
@@ -571,9 +571,12 @@ export default function Elections({searchName,electionInstances,web3,account,ele
         return f;
     }
 
-    const saveKeyPair = () => {
+    const saveKeyPair = (regPubKey,regPrvKey) => {
         let blob = new Blob([
-            `----------Public Key----------\n${regPubKey}----------Public Key----------\n${regPrvKey}\n`
+            "----------Public Key----------\n",
+            regPubKey,
+            "\n----------Private Key----------\n",
+            regPrvKey
         ],
             { type: "text/plain;charset=utf-8" });
         saveAs(blob,"KeyPair.txt");
