@@ -54,6 +54,7 @@ library Utils{
         bool isSetUp;
         bool isNoSendSharesCheck;
         bool isRegOn;
+        bool isFailed;
         address owner;
         Ballot[] ballots;
         RegParticipantInfo[] regInfo;

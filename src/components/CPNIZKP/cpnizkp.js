@@ -1,7 +1,13 @@
+// This proof is defined in
+//  "Wallet Databases with Observers - David Chaum and Torben Pryds Pedersen" 
+// url: https://link.springer.com/content/pdf/10.1007/3-540-48071-4_7.pdf
+
+
 import Web3 from 'web3';
 import BigInteger from '../linkable_ring_signature/lib/jsbn.js';
 import {getRandomIntModN} from '../linkable_ring_signature/utils';
 import {getSECCurveByName} from '../linkable_ring_signature/lib/sec.js';
+import Big from 'big.js';
 
 const ec_params = getSECCurveByName('secp256r1');
 const N = ec_params.getN();
@@ -57,3 +63,4 @@ export function CPverify(G1,h1,G2,h2,proof){
 
     return cc.compareTo(c) == 0;
 }
+

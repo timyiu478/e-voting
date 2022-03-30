@@ -23,7 +23,7 @@ export function getRandomIntModN(){
 
 export function getRandomInt(){
     let r = new BigInteger(N.bitLength(),rng);
-    r = r.mod(n1).add(BigInteger.ONE).mod(P);
+    r = r.mod(n1).add(BigInteger.ONE).mod(N);
     // console.log(r.toString(10));
     return r;
 }
@@ -197,20 +197,14 @@ export function mapToCurve(x){
     const A = new BigInteger("FFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFC",16);
     const B = new BigInteger("5AC635D8AA3A93E7B3EBBD55769886BC651D06B0CC53B0F63BCE3C3E27D2604B",16);
     let y = sqrt(x.pow(Three).add(A.multiply(x)).add(B).mod(P));
-    while(true){
-        // console.log(x.toString(16));
-        // console.log(y.toString(16));
-        try{
-            point = new ECPointFp(
-                Curve,
-                Curve.fromBigInteger(x),
-                Curve.fromBigInteger(y)
-            );
-            return point;
-        }catch{
-            y++;
-        }
-    }
+    point = new ECPointFp(
+        Curve,
+        Curve.fromBigInteger(x),
+        Curve.fromBigInteger(y)
+    );
+
+    // console.log("inf:",point.isInfinity());
+    return point;
 }
 
 export function paddingStr(str){
@@ -223,3 +217,8 @@ export function paddingStr(str){
 export function removePadding(str){
     return str.split("\0")[0];
 }
+
+// for(let i=0;i<100;i++){
+//     // console.log("testing.....");
+//     mapToCurve(new BigInteger(i.toString(),10));
+// }

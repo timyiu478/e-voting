@@ -6,8 +6,11 @@ import Web3 from 'web3';
 const ec_params = getSECCurveByName('secp256r1');
 const N = ec_params.getN();
 const G = ec_params.getG();
-const H = G.multiply(new BigInteger('10',10));
-console.log(pointToXYInt(H));
+// const H = G.multiply(getRandomInt());
+const H = intTopoint(
+    "16006238141036534036804433607070841308458431567545943570325073712346327731173"
+, "2491356589229472143736854231289515187283927748883828899965758140511401994013");
+// console.log(pointToXYInt(H));
 
 export function genCommitment(secret){
     let x = new BigInteger(secret,16);

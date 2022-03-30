@@ -93,7 +93,7 @@ contract Election {
     // verify shares event 
     event verifySharesEvent(bool isNoSendShares,uint[] illegitimate_voter_indeces);
     // set vote pubKey event 
-    event setVotePubKeyEvent(bool isVotePubKeySet, uint[] illegitimate_voter_indeces);
+    event setVotePubKeyEvent(bool isVotePubKeySet, uint[] illegitimate_voter_indeces, bool isFailed);
     // set election info event
     event setElectionInfoEvent(bool isSetUp);
     // add voter event
@@ -153,8 +153,6 @@ contract Election {
         vote_end_time = ver_end_time + Utils.calc_time(_data.voteTime,_data.voteTimeUnit); 
         secret_upload_end_time = vote_end_time + Utils.calc_time(_data.secUploadTime,_data.secUploadTimeUnit); 
 
-
-
         isSetUp = true;
 
         emit setElectionInfoEvent(isSetUp);
@@ -163,8 +161,9 @@ contract Election {
     function addSubSecret(Shares.VerSharesPar[] calldata _Par, 
     Shares.SubSecretWithSig calldata _s) 
     external{
+        require(isFailed==false,"NotEnoughValidParticipant");
         require(illegitimate_voters[_s.i] == false,"DisqualifiedVoter");
-        require(ECPubKeysAftVer.length>=min_shares,"InsufficientVoters");
+        // require(ECPubKeysAftVer.length>=min_shares,"InsufficientVoters");
         // verify secret upload peroid: vote end time <= now < secret_upload_end_time
         require(vote_end_time<=block.timestamp &&block.timestamp < secret_upload_end_time,"invalidTime");
         require(isSubSecrets[_s.i] == false,"SubSecretWasUploaded");
@@ -274,7 +273,7 @@ contract Election {
         emit verifySharesEvent(isNoSendSharesCheck,illegitimate_voter_indeces);
     }
 
-    function setNoSendSharesVoters() external{
+    function setNoDisVoters() external{
         // verify shares verfication peroid
         require(share_end_time<= block.timestamp && block.timestamp < ver_end_time,"WrongVerifyTime");
 
@@ -304,7 +303,7 @@ contract Election {
 
     function setVotePublicKey() external {
         // verify vote peroid
-        require(ver_end_time<= block.timestamp && block.timestamp < vote_end_time,"WrongVerifyTime");
+        require(ver_end_time<= block.timestamp && block.timestamp < vote_end_time,"WrongVoteTime");
         require(isVotePubKeySet==false,"AlreadySet");
         Secp256r1.ECPoint memory P;
         bool isFirst;
@@ -319,7 +318,7 @@ contract Election {
                 }else{
                     (votePubKey.x, votePubKey.y) = EllipticCurve.ecAdd(votePubKey.x, votePubKey.y, P.x, P.y, Secp256r1.AA, Secp256r1.PP);
                 }
-                // filter invalid voter's pubkeys 
+                // filter invalid voter's pubkeys    
                 ECPubKeysAftVer.push(EC_public_keys[i]);
             }
         }
@@ -329,9 +328,9 @@ contract Election {
         }else{
             // cal L and H for verify LRS
             (L,H) = LRS.calcLAndH(ECPubKeysAftVer);
-            isVotePubKeySet = true;
         }
-        emit setVotePubKeyEvent(isVotePubKeySet, illegitimate_voter_indeces);
+        isVotePubKeySet = true;
+        emit setVotePubKeyEvent(isVotePubKeySet, illegitimate_voter_indeces, isFailed);
     }
 
     function getSubSecrets() external view returns(Shares.SubSecretWithSig[] memory){
@@ -359,7 +358,7 @@ contract Election {
     }
 
     function addShares(Shares.F[] calldata _F, Shares.f[] calldata _f) external{
-        // check share distribution peroid: now < key_gen_end_time and now > reg_end_time
+        // check distribution peroid: now < share_end_time and now > reg_end_time
         require(block.timestamp < share_end_time && reg_end_time<block.timestamp,"WrongShareTime");
 
         bytes32 h;
@@ -416,7 +415,7 @@ contract Election {
         
         require(isVotePubKeySet==true,"SetVotePubKeyFirst");
 
-        require(ECPubKeysAftVer.length>=min_shares,"InsufficientVoters");
+        // require(ECPubKeysAftVer.length>=min_shares,"InsufficientVoters");
 
         // hash of _K
         bytes32 h = keccak256(abi.encodePacked(_K.x,_K.y));
@@ -455,6 +454,7 @@ contract Election {
 
     function tallyVote(uint256 _votePrvKey) external{
         require(isFailed==false,"NotEnoughValidParticipant");
+        require(subSecrets.length>=min_shares,"NotEnoughsubSecrets");
         // verify tally time : vote_end_time <= now 
         require(vote_end_time<= block.timestamp,"WrongTallyTime");
         // check whether the vote already tallied
@@ -485,7 +485,7 @@ contract Election {
         totatSharesSentCount,totalSubSecretSentCount,
         illegitimate_voter_indeces,title,description,candidates
         ,isVoteTallied,isVotePubKeySet,isECPubKeysAftVerSet,
-        isSetUp,isNoSendSharesCheck,isRegOn,owner,ballots,regInfo,
+        isSetUp,isNoSendSharesCheck,isRegOn,isFailed,owner,ballots,regInfo,
         EC_public_keys);
     } 
 }

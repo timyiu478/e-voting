@@ -183,9 +183,6 @@ export default function NewElection({electionAddresses,web3,handleCloseNewElecti
             alert("This eleciton already set up.");
             return;
         }
-        const ec_publickeys = voters.map(v => ["0x"+v.slice(2,66),"0x"+v.slice(66,)]);
-        setECPubKeys(ec_publickeys);
-        console.log(ec_publickeys);
         votingApp.methods.addElection().send({from: account, gas:300000000})
         .on('error', function(error, receipt){
             console.error("error:",error); 
@@ -194,6 +191,7 @@ export default function NewElection({electionAddresses,web3,handleCloseNewElecti
     
     const handleSetUP = async () =>{
         if(eInstance!=null){
+            const ec_publickeys = voters.map(v => ["0x"+v.slice(2,66),"0x"+v.slice(66,)]);
             await eInstance.methods.setElectionInfo(
                 [
                     Web3.utils.asciiToHex(paddingStr(title)),
@@ -334,7 +332,7 @@ export default function NewElection({electionAddresses,web3,handleCloseNewElecti
                         </InputGroup>
                     </div>
                     <div className='col-md'>
-                        <strong className='ps-1'>Secret Upload Time</strong>
+                        <strong className='ps-1'>Reconstruction Time</strong>
                         <InputGroup className='mt-1 mb-4'>
                             <Form.Control value={secret_upload_time} onChange={handleSecUpTimeChange} type="number"  min={0} />
                             <FloatingLabel label="Unit">

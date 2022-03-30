@@ -42,5 +42,5 @@ export default function CloseState({ballots,isTallied,candidates,eInstance,publi
                 <Ballots eInstance={eInstance} candidates={candidates} ballots={ballots} isShowBallots={isShowBallots}  />
             </Col>
         </Row>
-    </Container>
+    </Container>;
 }

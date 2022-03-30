@@ -1,9 +1,6 @@
 import React, { Component, useState, useEffect, useRef}  from 'react';
 import './elections.css';
-import { GrUserManager } from 'react-icons/gr';
-import {MdDateRange} from 'react-icons/md';
 
-import {GiVote} from 'react-icons/gi';
 import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
 import { Scrollbars } from 'react-custom-scrollbars-2';
@@ -17,9 +14,7 @@ import Tab from 'react-bootstrap/Tab';
 import TabContainer from 'react-bootstrap/TabContainer';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Web3 from 'web3';
-import {ImCross} from 'react-icons/im';
-import Form from 'react-bootstrap/Form';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
+
 import Button from 'react-bootstrap/Button';
 import { genSig,verifySig } from './linkable_ring_signature/lrs';
 import PrivateKey_item from './elections_components/privateKey_item';
@@ -39,7 +34,7 @@ import Publickeys_table_item from './elections_components/Publickeys_table_item'
 import SubSecretItem from './elections_components/SubSecret';
 import CloseState from './elections_components/CloseState';
 import Alert_item from './elections_components/Alert_item';
-import {BiKey} from 'react-icons/bi';
+
 import FormControl from 'react-bootstrap/FormControl';
 import {hashSecret,decryptR,verifyCommitment} from './pedersen_commitment/pedersen_commitment';
 import {getSECCurveByName} from './linkable_ring_signature/lib/sec.js';
@@ -130,6 +125,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
     const [isRegistering,setIsRegistering] = useState(false);
     const [isEligibleParticipant,setIsElligibleParticipant] = useState(false);
     const [isEligibleParticipanting,setIsElligibleParticipanting] = useState(false);
+    const [isFailed,setIsFailed] = useState(false);
 
     const [electionInstance,setelectionInstace] = useState(null);
     const [LRSignature,setLRSignature] = useState(null);
@@ -138,7 +134,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
         setTitle(removePadding(Web3.utils.hexToAscii(e.title)));
         setDescription(removePadding(Web3.utils.hexToAscii(e.description)));
         setOwner(e.owner);
-        setState(determineState(e.isSetUp,e.reg_end_time,e.share_end_time,e.ver_end_time,e.vote_end_time,e.secret_upload_end_time));
+        setState(determineState(e.isFailed,e.isSetUp,e.reg_end_time,e.share_end_time,e.ver_end_time,e.vote_end_time,e.secret_upload_end_time));
         setPostdate(timestampToDate(e.post_time));
         setRegEnddate(timestampToDate(e.reg_end_time));
         setVoteenddate(timestampToDate(e.vote_end_time));
@@ -150,7 +146,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
         setPublickeysAfterVerified(pubKeys);
         setCandidates(e.candidates);
         setIsselectedelection(true);
-        setSelectedState(determineState(e.isSetUp,e.reg_end_time,e.share_end_time,e.ver_end_time,e.vote_end_time,e.secret_upload_end_time));
+        setSelectedState(determineState(e.isFailed,e.isSetUp,e.reg_end_time,e.share_end_time,e.ver_end_time,e.vote_end_time,e.secret_upload_end_time));
         setElecitonID(e.id);
         setElectionAddress(electionAddresses[index]);
         setMinShares(e.min_shares);
@@ -161,12 +157,14 @@ export default function Elections({searchName,electionInstances,web3,account,ele
         setIsVotePubKeySet(e.isVotePubKeySet);
         seIsSetUp(e.isSetUp);
         setIsRegOn(e.isRegOn);
+        setIsFailed(e.isFailed);
         if(e.isRegOn){
             setRegInfo(e.regInfo);
         }
 
         setIsNoSendSharesCheck(e.isNoSendSharesCheck);
         if(e.isVoteTallied){
+            console.log(e.ballots);
             setBallots(e.ballots);
         }
         
@@ -284,6 +282,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
                 setIsVotePubKeySeting(false);
                 setIsVotePubKeySet(receipt.returnValues.isVotePubKeySet);
                 setDisqualifiedVoters(receipt.returnValues.illegitimate_voter_indeces);
+                setIsFailed(receipt.returnValues.isFailed);
                 alert("Set vote pubKey success");
             }
         });
@@ -302,25 +301,27 @@ export default function Elections({searchName,electionInstances,web3,account,ele
     },[electionInstance,elections,electionAddresses]);
 
     const state_color_mapping = {
+        'Terminated': "danger",
         'Set Up': "secondary",
         'Registration': "dark",
-        'Shares Distribution': 'primary',
-        'Shares Verification': 'warning',
+        'Distribution': 'primary',
+        'Verification': 'warning',
         'Vote': 'success',
-        'Secret Upload': 'danger',
-        'Close': 'info'
+        'Reconstruction': 'danger',
+        'Result': 'info'
     }
 
-    const determineState = (isSetUp,reg_end_time,shares_end_time,ver_end_time,vote_end_time,secret_upload_end_time) =>{
+    const determineState = (isFailed,isSetUp,reg_end_time,shares_end_time,ver_end_time,vote_end_time,secret_upload_end_time) =>{
+        if(isFailed) return 'Terminated';
         if(!isSetUp) return 'Set Up';
         const now = Date.now();
         // console.log(now);
         if(now < reg_end_time*1000) return 'Registration';
-        if(now < shares_end_time*1000) return 'Shares Distribution';
-        if(now < ver_end_time*1000) return 'Shares Verification';
+        if(now < shares_end_time*1000) return 'Distribution';
+        if(now < ver_end_time*1000) return 'Verification';
         if(now < vote_end_time*1000) return 'Vote';
-        if(now < secret_upload_end_time*1000) return 'Secret Upload';
-        return 'Close';
+        if(now < secret_upload_end_time*1000) return 'Reconstruction';
+        return 'Result';
     }
 
     const handleRegPubKeyChange = (e) =>{
@@ -422,6 +423,8 @@ export default function Elections({searchName,electionInstances,web3,account,ele
     }
 
     const handleEncVote = async () =>{
+        if(isFailed){alert("This Election was terminated.");return;}
+
         setIsEncryptLoading(true);
         setIsEncrypted(false);
 
@@ -482,6 +485,8 @@ export default function Elections({searchName,electionInstances,web3,account,ele
         }
 
         if(stage == 'secret_upload'){
+            if(isFailed){alert("This Election was terminated.");return;}
+
             if(isSecretUploadSignature == true){
                 return;
             }
@@ -552,6 +557,9 @@ export default function Elections({searchName,electionInstances,web3,account,ele
     }
 
     const handleSendSubSecret = async () => {
+        console.log(isFailed);
+        if(isFailed){alert("This Election was terminated.");return;}
+
         setIsSendSubSecretLoading(true);
         console.log(subSecretProof);
         console.log(subSecretwithSig);
@@ -691,6 +699,8 @@ export default function Elections({searchName,electionInstances,web3,account,ele
     };
 
     const handleGenLRS = async () =>{
+        if(isFailed){alert("This Election was terminated.");return;}
+
         if(privateKey == "") {
             alert("Please input your private key.");
             return;
@@ -730,6 +740,8 @@ export default function Elections({searchName,electionInstances,web3,account,ele
     }
 
     const handleSendVote = async () =>{
+        if(isFailed){alert("This Election was terminated.");return;}
+
         if(isLRS == false){
             alert("Please sign your vote.");
             return;
@@ -764,6 +776,8 @@ export default function Elections({searchName,electionInstances,web3,account,ele
     }
 
     const handleGenSubSecret = async () =>{
+        if(isFailed){alert("This Election was terminated.");return;}
+
         if(privateKey == ""){
             alert("Please input your private key.");
             return;
@@ -777,6 +791,8 @@ export default function Elections({searchName,electionInstances,web3,account,ele
     }
 
     const handleTally = async () =>{
+        if(isFailed){alert("This Election was terminated.");return;}
+
         const subSecrets = await electionInstance.methods.getSubSecrets().call();
         console.log(subSecrets);
         const tmp = reconstructSecret(subSecrets,min_shares);
@@ -806,6 +822,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
     }
 
     const handleVerKeyGenValues = async () =>{
+
         console.log(isNoSendSharesCheck);
         if(!isNoSendSharesCheck){
             await electionInstance.methods.setNoSendSharesVoters()
@@ -892,13 +909,13 @@ export default function Elections({searchName,electionInstances,web3,account,ele
                 >
                     {
                         elections.map((e,i)=>{
-                            return  <div onClick={()=>{handleSelectedElectionDataChange(e,i);}} key={e.id,i} className={searchName.length==0||removePadding(Web3.utils.hexToAscii(e.title)).includes(searchName)?'':'d-none'} >
+                            return  <div onClick={()=>{handleSelectedElectionDataChange(e,i);}} key={e.id+i} className={searchName.length==0||removePadding(Web3.utils.hexToAscii(e.title)).includes(searchName)?'':'d-none'} >
                                         <Election 
                                             election={e} 
                                             post_date = {timestampToDate(e.post_time)}
                                             close_date = {timestampToDate(e.secret_upload_end_time)}
-                                            state_badge = {state_color_mapping[determineState(e.isSetUp,e.reg_end_time,e.share_end_time,e.ver_end_time,e.vote_end_time,e.secret_upload_end_time)]}
-                                            state = {determineState(e.isSetUp,e.reg_end_time,e.share_end_time,e.ver_end_time,e.vote_end_time,e.secret_upload_end_time)}           
+                                            state_badge = {state_color_mapping[determineState(e.isFailed,e.isSetUp,e.reg_end_time,e.share_end_time,e.ver_end_time,e.vote_end_time,e.secret_upload_end_time)]}
+                                            state = {determineState(e.isFailed,e.isSetUp,e.reg_end_time,e.share_end_time,e.ver_end_time,e.vote_end_time,e.secret_upload_end_time)}           
                                         />
                                     </div>
                         })
@@ -934,15 +951,15 @@ export default function Elections({searchName,electionInstances,web3,account,ele
                                             (isRegOn)?
                                             <div>
                                                 <Row className="p-1"><strong>Registration Period:</strong> <small className="text-muted">{post_date} - {reg_end_date}</small></Row>
-                                                <Row className="p-1"><strong>Shares Distribution Period:</strong> <small className="text-muted">{reg_end_date} - {key_gen_end_date}</small></Row>
+                                                <Row className="p-1"><strong>Distribution Period:</strong> <small className="text-muted">{reg_end_date} - {key_gen_end_date}</small></Row>
                                             </div>
                                             :
-                                            <Row className="p-1"><strong>Shares Distribution Period:</strong> <small className="text-muted">{post_date} - {key_gen_end_date}</small></Row>
+                                            <Row className="p-1"><strong>Distribution Period:</strong> <small className="text-muted">{post_date} - {key_gen_end_date}</small></Row>
                                         }
 
-                                        <Row className="p-1"><strong>Shares Verification Period:</strong> <small className="text-muted">{key_gen_end_date} - {key_ver_end_date}</small></Row>
+                                        <Row className="p-1"><strong>Verification Period:</strong> <small className="text-muted">{key_gen_end_date} - {key_ver_end_date}</small></Row>
                                         <Row className="p-1"><strong>Vote Period:</strong> <small className="text-muted">{key_ver_end_date} - {vote_end_date}</small> </Row>
-                                        <Row className="p-1"><strong >Secret Upload Period:</strong> <small className="text-muted">{vote_end_date} - {secret_upload_end_date}</small></Row>
+                                        <Row className="p-1"><strong >Reconstruction Period:</strong> <small className="text-muted">{vote_end_date} - {secret_upload_end_date}</small></Row>
                                     </Col>
                                 </Row>
                                 <Row className="pt-2">
@@ -969,7 +986,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
                                 </Row>
                                 <Row className='mt-3 pt-2'>
                                     <Col className='table_height'>
-                                        <strong className="p-1">Voter Public keys: <span>(<span className='text-danger text-decoration-line-through'>Index,Key</span> =  Disqualified)</span></strong>
+                                        <strong className="p-1">Participant Public keys: <span>(<span className='text-danger text-decoration-line-through'>Index,Key</span> =  Disqualified)</span></strong>
                                         <Scrollbars
                                             autoHide
                                             autoHideTimeout={1000}
@@ -1001,6 +1018,11 @@ export default function Elections({searchName,electionInstances,web3,account,ele
                                             <Row className=" mt-2">
                                                 <Col sm={2}>
                                                     <Nav fill variant='pills' className="flex-column">
+                                                        <Nav.Item className="d-none">
+                                                            <Nav.Link eventKey="Terminated">
+                                                                Terminated
+                                                            </Nav.Link>
+                                                        </Nav.Item>
                                                         {
                                                             (isRegOn)?
                                                             <Nav.Item>
@@ -1010,13 +1032,13 @@ export default function Elections({searchName,electionInstances,web3,account,ele
                                                             </Nav.Item>:''
                                                         }
                                                         <Nav.Item>
-                                                            <Nav.Link eventKey="Shares Distribution">
-                                                                Shares Distribution
+                                                            <Nav.Link eventKey="Distribution">
+                                                                Distribution
                                                             </Nav.Link>
                                                         </Nav.Item>
                                                         <Nav.Item>
-                                                            <Nav.Link eventKey="Shares Verification">
-                                                                Shares Verification
+                                                            <Nav.Link eventKey="Verification">
+                                                                Verification
                                                             </Nav.Link>
                                                         </Nav.Item>
                                                         <Nav.Item>
@@ -1025,13 +1047,13 @@ export default function Elections({searchName,electionInstances,web3,account,ele
                                                             </Nav.Link>
                                                         </Nav.Item>
                                                         <Nav.Item>
-                                                            <Nav.Link eventKey="Secret Upload" >
-                                                                Secret Upload
+                                                            <Nav.Link eventKey="Reconstruction" >
+                                                                Reconstruction
                                                             </Nav.Link>
                                                         </Nav.Item>
                                                         <Nav.Item >
-                                                            <Nav.Link eventKey="Close" >
-                                                                Close
+                                                            <Nav.Link eventKey="Result" >
+                                                                Result
                                                             </Nav.Link>
                                                         </Nav.Item>
                                                     </Nav>
@@ -1082,7 +1104,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
                                                             <Badge_item isLoading={isEligibleParticipanting} isDone={isEligibleParticipant} text="Eligible Participant" />
                                                         </Tab.Pane>
 
-                                                        <Tab.Pane eventKey="Shares Distribution" className='operations'>
+                                                        <Tab.Pane eventKey="Distribution" className='operations'>
                                                             <PrivateKey_item k="vote_priv" privateKey={privateKey} handlePrivateKeyChange={handlePrivateKeyChange} />
                                                             <Row>
                                                                 <Col>
@@ -1106,7 +1128,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
                                                             <Badge_item isDone={isEncryptedValues} isLoading={isEncryptedValuesLoading} text="Encrypted Values" />
                                                         </Tab.Pane> 
 
-                                                        <Tab.Pane eventKey="Shares Verification" className='operations'>
+                                                        <Tab.Pane eventKey="Verification" className='operations'>
                                                             <PrivateKey_item k="vote_priv" privateKey={privateKey} handlePrivateKeyChange={handlePrivateKeyChange} />
                                                             <Row>
                                                                 <Col sm={6}>
@@ -1154,7 +1176,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
                                                             }
                                                         </Tab.Pane>
 
-                                                        <Tab.Pane eventKey="Secret Upload" className='operations'>
+                                                        <Tab.Pane eventKey="Reconstruction" className='operations'>
                                                             <PrivateKey_item k="vote_priv" privateKey={privateKey} handlePrivateKeyChange={handlePrivateKeyChange}  />
                                                             <Row>
                                                                 <Col>
@@ -1176,7 +1198,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
                                                             <Badge_item isLoading={isSecretUploadSignatureLoading} isDone={isSecretUploadSignature} text="Personal Signature" />
                                                         </Tab.Pane>
 
-                                                        <Tab.Pane eventKey="Close" className='operations'>
+                                                        <Tab.Pane eventKey="Result" className='operations'>
                                                             <Alert_item isDoing={isTallying} isDone={isTallied} handleDone={handleTally} alertMsg={"Please tally the election ballots."} doName={"Tally"} doingName={"Tallying"} />
                                                             <CloseState isTallying={isTallying} ballots={ballots} isTallied={isTallied} candidates={candidates} eInstance={electionInstance} publickeys={publickeys} />
                                                         </Tab.Pane>

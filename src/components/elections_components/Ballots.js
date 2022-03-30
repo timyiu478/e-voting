@@ -1,5 +1,6 @@
 import React, { Component, useState, useEffect,useLayoutEffect, useRef}  from 'react';
-import { Grid , _} from 'gridjs-react';
+import { Grid , _ } from 'gridjs-react';
+
 import Spinner from 'react-bootstrap/Spinner';
 import {TiTick} from 'react-icons/ti';
 import Button from 'react-bootstrap/Button';
@@ -12,6 +13,7 @@ export default function Ballots({isShowBallots,ballots,candidates,eInstance}){
     const [isValidLRS,setIsValidLRS] = useState({});
     const [isVoteOnceOnlyLoading,setIsVoteOnceOnlyLoading] = useState({});
     const [isVoteOnceOnly,setIsVoteOnceOnly] = useState({});
+    const [d,setD] = useState([]);
 
     const handleVerfiyLRS = async (ballot,id) =>{
         setIsValidLRS((prev)=>({
@@ -39,6 +41,7 @@ export default function Ballots({isShowBallots,ballots,candidates,eInstance}){
         }));
 
         console.log(isValidSig);
+        alert(isValidSig);
     } 
 
     const handleVerifyVoteOnlyOnce = async (K,id) =>{
@@ -61,6 +64,7 @@ export default function Ballots({isShowBallots,ballots,candidates,eInstance}){
         }
         console.log(count);
         if(count == 1){
+            alert(count ==1);
             setIsVoteOnceOnly((prev)=>({
                 ...prev,
                 [id]:true
@@ -69,49 +73,55 @@ export default function Ballots({isShowBallots,ballots,candidates,eInstance}){
                 ...prev,
                 [id]:false
             }));
-        }   
+        }
     }
 
     const timestampToDate = (timestamp) => {
         // console.log(timestamp);
+        console.log(candidates);
         const date = new Date(timestamp * 1000);
         // console.log(date);
         return date.toString().slice(0,21);
     }
 
+    useEffect(()=>{
+        const dd = ballots.map(b=>[
+            b.id,
+            timestampToDate(b.voteTime),
+            `${(b.candidate_id.toString()!="-1")?removePadding(Web3.utils.hexToAscii(candidates[b.candidate_id].name)):"NaN"} ( id: ${b.candidate_id} )`,
+            _(
+                <span className='w-100'>
+                    <Button size="sm" variant={isValidLRS[b.id]?"success":"outline-secondary"} className='me-1' onClick={()=>{handleVerfiyLRS(b,b.id)}}>
+                        {isValidLRSLoading[b.id]?<Spinner animation="border" size="sm" />:""}
+                        {isValidLRS[b.id]&&isValidLRSLoading[b.id]==false?<TiTick fontSize={"1.1rem"} />:""}
+                        Signature
+                    </Button>
+                    <Button size="sm" variant={isVoteOnceOnly[b.id]?"success":"outline-secondary"} className='me-1' onClick={()=>{handleVerifyVoteOnlyOnce(b.K,b.id)}}>
+                        {isVoteOnceOnlyLoading[b.id]?<Spinner animation="border" size="sm" />:""}
+                        {isVoteOnceOnly[b.id]&&isVoteOnceOnlyLoading[b.id]==false?<TiTick fontSize={"1.1rem"} />:""}
+                        Uniqueness
+                    </Button>
+                </span>
+            )
+        ]);
+        setD((d)=>(dd));
+    },[]);
+
     return <div className={isShowBallots?'mt-2':'d-none'} >
         <Grid 
             columns={[
-                {name:'ID'}, 
-                {name:'Vote Time'},
-                {name:'Vote For'},
-                {name:'Verify'}
+                {name:'ID',width:'15%'}, 
+                {name:'Vote Time',width:'25%'},
+                {name:'Vote For',width:'20%'},
+                {name:'Verify',width:'40%'}
             ]}
             sort={true}
             pagination={{
                 enabled: true,
-                limit: 3,
+                limit: 3                
             }}
             fixedHeader={true}
-            data={ballots.map(b=>[
-                b.id,
-                timestampToDate(b.voteTime),
-                `${(b.candidate_id.toString()!='-1')?removePadding(Web3.utils.hexToAscii(candidates[b.candidate_id].name)):"NaN"} ( id: ${b.candidate_id} )`,
-                _(
-                    <span className='w-100'>
-                        <Button size="sm" variant={isValidLRS[b.id]?"success":"outline-secondary"} className='me-1' onClick={()=>{handleVerfiyLRS(b,b.id)}}>
-                            {isValidLRSLoading[b.id]?<Spinner animation="border" size="sm" />:""}
-                            {isValidLRS[b.id]&&isValidLRSLoading[b.id]==false?<TiTick fontSize={"1.1rem"} />:""}
-                            Signature
-                        </Button>
-                        <Button size="sm" variant={isVoteOnceOnly[b.id]?"success":"outline-secondary"} className='me' onClick={()=>{handleVerifyVoteOnlyOnce(b.K,b.id)}}>
-                            {isVoteOnceOnlyLoading[b.id]?<Spinner animation="border" size="sm" />:""}
-                            {isVoteOnceOnly[b.id]&&isVoteOnceOnlyLoading[b.id]==false?<TiTick fontSize={"1.1rem"} />:""}
-                            Uniqueness
-                        </Button>
-                    </span>
-                )
-            ])}
+            data={d}
         />
     </div>;
 }

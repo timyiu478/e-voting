@@ -24,7 +24,7 @@ export function elgamal_encrypt(message,receiver_publickeyHex){
     const C = G.multiply(k);
     // CC = k*Y = k*x*G
     const CC = Y.multiply(k);
-    // map m to EC Point, Pm = m*G
+    // map m to EC Point
     const Pm = mapToCurve(m);
     console.log(Pm.getX().toBigInteger().toString(10));
     console.log(publicKeyToHex(Pm));
