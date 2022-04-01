@@ -4,7 +4,6 @@ pragma solidity >=0.5.3 <0.9.0;
 
 import "./EllipticCurve.sol";
 import "./Secp256r1.sol";
-import "./Commitment.sol";
 import "./Elgamal.sol";
 
 
@@ -15,12 +14,7 @@ library Utils{
         uint voteCount;
         bytes32 name;
     }
-    // Participant Info (For Registration)
-    struct RegParticipantInfo{
-        Commitment.info name;
-        Commitment.info birthDate;
-        Commitment.info ID;
-    }   
+ 
     // Model a ballot
     struct Ballot{
         uint id;
@@ -57,7 +51,7 @@ library Utils{
         bool isFailed;
         address owner;
         Ballot[] ballots;
-        RegParticipantInfo[] regInfo;
+        Secp256r1.ECPoint[] regInfo;
         Secp256r1.ECPoint[] EC_public_keys;
     }
 
@@ -78,7 +72,7 @@ library Utils{
         uint voteTimeUnit;
         uint secUploadTimeUnit;
         bool isRegOn;
-        RegParticipantInfo[] regInfo;
+        Secp256r1.ECPoint[] regInfo;
     }
 
     function verfiyVotePrivateKey(uint256 _prvKey,Secp256r1.ECPoint calldata _pubKey) 

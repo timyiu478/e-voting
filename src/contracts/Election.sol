@@ -8,7 +8,7 @@ import "./CPProof.sol";
 import "./LRS.sol";
 import "./Shares.sol";
 import "./Utils.sol";
-import "./Commitment.sol";
+import "./Schnorr.sol";
 
 contract Election {
 
@@ -62,7 +62,7 @@ contract Election {
 
 
     // Store Participant Info 
-    Utils.RegParticipantInfo[] public regInfo;
+    Secp256r1.ECPoint[] public regInfo;
 
     mapping(uint=>bool) isReg;
     mapping(bytes32 => Shares.F) F_2d;
@@ -71,7 +71,7 @@ contract Election {
     mapping(bytes32 => bool) isf_2d;
     mapping(uint => bool) isPiUploadShares;
 
-    Shares.SubSecretWithSig[] public subSecrets;
+    Shares.SubSecret[] public subSecrets;
     mapping(uint => bool) isSubSecrets; 
 
 
@@ -104,14 +104,13 @@ contract Election {
         owner = _owner;
     }
 
-    function addVoter(Secp256r1.ECPoint calldata _EC_PubKey, 
-    uint256 _R, uint256 _V, uint _i    
+    function addVoter(uint256 _i,Secp256r1.ECPoint calldata _EC_PubKey,
+    Secp256r1.ECPoint calldata _R,uint256 _c, uint256 _m   
     ) external{
         require(isRegOn==true,"RegisterDisallowed");
-        require(block.timestamp<reg_end_time,"InvalidTime");
+        // require(block.timestamp<reg_end_time,"InvalidTime");
         require(isReg[_i]==false,"AlreadyAdd");
-        require(Commitment.verify(regInfo[_i].name,regInfo[_i].birthDate,
-        regInfo[_i].ID,_R,_V)==true,"InValidCommitment");
+        require(Schnorr.verify(regInfo[_i],_R,_c,_m)==true,"InValidCommitment");
         isReg[_i]==true;
         EC_public_keys.push(_EC_PubKey);
         emit addVoterEvent(_EC_PubKey);
@@ -158,62 +157,37 @@ contract Election {
         emit setElectionInfoEvent(isSetUp);
     }
 
-    function addSubSecret(Shares.VerSharesPar[] calldata _Par, 
-    Shares.SubSecretWithSig calldata _s) 
+    function addSubSecret(uint256[] calldata _subShares, uint256 _i) 
     external{
         require(isFailed==false,"NotEnoughValidParticipant");
-        require(illegitimate_voters[_s.i] == false,"DisqualifiedVoter");
+        require(illegitimate_voters[_i] == false,"DisqualifiedVoter");
         // require(ECPubKeysAftVer.length>=min_shares,"InsufficientVoters");
         // verify secret upload peroid: vote end time <= now < secret_upload_end_time
-        require(vote_end_time<=block.timestamp &&block.timestamp < secret_upload_end_time,"invalidTime");
-        require(isSubSecrets[_s.i] == false,"SubSecretWasUploaded");
+        // require(vote_end_time<=block.timestamp &&block.timestamp < secret_upload_end_time,"invalidTime");
+        require(isSubSecrets[_i] == false,"SubSecretWasUploaded");
 
-        // get the shares from voter
-        bool isValidVal;
-        bool isValidProof;
-        uint256 plaintext;
+        uint256 c;
         uint256[] memory tmpShares = new uint256[](ECPubKeysAftVer.length);
-        Elgamal.Elgamal_ciphertext memory ciphertext;
         Secp256r1.ECPoint memory G;
         G.x = Secp256r1.GX;
         G.y = Secp256r1.GY;
-        for(uint i=0;i<_Par.length;i++){
-            ciphertext = f_2d[keccak256(
-                    abi.encodePacked(_Par[i].i,_Par[i].j))
-                    ].ciphertext;
-            // proof key = s*k*G without knowing s
-            isValidProof = CPProof.CPverify(
-                G, // g1
-                EC_public_keys[_Par[i].j-2], // h1
-                ciphertext.C, // g2
-                _Par[i].H2, // h2
-                _Par[i].proof
-            );
-            require(isValidProof==true,"WrongCPproof");
-            // get plaintext by key
-            plaintext = Elgamal.elgamal_decryptByPoint(
-                ciphertext.D,
-                _Par[i].H2
-            );
-            // verfiy shares
-            isValidVal = Shares.verifySharesVal(
-                plaintext,
-                _Par[i],getF(_Par[i].i)
-            );
-            require(isValidVal==true,"WrongShares");
-            // Store shares
-            tmpShares[i] = plaintext;
+        for(uint j=0;j<EC_public_keys.length;j++){
+            if(!illegitimate_voters[j]){
+                // verfiy subshares
+                require(Shares.verifySharesVal(
+                    _subShares[c],
+                    (_i+uint256(2)),getF(j)
+                )==true,"WrongSubShares");
+                // Store subshares
+                tmpShares[c] = _subShares[c];
+                c++;
+            }
         }
-        require(_s.subSecret==Shares.calcSubSecrets(tmpShares),"SharesNotMatch");
-        uint256 h = uint256(keccak256(abi.encodePacked(_s.subSecret,_s.i)));
-        require(h == _s.h,"MessageWasModified");
-        
-        bool isValidSig = ECDSA.ecdsa_verify(ECDSA.ECDSA_parameters(_s.sig.r, _s.sig.s, h, 
-        EC_public_keys[_s.i].x, EC_public_keys[_s.i].y));
-        require(isValidSig == true,"WrongSignature");
 
-        subSecrets.push(_s);
-        isSubSecrets[_s.i] = true;
+        subSecrets.push(Shares.SubSecret(
+            Shares.calcSubSecrets(tmpShares),_i
+            ));
+        isSubSecrets[_i] = true;
         totalSubSecretSentCount++;
 
         emit addSubSecretEvent(totalSubSecretSentCount);
@@ -258,7 +232,7 @@ contract Election {
             // verfiy shares
             isValidVal = Shares.verifySharesVal(
                 plaintext,
-                _Par[i],getF(_Par[i].i)
+                _Par[i].j,getF(_Par[i].i)
             );
 
             if(!isValidVal){
@@ -275,7 +249,7 @@ contract Election {
 
     function setNoDisVoters() external{
         // verify shares verfication peroid
-        require(share_end_time<= block.timestamp && block.timestamp < ver_end_time,"WrongVerifyTime");
+        // require(share_end_time<= block.timestamp && block.timestamp < ver_end_time,"WrongVerifyTime");
 
         for(uint i=0;i<EC_public_keys.length;i++){
             // check whether voter sends his polynomail coefficient
@@ -303,7 +277,7 @@ contract Election {
 
     function setVotePublicKey() external {
         // verify vote peroid
-        require(ver_end_time<= block.timestamp && block.timestamp < vote_end_time,"WrongVoteTime");
+        // require(ver_end_time<= block.timestamp && block.timestamp < vote_end_time,"WrongVoteTime");
         require(isVotePubKeySet==false,"AlreadySet");
         Secp256r1.ECPoint memory P;
         bool isFirst;
@@ -333,7 +307,7 @@ contract Election {
         emit setVotePubKeyEvent(isVotePubKeySet, illegitimate_voter_indeces, isFailed);
     }
 
-    function getSubSecrets() external view returns(Shares.SubSecretWithSig[] memory){
+    function getSubSecrets() external view returns(Shares.SubSecret[] memory){
         return subSecrets;
     }
 
@@ -359,7 +333,7 @@ contract Election {
 
     function addShares(Shares.F[] calldata _F, Shares.f[] calldata _f) external{
         // check distribution peroid: now < share_end_time and now > reg_end_time
-        require(block.timestamp < share_end_time && reg_end_time<block.timestamp,"WrongShareTime");
+        // require(block.timestamp < share_end_time && reg_end_time<block.timestamp,"WrongShareTime");
 
         bytes32 h;
         uint256 hm; // hashed message
@@ -411,7 +385,7 @@ contract Election {
     external{
         require(isFailed==false,"NotEnoughValidParticipant");
         // verify vote peroid: key_ver_end_time <= now < vote_end_time
-        require(ver_end_time<= block.timestamp && block.timestamp < vote_end_time,"WrongVoteTime");
+        // require(ver_end_time<= block.timestamp && block.timestamp < vote_end_time,"WrongVoteTime");
         
         require(isVotePubKeySet==true,"SetVotePubKeyFirst");
 
@@ -456,7 +430,7 @@ contract Election {
         require(isFailed==false,"NotEnoughValidParticipant");
         require(subSecrets.length>=min_shares,"NotEnoughsubSecrets");
         // verify tally time : vote_end_time <= now 
-        require(vote_end_time<= block.timestamp,"WrongTallyTime");
+        // require(vote_end_time<= block.timestamp,"WrongTallyTime");
         // check whether the vote already tallied
         require(isVoteTallied == false,"Tallied");
         require(ECPubKeysAftVer.length>=min_shares,"InsufficientVoters");

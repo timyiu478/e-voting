@@ -14,6 +14,13 @@ let n1 = N.subtract(BigInteger.ONE);
 
 let rng = new SecureRandom();
 
+export function getRandomIntModP(){
+    let r = new BigInteger(N.bitLength(),rng);
+    r = r.mod(n1).add(BigInteger.ONE).mod(P);
+    // console.log(r.toString(10));
+    return r;
+}
+
 export function getRandomIntModN(){
     let r = new BigInteger(N.bitLength(),rng);
     r = r.mod(n1).add(BigInteger.ONE).mod(N);
@@ -222,3 +229,13 @@ export function removePadding(str){
 //     // console.log("testing.....");
 //     mapToCurve(new BigInteger(i.toString(),10));
 // }
+
+// let p = genKeyPairs(20);
+// let t ="";
+// for(let i=0;i<p.length;i++){
+//     t += `(${i}) ` + p[i].privateKey + '\n';
+// }
+// for(let i=0;i<p.length;i++){
+//     t += `(${i}) ` + p[i].publicKey + '\n';
+// }
+// console.log(t);

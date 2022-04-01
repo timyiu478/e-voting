@@ -32,14 +32,14 @@ library Shares{
         ECDSA.ECDSA_Sig sig;
     }
 
-    struct SubSecretWithSig{
-        uint256 h;
+    struct SubSecret{
+        // uint256 h;
         uint256 subSecret;
         uint i;
-        ECDSA.ECDSA_Sig sig;
+        // ECDSA.ECDSA_Sig sig;
     }
 
-    function verifySharesVal(uint256 _val,VerSharesPar calldata _Par
+    function verifySharesVal(uint256 _val,uint256 _j
     ,F[] calldata _F) external pure
     returns (bool){
         Secp256r1.ECPoint memory tmp;
@@ -47,9 +47,9 @@ library Shares{
         Secp256r1.ECPoint memory rhs;
         for(uint t=0;t<_F.length;t++){
             if(t==0){
-                (rhs.x,rhs.y) = EllipticCurve.ecMul((_Par.j)**t,_F[t].p.x,_F[t].p.y,Secp256r1.AA,Secp256r1.PP);
+                (rhs.x,rhs.y) = EllipticCurve.ecMul((_j)**t,_F[t].p.x,_F[t].p.y,Secp256r1.AA,Secp256r1.PP);
             }else{
-                (tmp.x,tmp.y) = EllipticCurve.ecMul((_Par.j)**t,_F[t].p.x,_F[t].p.y,Secp256r1.AA,Secp256r1.PP);
+                (tmp.x,tmp.y) = EllipticCurve.ecMul((_j)**t,_F[t].p.x,_F[t].p.y,Secp256r1.AA,Secp256r1.PP);
                 (rhs.x,rhs.y) = EllipticCurve.ecAdd(rhs.x, rhs.y, tmp.x, tmp.y, Secp256r1.AA, Secp256r1.PP);
             }
         }

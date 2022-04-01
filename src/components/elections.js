@@ -23,7 +23,7 @@ import Publickey_index_item from './elections_components/publickey_index_item';
 import Badge_item from './elections_components/Badge_item';
 import Spinner from 'react-bootstrap/Spinner';
 import Afi0Item from './elections_components/Afi0Item';
-import {removePadding,hexToPublicKey,pointToXYInt,genKeyPair,publicKeyToHex,intTopoint,getRandomInt,getPublicKeyXY} from './linkable_ring_signature/utils';
+import {getRandomIntModP,removePadding,hexToPublicKey,pointToXYInt,genKeyPair,publicKeyToHex,intTopoint,getRandomInt,getPublicKeyXY} from './linkable_ring_signature/utils';
 import ElectionABI from '../abis/Election.json';
 import { saveAs } from 'file-saver';
 import {ec_sign} from './ecdsa/ecdsa';
@@ -36,8 +36,10 @@ import CloseState from './elections_components/CloseState';
 import Alert_item from './elections_components/Alert_item';
 
 import FormControl from 'react-bootstrap/FormControl';
-import {hashSecret,decryptR,verifyCommitment} from './pedersen_commitment/pedersen_commitment';
 import {getSECCurveByName} from './linkable_ring_signature/lib/sec.js';
+
+import {schnorrProve} from './schnorrProtocol/schnorr';
+import BigInteger from 'js-jsbn';
 
 export default function Elections({searchName,electionInstances,web3,account,electionAddresses}){
 
@@ -65,9 +67,8 @@ export default function Elections({searchName,electionInstances,web3,account,ele
     const [regName,setRegName] = useState("");
     const [regBirthDate,setRegBirthDate] = useState("");
     const [regID,setRegID] = useState("");
-    const [regR,setRegR] = useState("");
-    const [regX,setRegX] = useState("");
 
+    const [regProof,setRegProof] = useState([]);
     const [elections,setElections] = useState([]);
     const [publickeys,setPublickeys] = useState([]);
     const [candidates,setCandidates] = useState([]);
@@ -96,6 +97,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
     const [fi0,setfi0Change] = useState(-1);
     const [subSecret,setSubSecret] = useState(-1);
     const [regInfoIndex,setRegInfoIndex] = useState(-1);
+    const [subShares,setSubShares] = useState(0);
 
 
     const [isEncrypted,setIsEncrypted] = useState(false);
@@ -354,51 +356,39 @@ export default function Elections({searchName,electionInstances,web3,account,ele
     }
 
     const handleCheckIdentity = () =>{
+        console.time("Registration Stage: Verify Identiy");
         console.log(regInfo);
         setIsElligibleParticipant(false);
         setIsElligibleParticipanting(true);
         setRegInfoIndex(-1);
         const ec_params = getSECCurveByName('secp256r1');
         const N = ec_params.getN();
-        let hashID = hashSecret(regID);
-        let hashBirthDate = hashSecret(regBirthDate);
-        let hashName = hashSecret(regName);
-        let ID;
-        let birthDate;
-        let name;
-        let id_R;
-        let birthDate_R;
-        let name_R;
-        let commitments;
-        let R;
-        let X;
+        const G = ec_params.getG();
+        let rInfo;
+        let h = Web3.utils.soliditySha3({
+            'string':regName.toString()+regBirthDate.toString()+regID.toString()
+        }).slice(2,);
+        h = new BigInteger(h,16).mod(N);
+        const regCom = G.multiply(h);
+        let proof;
         // ith person
         for(let i=0;i<regInfo.length;i++){
-            ID = regInfo[i].ID;
-            birthDate = regInfo[i].birthDate;
-            name = regInfo[i].name;
+            rInfo = intTopoint(regInfo[i].x,regInfo[i].y);
             
-            commitments = [ID.val,birthDate.val,name.val];
-            
-            id_R = decryptR(hashID,ID.salt,ID.encR);
-            birthDate_R = decryptR(hashBirthDate,birthDate.salt,birthDate.encR);
-            name_R = decryptR(hashName,name.salt,name.encR);
-
-            X = hashID.add(hashBirthDate).add(hashName).mod(N);
-            R = id_R.add(birthDate_R).add(name_R).mod(N);
-
-            if(verifyCommitment(R,X,commitments)==true){
+            if(rInfo.equals(regCom)){
                 setIsElligibleParticipant(true);
                 setRegInfoIndex(i);
                 setIsElligibleParticipanting(false);
-                setRegR(R.toString(10));
-                setRegX(X.toString(10));
+                proof = schnorrProve(h);
+                setRegProof((prev)=>(proof));
                 alert(`You are elgible participant.\n Your info index is ${i}.`);
+                console.timeEnd("Registration Stage: Verify Identiy");
                 return;
             }
         }
-
+        
         setIsElligibleParticipanting(false);
+        
         alert("You are not elgible participant.");
     }
 
@@ -412,7 +402,8 @@ export default function Elections({searchName,electionInstances,web3,account,ele
         setIsRegistering(true);
         saveKeyPair(regPubKey,regPrvKey); 
         await electionInstance.methods.addVoter(
-            regPubKeyEC,regR,regX,regInfoIndex
+            regInfoIndex,regPubKeyEC,regProof[0],
+            regProof[1],regProof[2]
         ).send({from:account,gas:30000000})
         .on('error', function(error, receipt){
             setIsRegistering(false);
@@ -423,6 +414,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
     }
 
     const handleEncVote = async () =>{
+        console.time("Vote Stage: encrypt vote");
         if(isFailed){alert("This Election was terminated.");return;}
 
         setIsEncryptLoading(true);
@@ -441,9 +433,11 @@ export default function Elections({searchName,electionInstances,web3,account,ele
 
         setIsEncryptLoading(false);
         setIsEncrypted(true);
+        console.timeEnd("Vote Stage: encrypt vote");
     }
 
     const handleGenSig = (stage) => {
+        console.time("Distribution Stage: generate signatures of values and commitments.");
         // alert(stage);
         if(privateKey == "") {
             alert("Please input your private key.");
@@ -483,38 +477,39 @@ export default function Elections({searchName,electionInstances,web3,account,ele
             setIsKeyGenSignatureLoading(false);
             setIsKeyGenSignature(true);
         }
+        console.timeEnd("Distribution Stage: generate signatures of values and commitments.");
+        // if(stage == 'secret_upload'){
+        //     if(isFailed){alert("This Election was terminated.");return;}
 
-        if(stage == 'secret_upload'){
-            if(isFailed){alert("This Election was terminated.");return;}
-
-            if(isSecretUploadSignature == true){
-                return;
-            }
-            if(subSecret == -1){
-                alert("Please generate your sub secret first.");
-                return;
-            }
+        //     if(isSecretUploadSignature == true){
+        //         return;
+        //     }
+        //     if(subSecret == -1){
+        //         alert("Please generate your sub secret first.");
+        //         return;
+        //     }
             
-            setIsSecretUploadSignature(false);
-            setIsSecretUploadSignatureLoading(true);
+        //     setIsSecretUploadSignature(false);
+        //     setIsSecretUploadSignatureLoading(true);
 
-            const hash = web3.utils.soliditySha3(
-                {t:"uint256",v:subSecret},
-                {t:"uint256",v:publickeyIndex}
-            );
-            console.log(hash);
-            const sig = ec_sign(hash,privateKey);
-            console.log(sig);
-            setSubSecretWithSig([
-                hash,subSecret,publickeyIndex,sig
-            ]);
+        //     const hash = web3.utils.soliditySha3(
+        //         {t:"uint256",v:subSecret},
+        //         {t:"uint256",v:publickeyIndex}
+        //     );
+        //     console.log(hash);
+        //     const sig = ec_sign(hash,privateKey);
+        //     console.log(sig);
+        //     setSubSecretWithSig([
+        //         hash,subSecret,publickeyIndex,sig
+        //     ]);
 
-            setIsSecretUploadSignature(true);
-            setIsSecretUploadSignatureLoading(false);
-        }
+        //     setIsSecretUploadSignature(true);
+        //     setIsSecretUploadSignatureLoading(false);
+        // }
     }
 
     const handleEncryptKeyGenVal = () => {
+        console.time("Distrubition Stage: encrypt the values");
         if(isEncryptedValues == true){
             return;
         }
@@ -554,6 +549,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
         setfi_ofJ_list_encrypted(tmp);
         setIsEncryptedValues(true);
         setIsEncryptedValuesLoading(false);
+        console.timeEnd("Distrubition Stage: encrypt the values");
     }
 
     const handleSendSubSecret = async () => {
@@ -561,9 +557,10 @@ export default function Elections({searchName,electionInstances,web3,account,ele
         if(isFailed){alert("This Election was terminated.");return;}
 
         setIsSendSubSecretLoading(true);
+        console.log(subShares);
         console.log(subSecretProof);
-        console.log(subSecretwithSig);
-        electionInstance.methods.addSubSecret(subSecretProof,subSecretwithSig)
+        // console.log(subSecretwithSig);
+        electionInstance.methods.addSubSecret(subShares,publickeyIndex)
         .send({from: account,gas:30000000})
         .on('error', function(error, receipt){
             setIsSendSubSecretLoading(false);
@@ -618,7 +615,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
         // saveKeyGenValues();
         setIsSendValueLoading(true);
         
-        electionInstance.methods.addShares(Fij_list,fi_ofJ_list_signed).send({from: account,gas:30000000})
+        electionInstance.methods.addShares(Fij_list,fi_ofJ_list_signed).send({from: account,gas:300000000})
         .on('error', function(error, receipt){
             setIsSendValueLoading(false);
             alert(error.message);
@@ -627,6 +624,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
     }
 
     const handleGenKeyGenValues = () => {
+        console.time("Distribution Stage: generate polynomails, values, and comitments.");
         let rands = [];
         
         setIsEncryptedValues(false);
@@ -638,7 +636,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
         setPolynomialOfXModP([]);
         setfi_ofJ_list([]);
         for(let i=0;i<min_shares;i++){
-            const rand = getRandomInt().toString(10);
+            const rand = getRandomIntModP().toString(10);
             console.log(rand);
             setPolynomial((polynomial)=>[...polynomial,rand]);
             const randMulG = getPublicKeyXY(rand);
@@ -664,6 +662,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
             setfi_ofJ_list((prev)=>[...prev,[fi_ofJ,publickeyIndex,j]]);
         }
         // console.log(polynomialOfXModP);
+        console.timeEnd("Distribution Stage: generate polynomails, values, and comitments.");
     }
 
     const timestampToDate = (timestamp) => {
@@ -699,6 +698,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
     };
 
     const handleGenLRS = async () =>{
+        console.time("Vote Stage: generate LRS");
         if(isFailed){alert("This Election was terminated.");return;}
 
         if(privateKey == "") {
@@ -725,17 +725,20 @@ export default function Elections({searchName,electionInstances,web3,account,ele
             if(sig == -1||verifySig(encyptedVoteHash,publickeysAfterVerified,sig) == false){
                 setLRSLoading(false);
                 setIsLRS(false);
+                console.timeEnd("Vote Stage: generate LRS");
                 return;
             }
             setLRSignature(sig);
             setLRSLoading(false);
             setIsLRS(true);
+            console.timeEnd("Vote Stage: generate LRS");
             return;
         }catch{
             setLRSLoading(false);
             setIsLRS(false);
         }
         setLRSLoading(false);
+        
         return;
     }
 
@@ -768,7 +771,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
         // console.log(Ky);
         // console.log(M);
         electionInstance.methods.addVote(encyptedVote,encVoteHash,U0,V,[Kx,Ky])
-        .send({from: account,gas:30000000})
+        .send({from: account,gas:3000000000})
         .on('error', function(error, receipt){
             setIsSendVoteLoading(false);
             console.error("error:",error);
@@ -776,6 +779,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
     }
 
     const handleGenSubSecret = async () =>{
+        console.time("Reconstruction Stage: gnerate sub secret");
         if(isFailed){alert("This Election was terminated.");return;}
 
         if(privateKey == ""){
@@ -784,24 +788,28 @@ export default function Elections({searchName,electionInstances,web3,account,ele
         }
         const tmp = await decrypt_fiOFJValues();
         const shares = tmp[0];
-        const subSecretProof = tmp[1];
+        // const subSecretProof = tmp[1];
+        setSubShares(shares);
+        console.timeEnd("Reconstruction Stage: gnerate sub secret");
         const subSec = sumOFfiOFJ(shares);
         setSubSecret(subSec);
-        setSubSecretProof(subSecretProof);
+        // setSubSecretProof(subSecretProof);
     }
 
     const handleTally = async () =>{
         if(isFailed){alert("This Election was terminated.");return;}
-
+        console.time("Result Stage: compute private key");
         const subSecrets = await electionInstance.methods.getSubSecrets().call();
         console.log(subSecrets);
         const tmp = reconstructSecret(subSecrets,min_shares);
+        console.timeEnd("Result Stage: compute private key");
         console.log(tmp);
         // const testPrkKey = await electionInstance.methods.verfiyVotePrivateKey(tmp)
         // .call();
         // console.log(testPrkKey);
-        console.log("VotePubKey:",votePubKey);
-        // const ballots = await electionInstance.methods.getBallot().call();
+        // console.log("VotePubKey:",votePubKey);
+        // const H = await electionInstance.methods.H().call();
+        // console.log(H);
         // console.log(ballots);
         // const decVote = await electionInstance.methods.decryptVote(ballots[0].encVote,prkkey).call();
         // console.log(decVote);
@@ -814,7 +822,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
         setIsTallied(false);
         setIsTallying(true);
         await electionInstance.methods.tallyVote(tmp)
-        .send({from:account, gas:300000000})
+        .send({from:account, gas:300000000000})
         .on('error', function(error, receipt){
             setIsTallying(false);
             console.error("error:",error);
@@ -825,7 +833,7 @@ export default function Elections({searchName,electionInstances,web3,account,ele
 
         console.log(isNoSendSharesCheck);
         if(!isNoSendSharesCheck){
-            await electionInstance.methods.setNoSendSharesVoters()
+            await electionInstance.methods.setNoDisVoters()
             .send({from:account,gas:300000000});
             return;
         }
@@ -1183,19 +1191,19 @@ export default function Elections({searchName,electionInstances,web3,account,ele
                                                                     <Publickey_index_item k="keygen_pub" publickeyIndex={publickeyIndex} handlePublicKeyIndexChange={handlePublicKeyIndexChange} publickeys={publickeys}  />
                                                                 </Col>
                                                                 <Col>
-                                                                    <SubSecretItem k="subSecret" subSecret={subSecret} /> 
+                                                                    <SubSecretItem k="Share" subSecret={subSecret} /> 
                                                                 </Col>
                                                             </Row>
                                                             <div className='mt-4 mb-5'>
-                                                                <Button className="me-2" variant="light" onClick={handleGenSubSecret}>Calc Sub Secret</Button>
-                                                                <Button className="me-2" variant="light" onClick={()=>{handleGenSig('secret_upload')}}>Gen Sig</Button>
+                                                                <Button className="me-2" variant="light" onClick={handleGenSubSecret}>Calc Share</Button>
+                                                                {/* <Button className="me-2" variant="light" onClick={()=>{handleGenSig('secret_upload')}}>Gen Sig</Button> */}
                                                                 <Button className="me-2" variant="dark" onClick={handleSendSubSecret} disabled={isSendSubSecretLoading}>
                                                                     {(isSendSubSecretLoading)?<span><Spinner animation="border" size="sm" /> Sending x<sub>{publickeyIndex}</sub></span>
                                                                         : <span>Send x<sub>{publickeyIndex}</sub></span>}
                                                                 </Button>
                                                             </div>
                                                             # of Voter Sent: <strong>{totalSubSecretSentCount}</strong>
-                                                            <Badge_item isLoading={isSecretUploadSignatureLoading} isDone={isSecretUploadSignature} text="Personal Signature" />
+                                                            {/* <Badge_item isLoading={isSecretUploadSignatureLoading} isDone={isSecretUploadSignature} text="Personal Signature" /> */}
                                                         </Tab.Pane>
 
                                                         <Tab.Pane eventKey="Result" className='operations'>

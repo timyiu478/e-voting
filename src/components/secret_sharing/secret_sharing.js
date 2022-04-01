@@ -37,6 +37,7 @@ export function reconstructSecret(subSecrets,min_shares){
     
     console.log(subSecrets);
     const H = subSecrets.map(s=>parseInt(s.i)+2);
+    console.log(H);
     let secret = new Big ("0");
     for(let i=0;i<min_shares;i++){
         let value = new Big (subSecrets[i].subSecret.toString());
@@ -52,7 +53,7 @@ export function reconstructSecret(subSecrets,min_shares){
             }
         }
         // console.log(z);
-        // console.log(z.toString());
+        console.log(z.toString());  
         z = new Big(z);
         value = value.times(z);
         secret = secret.plus(value);
