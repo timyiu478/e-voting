@@ -1,7 +1,7 @@
 import BigInteger from 'js-jsbn';
 import {getSECCurveByName} from './lib/sec.js';
 import {sha256} from './lib/sha256.js';
-import {getRandomInt,genKeyPair,publicKeyToHex,hexToPublicKey,hash1,
+import {getRandomIntModP,getRandomInt,genKeyPair,publicKeyToHex,hexToPublicKey,hash1,
     hash2,concateArray,pointToInt,messageToInt,genKeyPairs} from './utils.js';
 
 const ec_params = getSECCurveByName('secp256r1');
@@ -41,7 +41,7 @@ export function genSig(message,publicKeys,privateKey,identity){
     for(let i=1;i<n;i++){
         const index = (identity+i) % n;
         // console.log(U[i]);
-        let v = getRandomInt();
+        let v = getRandomIntModP();
         V[index] = v;
         let vG = G.multiply(v);
         // console.log(Y[i]);
@@ -53,7 +53,7 @@ export function genSig(message,publicKeys,privateKey,identity){
         pointToInt(vG.add(uY)),pointToInt(vH.add(uK))]));
         // console.log(U[(i+1)%n].toString(10));
     }
-    V[identity] = c.subtract(X.multiply(U[identity])).mod(N);
+    V[identity] = c.subtract(X.multiply(U[identity])).mod(P);
     // console.log(V[identity].toString(10));
     // console.log("U: ",U.map(v => v.toString(10)));
     // console.log();
@@ -173,12 +173,17 @@ export function test(){
     let identity = 2;   // signer's public key index
     let message = "1";
     let message2 = "abc";
+    
     let sig = genSig(message,publicKeys,privateKey,identity);
     let verify = verifySig(message,publicKeys,sig);
     console.log("check U[0] == Sig.U[0]: ",verify);
+    
+
     // let sig2 = genSig(message2,publicKeys,privateKey,identity);
     // console.log("check Linkability: ",sig.K == sig2.K);
 }
 
-// test();
+for(let i=0;i<5;i++){
+    test();
+}
 // console.log(genKeyPairs(2));
