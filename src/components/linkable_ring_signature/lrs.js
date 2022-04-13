@@ -183,7 +183,4 @@ export function test(){
     // console.log("check Linkability: ",sig.K == sig2.K);
 }
 
-for(let i=0;i<5;i++){
-    test();
-}
 // console.log(genKeyPairs(2));

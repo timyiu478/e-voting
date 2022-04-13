@@ -197,7 +197,7 @@ contract Election {
     function setDisqualifiedPubKeyIndece(Shares.VerSharesPar[] calldata _Par) 
     external{
         // verify shares verfication peroid
-        require(share_end_time<= block.timestamp && block.timestamp < ver_end_time,"WrongVerifyTime");
+        // require(share_end_time<= block.timestamp && block.timestamp < ver_end_time,"WrongVerifyTime");
 
         bool isValidVal;
         bool isValidProof;

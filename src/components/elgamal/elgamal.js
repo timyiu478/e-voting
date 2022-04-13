@@ -12,6 +12,7 @@ const G = ec_params.getG();
 const N = ec_params.getN();
 
 export function elgamal_encrypt(message,receiver_publickeyHex){
+    // message = "123123";
     // console.log(message);
     // Hex to BigInt
     const m = new BigInteger(message,10).add(new BigInteger("1",10));

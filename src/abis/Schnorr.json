@@ -461,7 +461,7 @@
                 }
               ]
             },
-            "name": "abi_decode_tuple_t_struct$_ECPoint_$4245_calldata_ptrt_struct$_ECPoint_$4245_calldata_ptrt_uint256t_uint256",
+            "name": "abi_decode_tuple_t_struct$_ECPoint_$4232_calldata_ptrt_struct$_ECPoint_$4232_calldata_ptrt_uint256t_uint256",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -1824,7 +1824,7 @@
           }
         ]
       },
-      "contents": "{\n    { }\n    function abi_decode_struct_ECPoint_calldata(offset, end) -> value\n    {\n        if slt(sub(end, offset), 64) { revert(0, 0) }\n        value := offset\n    }\n    function abi_decode_tuple_t_struct$_ECPoint_$4245_calldata_ptrt_struct$_ECPoint_$4245_calldata_ptrt_uint256t_uint256(headStart, dataEnd) -> value0, value1, value2, value3\n    {\n        if slt(sub(dataEnd, headStart), 192) { revert(0, 0) }\n        value0 := abi_decode_struct_ECPoint_calldata(headStart, dataEnd)\n        value1 := abi_decode_struct_ECPoint_calldata(add(headStart, 64), dataEnd)\n        value2 := calldataload(add(headStart, 128))\n        value3 := calldataload(add(headStart, 160))\n    }\n    function abi_encode_tuple_t_bool__to_t_bool__fromStack_library_reversed(headStart, value0) -> tail\n    {\n        tail := add(headStart, 32)\n        mstore(headStart, iszero(iszero(value0)))\n    }\n    function panic_error_0x12()\n    {\n        mstore(0, shl(224, 0x4e487b71))\n        mstore(4, 0x12)\n        revert(0, 0x24)\n    }\n    function panic_error_0x11()\n    {\n        mstore(0, shl(224, 0x4e487b71))\n        mstore(4, 0x11)\n        revert(0, 0x24)\n    }\n    function checked_div_t_uint256(x, y) -> r\n    {\n        if iszero(y) { panic_error_0x12() }\n        r := div(x, y)\n    }\n    function checked_sub_t_uint256(x, y) -> diff\n    {\n        if lt(x, y) { panic_error_0x11() }\n        diff := sub(x, y)\n    }\n    function mod_t_uint256(x, y) -> r\n    {\n        if iszero(y) { panic_error_0x12() }\n        r := mod(x, y)\n    }\n    function panic_error_0x32()\n    {\n        mstore(0, shl(224, 0x4e487b71))\n        mstore(4, 0x32)\n        revert(0, 0x24)\n    }\n    function abi_encode_tuple_t_stringliteral_5fdf44d35b202e4b4a5d1b6167961ee48e84a906ae5e709d7bddb824c86220a6__to_t_string_memory_ptr__fromStack_reversed(headStart) -> tail\n    {\n        mstore(headStart, 32)\n        mstore(add(headStart, 32), 30)\n        mstore(add(headStart, 64), \"Use jacDouble function instead\")\n        tail := add(headStart, 96)\n    }\n    function abi_encode_tuple_t_stringliteral_f10345bf174b7296e0343b593f8b22d6d65d2b16a2522b6b74d9848a96db003a__to_t_string_memory_ptr__fromStack_reversed(headStart) -> tail\n    {\n        mstore(headStart, 32)\n        mstore(add(headStart, 32), 14)\n        mstore(add(headStart, 64), \"Invalid number\")\n        tail := add(headStart, 96)\n    }\n    function checked_mul_t_uint256(x, y) -> product\n    {\n        if and(iszero(iszero(x)), gt(y, div(not(0), x))) { panic_error_0x11() }\n        product := mul(x, y)\n    }\n}",
+      "contents": "{\n    { }\n    function abi_decode_struct_ECPoint_calldata(offset, end) -> value\n    {\n        if slt(sub(end, offset), 64) { revert(0, 0) }\n        value := offset\n    }\n    function abi_decode_tuple_t_struct$_ECPoint_$4232_calldata_ptrt_struct$_ECPoint_$4232_calldata_ptrt_uint256t_uint256(headStart, dataEnd) -> value0, value1, value2, value3\n    {\n        if slt(sub(dataEnd, headStart), 192) { revert(0, 0) }\n        value0 := abi_decode_struct_ECPoint_calldata(headStart, dataEnd)\n        value1 := abi_decode_struct_ECPoint_calldata(add(headStart, 64), dataEnd)\n        value2 := calldataload(add(headStart, 128))\n        value3 := calldataload(add(headStart, 160))\n    }\n    function abi_encode_tuple_t_bool__to_t_bool__fromStack_library_reversed(headStart, value0) -> tail\n    {\n        tail := add(headStart, 32)\n        mstore(headStart, iszero(iszero(value0)))\n    }\n    function panic_error_0x12()\n    {\n        mstore(0, shl(224, 0x4e487b71))\n        mstore(4, 0x12)\n        revert(0, 0x24)\n    }\n    function panic_error_0x11()\n    {\n        mstore(0, shl(224, 0x4e487b71))\n        mstore(4, 0x11)\n        revert(0, 0x24)\n    }\n    function checked_div_t_uint256(x, y) -> r\n    {\n        if iszero(y) { panic_error_0x12() }\n        r := div(x, y)\n    }\n    function checked_sub_t_uint256(x, y) -> diff\n    {\n        if lt(x, y) { panic_error_0x11() }\n        diff := sub(x, y)\n    }\n    function mod_t_uint256(x, y) -> r\n    {\n        if iszero(y) { panic_error_0x12() }\n        r := mod(x, y)\n    }\n    function panic_error_0x32()\n    {\n        mstore(0, shl(224, 0x4e487b71))\n        mstore(4, 0x32)\n        revert(0, 0x24)\n    }\n    function abi_encode_tuple_t_stringliteral_5fdf44d35b202e4b4a5d1b6167961ee48e84a906ae5e709d7bddb824c86220a6__to_t_string_memory_ptr__fromStack_reversed(headStart) -> tail\n    {\n        mstore(headStart, 32)\n        mstore(add(headStart, 32), 30)\n        mstore(add(headStart, 64), \"Use jacDouble function instead\")\n        tail := add(headStart, 96)\n    }\n    function abi_encode_tuple_t_stringliteral_f10345bf174b7296e0343b593f8b22d6d65d2b16a2522b6b74d9848a96db003a__to_t_string_memory_ptr__fromStack_reversed(headStart) -> tail\n    {\n        mstore(headStart, 32)\n        mstore(add(headStart, 32), 14)\n        mstore(add(headStart, 64), \"Invalid number\")\n        tail := add(headStart, 96)\n    }\n    function checked_mul_t_uint256(x, y) -> product\n    {\n        if and(iszero(iszero(x)), gt(y, div(not(0), x))) { panic_error_0x11() }\n        product := mul(x, y)\n    }\n}",
       "id": 13,
       "language": "Yul",
       "name": "#utility.yul"
@@ -1838,21 +1838,21 @@
     "absolutePath": "project:/src/contracts/Schnorr.sol",
     "exportedSymbols": {
       "EllipticCurve": [
-        3667
+        3654
       ],
       "Schnorr": [
-        4238
+        4225
       ],
       "Secp256r1": [
-        4273
+        4260
       ]
     },
-    "id": 4239,
+    "id": 4226,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 4120,
+        "id": 4107,
         "literals": [
           "solidity",
           ">=",
@@ -1868,11 +1868,11 @@
       {
         "absolutePath": "project:/src/contracts/EllipticCurve.sol",
         "file": "./EllipticCurve.sol",
-        "id": 4121,
+        "id": 4108,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 4239,
-        "sourceUnit": 3668,
+        "scope": 4226,
+        "sourceUnit": 3655,
         "src": "70:29:8",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1880,11 +1880,11 @@
       {
         "absolutePath": "project:/src/contracts/Secp256r1.sol",
         "file": "./Secp256r1.sol",
-        "id": 4122,
+        "id": 4109,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 4239,
-        "sourceUnit": 4274,
+        "scope": 4226,
+        "sourceUnit": 4261,
         "src": "101:25:8",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1896,9 +1896,9 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 4238,
+        "id": 4225,
         "linearizedBaseContracts": [
-          4238
+          4225
         ],
         "name": "Schnorr",
         "nameLocation": "138:7:8",
@@ -1906,145 +1906,145 @@
         "nodes": [
           {
             "body": {
-              "id": 4236,
+              "id": 4223,
               "nodeType": "Block",
               "src": "291:531:8",
               "statements": [
                 {
                   "assignments": [
-                    4141
+                    4128
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 4141,
+                      "id": 4128,
                       "mutability": "mutable",
                       "name": "t1",
                       "nameLocation": "327:2:8",
                       "nodeType": "VariableDeclaration",
-                      "scope": 4236,
+                      "scope": 4223,
                       "src": "302:27:8",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
-                        "id": 4140,
+                        "id": 4127,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 4139,
+                          "id": 4126,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4245,
+                          "referencedDeclaration": 4232,
                           "src": "302:17:8"
                         },
-                        "referencedDeclaration": 4245,
+                        "referencedDeclaration": 4232,
                         "src": "302:17:8",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4245_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4232_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
                       "visibility": "internal"
                     }
                   ],
-                  "id": 4142,
+                  "id": 4129,
                   "nodeType": "VariableDeclarationStatement",
                   "src": "302:27:8"
                 },
                 {
                   "assignments": [
-                    4147
+                    4134
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 4147,
+                      "id": 4134,
                       "mutability": "mutable",
                       "name": "t2",
                       "nameLocation": "365:2:8",
                       "nodeType": "VariableDeclaration",
-                      "scope": 4236,
+                      "scope": 4223,
                       "src": "340:27:8",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
-                        "id": 4146,
+                        "id": 4133,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 4145,
+                          "id": 4132,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4245,
+                          "referencedDeclaration": 4232,
                           "src": "340:17:8"
                         },
-                        "referencedDeclaration": 4245,
+                        "referencedDeclaration": 4232,
                         "src": "340:17:8",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4245_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4232_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
                       "visibility": "internal"
                     }
                   ],
-                  "id": 4148,
+                  "id": 4135,
                   "nodeType": "VariableDeclarationStatement",
                   "src": "340:27:8"
                 },
                 {
                   "assignments": [
-                    4153
+                    4140
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 4153,
+                      "id": 4140,
                       "mutability": "mutable",
                       "name": "t3",
                       "nameLocation": "403:2:8",
                       "nodeType": "VariableDeclaration",
-                      "scope": 4236,
+                      "scope": 4223,
                       "src": "378:27:8",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
-                        "id": 4152,
+                        "id": 4139,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 4151,
+                          "id": 4138,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4245,
+                          "referencedDeclaration": 4232,
                           "src": "378:17:8"
                         },
-                        "referencedDeclaration": 4245,
+                        "referencedDeclaration": 4232,
                         "src": "378:17:8",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4245_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4232_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
                       "visibility": "internal"
                     }
                   ],
-                  "id": 4154,
+                  "id": 4141,
                   "nodeType": "VariableDeclarationStatement",
                   "src": "378:27:8"
                 },
                 {
                   "expression": {
-                    "id": 4173,
+                    "id": 4160,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2053,25 +2053,25 @@
                       "components": [
                         {
                           "expression": {
-                            "id": 4155,
+                            "id": 4142,
                             "name": "t1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4141,
+                            "referencedDeclaration": 4128,
                             "src": "417:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4157,
+                          "id": 4144,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4242,
+                          "referencedDeclaration": 4229,
                           "src": "417:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2080,25 +2080,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4158,
+                            "id": 4145,
                             "name": "t1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4141,
+                            "referencedDeclaration": 4128,
                             "src": "422:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4159,
+                          "id": 4146,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4244,
+                          "referencedDeclaration": 4231,
                           "src": "422:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2106,7 +2106,7 @@
                           }
                         }
                       ],
-                      "id": 4160,
+                      "id": 4147,
                       "isConstant": false,
                       "isInlineArray": false,
                       "isLValue": true,
@@ -2124,11 +2124,11 @@
                     "rightHandSide": {
                       "arguments": [
                         {
-                          "id": 4163,
+                          "id": 4150,
                           "name": "_m",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4132,
+                          "referencedDeclaration": 4119,
                           "src": "450:2:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2137,25 +2137,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4164,
+                            "id": 4151,
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4273,
+                            "referencedDeclaration": 4260,
                             "src": "453:9:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4273_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4260_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
-                          "id": 4165,
+                          "id": 4152,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "GX",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4254,
+                          "referencedDeclaration": 4241,
                           "src": "453:12:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2164,25 +2164,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4166,
+                            "id": 4153,
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4273,
+                            "referencedDeclaration": 4260,
                             "src": "467:9:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4273_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4260_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
-                          "id": 4167,
+                          "id": 4154,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "GY",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4257,
+                          "referencedDeclaration": 4244,
                           "src": "467:12:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2191,25 +2191,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4168,
+                            "id": 4155,
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4273,
+                            "referencedDeclaration": 4260,
                             "src": "481:9:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4273_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4260_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
-                          "id": 4169,
+                          "id": 4156,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4260,
+                          "referencedDeclaration": 4247,
                           "src": "481:12:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2218,25 +2218,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4170,
+                            "id": 4157,
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4273,
+                            "referencedDeclaration": 4260,
                             "src": "495:9:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4273_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4260_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
-                          "id": 4171,
+                          "id": 4158,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4266,
+                          "referencedDeclaration": 4253,
                           "src": "495:12:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2268,32 +2268,32 @@
                           }
                         ],
                         "expression": {
-                          "id": 4161,
+                          "id": 4148,
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3667,
+                          "referencedDeclaration": 3654,
                           "src": "430:13:8",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3667_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3654_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
-                        "id": 4162,
+                        "id": 4149,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "ecMul",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3093,
+                        "referencedDeclaration": 3080,
                         "src": "430:19:8",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
                           "typeString": "function (uint256,uint256,uint256,uint256,uint256) pure returns (uint256,uint256)"
                         }
                       },
-                      "id": 4172,
+                      "id": 4159,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2314,13 +2314,13 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4174,
+                  "id": 4161,
                   "nodeType": "ExpressionStatement",
                   "src": "416:92:8"
                 },
                 {
                   "expression": {
-                    "id": 4193,
+                    "id": 4180,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2329,25 +2329,25 @@
                       "components": [
                         {
                           "expression": {
-                            "id": 4175,
+                            "id": 4162,
                             "name": "t2",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4147,
+                            "referencedDeclaration": 4134,
                             "src": "520:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4177,
+                          "id": 4164,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4242,
+                          "referencedDeclaration": 4229,
                           "src": "520:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2356,25 +2356,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4178,
+                            "id": 4165,
                             "name": "t2",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4147,
+                            "referencedDeclaration": 4134,
                             "src": "525:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4179,
+                          "id": 4166,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4244,
+                          "referencedDeclaration": 4231,
                           "src": "525:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2382,7 +2382,7 @@
                           }
                         }
                       ],
-                      "id": 4180,
+                      "id": 4167,
                       "isConstant": false,
                       "isInlineArray": false,
                       "isLValue": true,
@@ -2400,11 +2400,11 @@
                     "rightHandSide": {
                       "arguments": [
                         {
-                          "id": 4183,
+                          "id": 4170,
                           "name": "_c",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4130,
+                          "referencedDeclaration": 4117,
                           "src": "553:2:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2413,25 +2413,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4184,
+                            "id": 4171,
                             "name": "_A",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4125,
+                            "referencedDeclaration": 4112,
                             "src": "556:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
-                          "id": 4185,
+                          "id": 4172,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4242,
+                          "referencedDeclaration": 4229,
                           "src": "556:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2440,25 +2440,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4186,
+                            "id": 4173,
                             "name": "_A",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4125,
+                            "referencedDeclaration": 4112,
                             "src": "562:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
-                          "id": 4187,
+                          "id": 4174,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4244,
+                          "referencedDeclaration": 4231,
                           "src": "562:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2467,25 +2467,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4188,
+                            "id": 4175,
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4273,
+                            "referencedDeclaration": 4260,
                             "src": "568:9:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4273_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4260_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
-                          "id": 4189,
+                          "id": 4176,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4260,
+                          "referencedDeclaration": 4247,
                           "src": "568:12:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2494,25 +2494,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4190,
+                            "id": 4177,
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4273,
+                            "referencedDeclaration": 4260,
                             "src": "582:9:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4273_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4260_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
-                          "id": 4191,
+                          "id": 4178,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4266,
+                          "referencedDeclaration": 4253,
                           "src": "582:12:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2544,32 +2544,32 @@
                           }
                         ],
                         "expression": {
-                          "id": 4181,
+                          "id": 4168,
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3667,
+                          "referencedDeclaration": 3654,
                           "src": "533:13:8",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3667_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3654_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
-                        "id": 4182,
+                        "id": 4169,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "ecMul",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3093,
+                        "referencedDeclaration": 3080,
                         "src": "533:19:8",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
                           "typeString": "function (uint256,uint256,uint256,uint256,uint256) pure returns (uint256,uint256)"
                         }
                       },
-                      "id": 4192,
+                      "id": 4179,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2590,13 +2590,13 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4194,
+                  "id": 4181,
                   "nodeType": "ExpressionStatement",
                   "src": "519:76:8"
                 },
                 {
                   "expression": {
-                    "id": 4216,
+                    "id": 4203,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2605,25 +2605,25 @@
                       "components": [
                         {
                           "expression": {
-                            "id": 4195,
+                            "id": 4182,
                             "name": "t3",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4153,
+                            "referencedDeclaration": 4140,
                             "src": "607:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4197,
+                          "id": 4184,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4242,
+                          "referencedDeclaration": 4229,
                           "src": "607:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2632,25 +2632,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4198,
+                            "id": 4185,
                             "name": "t3",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4153,
+                            "referencedDeclaration": 4140,
                             "src": "612:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4199,
+                          "id": 4186,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4244,
+                          "referencedDeclaration": 4231,
                           "src": "612:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2658,7 +2658,7 @@
                           }
                         }
                       ],
-                      "id": 4200,
+                      "id": 4187,
                       "isConstant": false,
                       "isInlineArray": false,
                       "isLValue": true,
@@ -2677,25 +2677,25 @@
                       "arguments": [
                         {
                           "expression": {
-                            "id": 4203,
+                            "id": 4190,
                             "name": "t1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4141,
+                            "referencedDeclaration": 4128,
                             "src": "640:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4204,
+                          "id": 4191,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4242,
+                          "referencedDeclaration": 4229,
                           "src": "640:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2704,25 +2704,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4205,
+                            "id": 4192,
                             "name": "t1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4141,
+                            "referencedDeclaration": 4128,
                             "src": "646:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4206,
+                          "id": 4193,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4244,
+                          "referencedDeclaration": 4231,
                           "src": "646:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2731,25 +2731,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4207,
+                            "id": 4194,
                             "name": "t2",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4147,
+                            "referencedDeclaration": 4134,
                             "src": "652:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4208,
+                          "id": 4195,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4242,
+                          "referencedDeclaration": 4229,
                           "src": "652:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2758,25 +2758,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4209,
+                            "id": 4196,
                             "name": "t2",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4147,
+                            "referencedDeclaration": 4134,
                             "src": "658:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4210,
+                          "id": 4197,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4244,
+                          "referencedDeclaration": 4231,
                           "src": "658:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2785,25 +2785,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4211,
+                            "id": 4198,
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4273,
+                            "referencedDeclaration": 4260,
                             "src": "664:9:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4273_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4260_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
-                          "id": 4212,
+                          "id": 4199,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4260,
+                          "referencedDeclaration": 4247,
                           "src": "664:12:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2812,25 +2812,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4213,
+                            "id": 4200,
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4273,
+                            "referencedDeclaration": 4260,
                             "src": "678:9:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4273_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4260_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
-                          "id": 4214,
+                          "id": 4201,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4266,
+                          "referencedDeclaration": 4253,
                           "src": "678:12:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -2866,32 +2866,32 @@
                           }
                         ],
                         "expression": {
-                          "id": 4201,
+                          "id": 4188,
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3667,
+                          "referencedDeclaration": 3654,
                           "src": "620:13:8",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3667_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3654_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
-                        "id": 4202,
+                        "id": 4189,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "ecSub",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3052,
+                        "referencedDeclaration": 3039,
                         "src": "620:19:8",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
                           "typeString": "function (uint256,uint256,uint256,uint256,uint256,uint256) pure returns (uint256,uint256)"
                         }
                       },
-                      "id": 4215,
+                      "id": 4202,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2912,7 +2912,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4217,
+                  "id": 4204,
                   "nodeType": "ExpressionStatement",
                   "src": "606:85:8"
                 },
@@ -2922,7 +2922,7 @@
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     },
-                    "id": 4228,
+                    "id": 4215,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2932,32 +2932,32 @@
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       },
-                      "id": 4222,
+                      "id": 4209,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "leftExpression": {
                         "expression": {
-                          "id": 4218,
+                          "id": 4205,
                           "name": "_R",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4128,
+                          "referencedDeclaration": 4115,
                           "src": "705:2:8",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_ECPoint_$4245_calldata_ptr",
+                            "typeIdentifier": "t_struct$_ECPoint_$4232_calldata_ptr",
                             "typeString": "struct Secp256r1.ECPoint calldata"
                           }
                         },
-                        "id": 4219,
+                        "id": 4206,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "x",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 4242,
+                        "referencedDeclaration": 4229,
                         "src": "705:4:8",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -2968,25 +2968,25 @@
                       "operator": "==",
                       "rightExpression": {
                         "expression": {
-                          "id": 4220,
+                          "id": 4207,
                           "name": "t3",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4153,
+                          "referencedDeclaration": 4140,
                           "src": "713:2:8",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                            "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                             "typeString": "struct Secp256r1.ECPoint memory"
                           }
                         },
-                        "id": 4221,
+                        "id": 4208,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "x",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 4242,
+                        "referencedDeclaration": 4229,
                         "src": "713:4:8",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -3006,32 +3006,32 @@
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       },
-                      "id": 4227,
+                      "id": 4214,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "leftExpression": {
                         "expression": {
-                          "id": 4223,
+                          "id": 4210,
                           "name": "_R",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4128,
+                          "referencedDeclaration": 4115,
                           "src": "721:2:8",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_ECPoint_$4245_calldata_ptr",
+                            "typeIdentifier": "t_struct$_ECPoint_$4232_calldata_ptr",
                             "typeString": "struct Secp256r1.ECPoint calldata"
                           }
                         },
-                        "id": 4224,
+                        "id": 4211,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "y",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 4244,
+                        "referencedDeclaration": 4231,
                         "src": "721:4:8",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -3042,25 +3042,25 @@
                       "operator": "==",
                       "rightExpression": {
                         "expression": {
-                          "id": 4225,
+                          "id": 4212,
                           "name": "t3",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4153,
+                          "referencedDeclaration": 4140,
                           "src": "729:2:8",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                            "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                             "typeString": "struct Secp256r1.ECPoint memory"
                           }
                         },
-                        "id": 4226,
+                        "id": 4213,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "y",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 4244,
+                        "referencedDeclaration": 4231,
                         "src": "729:4:8",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -3080,14 +3080,14 @@
                     }
                   },
                   "falseBody": {
-                    "id": 4234,
+                    "id": 4221,
                     "nodeType": "Block",
                     "src": "776:39:8",
                     "statements": [
                       {
                         "expression": {
                           "hexValue": "66616c7365",
-                          "id": 4232,
+                          "id": 4219,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -3101,25 +3101,25 @@
                           },
                           "value": "false"
                         },
-                        "functionReturnParameters": 4136,
-                        "id": 4233,
+                        "functionReturnParameters": 4123,
+                        "id": 4220,
                         "nodeType": "Return",
                         "src": "791:12:8"
                       }
                     ]
                   },
-                  "id": 4235,
+                  "id": 4222,
                   "nodeType": "IfStatement",
                   "src": "702:113:8",
                   "trueBody": {
-                    "id": 4231,
+                    "id": 4218,
                     "nodeType": "Block",
                     "src": "734:38:8",
                     "statements": [
                       {
                         "expression": {
                           "hexValue": "74727565",
-                          "id": 4229,
+                          "id": 4216,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -3133,8 +3133,8 @@
                           },
                           "value": "true"
                         },
-                        "functionReturnParameters": 4136,
-                        "id": 4230,
+                        "functionReturnParameters": 4123,
+                        "id": 4217,
                         "nodeType": "Return",
                         "src": "749:11:8"
                       }
@@ -3144,7 +3144,7 @@
               ]
             },
             "functionSelector": "9b8e72c4",
-            "id": 4237,
+            "id": 4224,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -3152,38 +3152,38 @@
             "nameLocation": "161:6:8",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4133,
+              "id": 4120,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4125,
+                  "id": 4112,
                   "mutability": "mutable",
                   "name": "_A",
                   "nameLocation": "195:2:8",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4237,
+                  "scope": 4224,
                   "src": "168:29:8",
                   "stateVariable": false,
                   "storageLocation": "calldata",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_ECPoint_$4245_calldata_ptr",
+                    "typeIdentifier": "t_struct$_ECPoint_$4232_calldata_ptr",
                     "typeString": "struct Secp256r1.ECPoint"
                   },
                   "typeName": {
-                    "id": 4124,
+                    "id": 4111,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 4123,
+                      "id": 4110,
                       "name": "Secp256r1.ECPoint",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 4245,
+                      "referencedDeclaration": 4232,
                       "src": "168:17:8"
                     },
-                    "referencedDeclaration": 4245,
+                    "referencedDeclaration": 4232,
                     "src": "168:17:8",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_ECPoint_$4245_storage_ptr",
+                      "typeIdentifier": "t_struct$_ECPoint_$4232_storage_ptr",
                       "typeString": "struct Secp256r1.ECPoint"
                     }
                   },
@@ -3191,33 +3191,33 @@
                 },
                 {
                   "constant": false,
-                  "id": 4128,
+                  "id": 4115,
                   "mutability": "mutable",
                   "name": "_R",
                   "nameLocation": "226:2:8",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4237,
+                  "scope": 4224,
                   "src": "199:29:8",
                   "stateVariable": false,
                   "storageLocation": "calldata",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_ECPoint_$4245_calldata_ptr",
+                    "typeIdentifier": "t_struct$_ECPoint_$4232_calldata_ptr",
                     "typeString": "struct Secp256r1.ECPoint"
                   },
                   "typeName": {
-                    "id": 4127,
+                    "id": 4114,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 4126,
+                      "id": 4113,
                       "name": "Secp256r1.ECPoint",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 4245,
+                      "referencedDeclaration": 4232,
                       "src": "199:17:8"
                     },
-                    "referencedDeclaration": 4245,
+                    "referencedDeclaration": 4232,
                     "src": "199:17:8",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_ECPoint_$4245_storage_ptr",
+                      "typeIdentifier": "t_struct$_ECPoint_$4232_storage_ptr",
                       "typeString": "struct Secp256r1.ECPoint"
                     }
                   },
@@ -3225,12 +3225,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4130,
+                  "id": 4117,
                   "mutability": "mutable",
                   "name": "_c",
                   "nameLocation": "243:2:8",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4237,
+                  "scope": 4224,
                   "src": "235:10:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3239,7 +3239,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4129,
+                    "id": 4116,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "235:7:8",
@@ -3252,12 +3252,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4132,
+                  "id": 4119,
                   "mutability": "mutable",
                   "name": "_m",
                   "nameLocation": "255:2:8",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4237,
+                  "scope": 4224,
                   "src": "247:10:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3266,7 +3266,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4131,
+                    "id": 4118,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "247:7:8",
@@ -3281,17 +3281,17 @@
               "src": "167:97:8"
             },
             "returnParameters": {
-              "id": 4136,
+              "id": 4123,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4135,
+                  "id": 4122,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4237,
+                  "scope": 4224,
                   "src": "286:4:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3300,7 +3300,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 4134,
+                    "id": 4121,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "286:4:8",
@@ -3314,14 +3314,14 @@
               ],
               "src": "285:6:8"
             },
-            "scope": 4238,
+            "scope": 4225,
             "src": "152:670:8",
             "stateMutability": "pure",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 4239,
+        "scope": 4226,
         "src": "130:695:8",
         "usedErrors": []
       }
@@ -3332,21 +3332,21 @@
     "absolutePath": "project:/src/contracts/Schnorr.sol",
     "exportedSymbols": {
       "EllipticCurve": [
-        3667
+        3654
       ],
       "Schnorr": [
-        4238
+        4225
       ],
       "Secp256r1": [
-        4273
+        4260
       ]
     },
-    "id": 4239,
+    "id": 4226,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 4120,
+        "id": 4107,
         "literals": [
           "solidity",
           ">=",
@@ -3362,11 +3362,11 @@
       {
         "absolutePath": "project:/src/contracts/EllipticCurve.sol",
         "file": "./EllipticCurve.sol",
-        "id": 4121,
+        "id": 4108,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 4239,
-        "sourceUnit": 3668,
+        "scope": 4226,
+        "sourceUnit": 3655,
         "src": "70:29:8",
         "symbolAliases": [],
         "unitAlias": ""
@@ -3374,11 +3374,11 @@
       {
         "absolutePath": "project:/src/contracts/Secp256r1.sol",
         "file": "./Secp256r1.sol",
-        "id": 4122,
+        "id": 4109,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 4239,
-        "sourceUnit": 4274,
+        "scope": 4226,
+        "sourceUnit": 4261,
         "src": "101:25:8",
         "symbolAliases": [],
         "unitAlias": ""
@@ -3390,9 +3390,9 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 4238,
+        "id": 4225,
         "linearizedBaseContracts": [
-          4238
+          4225
         ],
         "name": "Schnorr",
         "nameLocation": "138:7:8",
@@ -3400,145 +3400,145 @@
         "nodes": [
           {
             "body": {
-              "id": 4236,
+              "id": 4223,
               "nodeType": "Block",
               "src": "291:531:8",
               "statements": [
                 {
                   "assignments": [
-                    4141
+                    4128
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 4141,
+                      "id": 4128,
                       "mutability": "mutable",
                       "name": "t1",
                       "nameLocation": "327:2:8",
                       "nodeType": "VariableDeclaration",
-                      "scope": 4236,
+                      "scope": 4223,
                       "src": "302:27:8",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
-                        "id": 4140,
+                        "id": 4127,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 4139,
+                          "id": 4126,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4245,
+                          "referencedDeclaration": 4232,
                           "src": "302:17:8"
                         },
-                        "referencedDeclaration": 4245,
+                        "referencedDeclaration": 4232,
                         "src": "302:17:8",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4245_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4232_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
                       "visibility": "internal"
                     }
                   ],
-                  "id": 4142,
+                  "id": 4129,
                   "nodeType": "VariableDeclarationStatement",
                   "src": "302:27:8"
                 },
                 {
                   "assignments": [
-                    4147
+                    4134
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 4147,
+                      "id": 4134,
                       "mutability": "mutable",
                       "name": "t2",
                       "nameLocation": "365:2:8",
                       "nodeType": "VariableDeclaration",
-                      "scope": 4236,
+                      "scope": 4223,
                       "src": "340:27:8",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
-                        "id": 4146,
+                        "id": 4133,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 4145,
+                          "id": 4132,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4245,
+                          "referencedDeclaration": 4232,
                           "src": "340:17:8"
                         },
-                        "referencedDeclaration": 4245,
+                        "referencedDeclaration": 4232,
                         "src": "340:17:8",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4245_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4232_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
                       "visibility": "internal"
                     }
                   ],
-                  "id": 4148,
+                  "id": 4135,
                   "nodeType": "VariableDeclarationStatement",
                   "src": "340:27:8"
                 },
                 {
                   "assignments": [
-                    4153
+                    4140
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 4153,
+                      "id": 4140,
                       "mutability": "mutable",
                       "name": "t3",
                       "nameLocation": "403:2:8",
                       "nodeType": "VariableDeclaration",
-                      "scope": 4236,
+                      "scope": 4223,
                       "src": "378:27:8",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                        "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                         "typeString": "struct Secp256r1.ECPoint"
                       },
                       "typeName": {
-                        "id": 4152,
+                        "id": 4139,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 4151,
+                          "id": 4138,
                           "name": "Secp256r1.ECPoint",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 4245,
+                          "referencedDeclaration": 4232,
                           "src": "378:17:8"
                         },
-                        "referencedDeclaration": 4245,
+                        "referencedDeclaration": 4232,
                         "src": "378:17:8",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_ECPoint_$4245_storage_ptr",
+                          "typeIdentifier": "t_struct$_ECPoint_$4232_storage_ptr",
                           "typeString": "struct Secp256r1.ECPoint"
                         }
                       },
                       "visibility": "internal"
                     }
                   ],
-                  "id": 4154,
+                  "id": 4141,
                   "nodeType": "VariableDeclarationStatement",
                   "src": "378:27:8"
                 },
                 {
                   "expression": {
-                    "id": 4173,
+                    "id": 4160,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3547,25 +3547,25 @@
                       "components": [
                         {
                           "expression": {
-                            "id": 4155,
+                            "id": 4142,
                             "name": "t1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4141,
+                            "referencedDeclaration": 4128,
                             "src": "417:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4157,
+                          "id": 4144,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4242,
+                          "referencedDeclaration": 4229,
                           "src": "417:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3574,25 +3574,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4158,
+                            "id": 4145,
                             "name": "t1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4141,
+                            "referencedDeclaration": 4128,
                             "src": "422:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4159,
+                          "id": 4146,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4244,
+                          "referencedDeclaration": 4231,
                           "src": "422:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3600,7 +3600,7 @@
                           }
                         }
                       ],
-                      "id": 4160,
+                      "id": 4147,
                       "isConstant": false,
                       "isInlineArray": false,
                       "isLValue": true,
@@ -3618,11 +3618,11 @@
                     "rightHandSide": {
                       "arguments": [
                         {
-                          "id": 4163,
+                          "id": 4150,
                           "name": "_m",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4132,
+                          "referencedDeclaration": 4119,
                           "src": "450:2:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3631,25 +3631,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4164,
+                            "id": 4151,
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4273,
+                            "referencedDeclaration": 4260,
                             "src": "453:9:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4273_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4260_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
-                          "id": 4165,
+                          "id": 4152,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "GX",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4254,
+                          "referencedDeclaration": 4241,
                           "src": "453:12:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3658,25 +3658,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4166,
+                            "id": 4153,
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4273,
+                            "referencedDeclaration": 4260,
                             "src": "467:9:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4273_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4260_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
-                          "id": 4167,
+                          "id": 4154,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "GY",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4257,
+                          "referencedDeclaration": 4244,
                           "src": "467:12:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3685,25 +3685,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4168,
+                            "id": 4155,
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4273,
+                            "referencedDeclaration": 4260,
                             "src": "481:9:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4273_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4260_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
-                          "id": 4169,
+                          "id": 4156,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4260,
+                          "referencedDeclaration": 4247,
                           "src": "481:12:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3712,25 +3712,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4170,
+                            "id": 4157,
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4273,
+                            "referencedDeclaration": 4260,
                             "src": "495:9:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4273_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4260_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
-                          "id": 4171,
+                          "id": 4158,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4266,
+                          "referencedDeclaration": 4253,
                           "src": "495:12:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3762,32 +3762,32 @@
                           }
                         ],
                         "expression": {
-                          "id": 4161,
+                          "id": 4148,
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3667,
+                          "referencedDeclaration": 3654,
                           "src": "430:13:8",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3667_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3654_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
-                        "id": 4162,
+                        "id": 4149,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "ecMul",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3093,
+                        "referencedDeclaration": 3080,
                         "src": "430:19:8",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
                           "typeString": "function (uint256,uint256,uint256,uint256,uint256) pure returns (uint256,uint256)"
                         }
                       },
-                      "id": 4172,
+                      "id": 4159,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -3808,13 +3808,13 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4174,
+                  "id": 4161,
                   "nodeType": "ExpressionStatement",
                   "src": "416:92:8"
                 },
                 {
                   "expression": {
-                    "id": 4193,
+                    "id": 4180,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3823,25 +3823,25 @@
                       "components": [
                         {
                           "expression": {
-                            "id": 4175,
+                            "id": 4162,
                             "name": "t2",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4147,
+                            "referencedDeclaration": 4134,
                             "src": "520:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4177,
+                          "id": 4164,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4242,
+                          "referencedDeclaration": 4229,
                           "src": "520:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3850,25 +3850,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4178,
+                            "id": 4165,
                             "name": "t2",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4147,
+                            "referencedDeclaration": 4134,
                             "src": "525:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4179,
+                          "id": 4166,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4244,
+                          "referencedDeclaration": 4231,
                           "src": "525:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3876,7 +3876,7 @@
                           }
                         }
                       ],
-                      "id": 4180,
+                      "id": 4167,
                       "isConstant": false,
                       "isInlineArray": false,
                       "isLValue": true,
@@ -3894,11 +3894,11 @@
                     "rightHandSide": {
                       "arguments": [
                         {
-                          "id": 4183,
+                          "id": 4170,
                           "name": "_c",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4130,
+                          "referencedDeclaration": 4117,
                           "src": "553:2:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3907,25 +3907,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4184,
+                            "id": 4171,
                             "name": "_A",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4125,
+                            "referencedDeclaration": 4112,
                             "src": "556:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
-                          "id": 4185,
+                          "id": 4172,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4242,
+                          "referencedDeclaration": 4229,
                           "src": "556:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3934,25 +3934,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4186,
+                            "id": 4173,
                             "name": "_A",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4125,
+                            "referencedDeclaration": 4112,
                             "src": "562:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_calldata_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_calldata_ptr",
                               "typeString": "struct Secp256r1.ECPoint calldata"
                             }
                           },
-                          "id": 4187,
+                          "id": 4174,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4244,
+                          "referencedDeclaration": 4231,
                           "src": "562:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3961,25 +3961,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4188,
+                            "id": 4175,
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4273,
+                            "referencedDeclaration": 4260,
                             "src": "568:9:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4273_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4260_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
-                          "id": 4189,
+                          "id": 4176,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4260,
+                          "referencedDeclaration": 4247,
                           "src": "568:12:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -3988,25 +3988,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4190,
+                            "id": 4177,
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4273,
+                            "referencedDeclaration": 4260,
                             "src": "582:9:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4273_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4260_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
-                          "id": 4191,
+                          "id": 4178,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4266,
+                          "referencedDeclaration": 4253,
                           "src": "582:12:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4038,32 +4038,32 @@
                           }
                         ],
                         "expression": {
-                          "id": 4181,
+                          "id": 4168,
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3667,
+                          "referencedDeclaration": 3654,
                           "src": "533:13:8",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3667_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3654_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
-                        "id": 4182,
+                        "id": 4169,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "ecMul",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3093,
+                        "referencedDeclaration": 3080,
                         "src": "533:19:8",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
                           "typeString": "function (uint256,uint256,uint256,uint256,uint256) pure returns (uint256,uint256)"
                         }
                       },
-                      "id": 4192,
+                      "id": 4179,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -4084,13 +4084,13 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4194,
+                  "id": 4181,
                   "nodeType": "ExpressionStatement",
                   "src": "519:76:8"
                 },
                 {
                   "expression": {
-                    "id": 4216,
+                    "id": 4203,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -4099,25 +4099,25 @@
                       "components": [
                         {
                           "expression": {
-                            "id": 4195,
+                            "id": 4182,
                             "name": "t3",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4153,
+                            "referencedDeclaration": 4140,
                             "src": "607:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4197,
+                          "id": 4184,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": true,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4242,
+                          "referencedDeclaration": 4229,
                           "src": "607:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4126,25 +4126,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4198,
+                            "id": 4185,
                             "name": "t3",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4153,
+                            "referencedDeclaration": 4140,
                             "src": "612:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4199,
+                          "id": 4186,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": true,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4244,
+                          "referencedDeclaration": 4231,
                           "src": "612:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4152,7 +4152,7 @@
                           }
                         }
                       ],
-                      "id": 4200,
+                      "id": 4187,
                       "isConstant": false,
                       "isInlineArray": false,
                       "isLValue": true,
@@ -4171,25 +4171,25 @@
                       "arguments": [
                         {
                           "expression": {
-                            "id": 4203,
+                            "id": 4190,
                             "name": "t1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4141,
+                            "referencedDeclaration": 4128,
                             "src": "640:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4204,
+                          "id": 4191,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4242,
+                          "referencedDeclaration": 4229,
                           "src": "640:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4198,25 +4198,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4205,
+                            "id": 4192,
                             "name": "t1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4141,
+                            "referencedDeclaration": 4128,
                             "src": "646:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4206,
+                          "id": 4193,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4244,
+                          "referencedDeclaration": 4231,
                           "src": "646:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4225,25 +4225,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4207,
+                            "id": 4194,
                             "name": "t2",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4147,
+                            "referencedDeclaration": 4134,
                             "src": "652:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4208,
+                          "id": 4195,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "x",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4242,
+                          "referencedDeclaration": 4229,
                           "src": "652:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4252,25 +4252,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4209,
+                            "id": 4196,
                             "name": "t2",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4147,
+                            "referencedDeclaration": 4134,
                             "src": "658:2:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                              "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                               "typeString": "struct Secp256r1.ECPoint memory"
                             }
                           },
-                          "id": 4210,
+                          "id": 4197,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "y",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4244,
+                          "referencedDeclaration": 4231,
                           "src": "658:4:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4279,25 +4279,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4211,
+                            "id": 4198,
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4273,
+                            "referencedDeclaration": 4260,
                             "src": "664:9:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4273_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4260_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
-                          "id": 4212,
+                          "id": 4199,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "AA",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4260,
+                          "referencedDeclaration": 4247,
                           "src": "664:12:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4306,25 +4306,25 @@
                         },
                         {
                           "expression": {
-                            "id": 4213,
+                            "id": 4200,
                             "name": "Secp256r1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 4273,
+                            "referencedDeclaration": 4260,
                             "src": "678:9:8",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4273_$",
+                              "typeIdentifier": "t_type$_t_contract$_Secp256r1_$4260_$",
                               "typeString": "type(library Secp256r1)"
                             }
                           },
-                          "id": 4214,
+                          "id": 4201,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "PP",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 4266,
+                          "referencedDeclaration": 4253,
                           "src": "678:12:8",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4360,32 +4360,32 @@
                           }
                         ],
                         "expression": {
-                          "id": 4201,
+                          "id": 4188,
                           "name": "EllipticCurve",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3667,
+                          "referencedDeclaration": 3654,
                           "src": "620:13:8",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3667_$",
+                            "typeIdentifier": "t_type$_t_contract$_EllipticCurve_$3654_$",
                             "typeString": "type(library EllipticCurve)"
                           }
                         },
-                        "id": 4202,
+                        "id": 4189,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "ecSub",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3052,
+                        "referencedDeclaration": 3039,
                         "src": "620:19:8",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$_t_uint256_$_t_uint256_$",
                           "typeString": "function (uint256,uint256,uint256,uint256,uint256,uint256) pure returns (uint256,uint256)"
                         }
                       },
-                      "id": 4215,
+                      "id": 4202,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -4406,7 +4406,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4217,
+                  "id": 4204,
                   "nodeType": "ExpressionStatement",
                   "src": "606:85:8"
                 },
@@ -4416,7 +4416,7 @@
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     },
-                    "id": 4228,
+                    "id": 4215,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -4426,32 +4426,32 @@
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       },
-                      "id": 4222,
+                      "id": 4209,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "leftExpression": {
                         "expression": {
-                          "id": 4218,
+                          "id": 4205,
                           "name": "_R",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4128,
+                          "referencedDeclaration": 4115,
                           "src": "705:2:8",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_ECPoint_$4245_calldata_ptr",
+                            "typeIdentifier": "t_struct$_ECPoint_$4232_calldata_ptr",
                             "typeString": "struct Secp256r1.ECPoint calldata"
                           }
                         },
-                        "id": 4219,
+                        "id": 4206,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "x",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 4242,
+                        "referencedDeclaration": 4229,
                         "src": "705:4:8",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -4462,25 +4462,25 @@
                       "operator": "==",
                       "rightExpression": {
                         "expression": {
-                          "id": 4220,
+                          "id": 4207,
                           "name": "t3",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4153,
+                          "referencedDeclaration": 4140,
                           "src": "713:2:8",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                            "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                             "typeString": "struct Secp256r1.ECPoint memory"
                           }
                         },
-                        "id": 4221,
+                        "id": 4208,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "x",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 4242,
+                        "referencedDeclaration": 4229,
                         "src": "713:4:8",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -4500,32 +4500,32 @@
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       },
-                      "id": 4227,
+                      "id": 4214,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "leftExpression": {
                         "expression": {
-                          "id": 4223,
+                          "id": 4210,
                           "name": "_R",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4128,
+                          "referencedDeclaration": 4115,
                           "src": "721:2:8",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_ECPoint_$4245_calldata_ptr",
+                            "typeIdentifier": "t_struct$_ECPoint_$4232_calldata_ptr",
                             "typeString": "struct Secp256r1.ECPoint calldata"
                           }
                         },
-                        "id": 4224,
+                        "id": 4211,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "y",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 4244,
+                        "referencedDeclaration": 4231,
                         "src": "721:4:8",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -4536,25 +4536,25 @@
                       "operator": "==",
                       "rightExpression": {
                         "expression": {
-                          "id": 4225,
+                          "id": 4212,
                           "name": "t3",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4153,
+                          "referencedDeclaration": 4140,
                           "src": "729:2:8",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_ECPoint_$4245_memory_ptr",
+                            "typeIdentifier": "t_struct$_ECPoint_$4232_memory_ptr",
                             "typeString": "struct Secp256r1.ECPoint memory"
                           }
                         },
-                        "id": 4226,
+                        "id": 4213,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "y",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 4244,
+                        "referencedDeclaration": 4231,
                         "src": "729:4:8",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -4574,14 +4574,14 @@
                     }
                   },
                   "falseBody": {
-                    "id": 4234,
+                    "id": 4221,
                     "nodeType": "Block",
                     "src": "776:39:8",
                     "statements": [
                       {
                         "expression": {
                           "hexValue": "66616c7365",
-                          "id": 4232,
+                          "id": 4219,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -4595,25 +4595,25 @@
                           },
                           "value": "false"
                         },
-                        "functionReturnParameters": 4136,
-                        "id": 4233,
+                        "functionReturnParameters": 4123,
+                        "id": 4220,
                         "nodeType": "Return",
                         "src": "791:12:8"
                       }
                     ]
                   },
-                  "id": 4235,
+                  "id": 4222,
                   "nodeType": "IfStatement",
                   "src": "702:113:8",
                   "trueBody": {
-                    "id": 4231,
+                    "id": 4218,
                     "nodeType": "Block",
                     "src": "734:38:8",
                     "statements": [
                       {
                         "expression": {
                           "hexValue": "74727565",
-                          "id": 4229,
+                          "id": 4216,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -4627,8 +4627,8 @@
                           },
                           "value": "true"
                         },
-                        "functionReturnParameters": 4136,
-                        "id": 4230,
+                        "functionReturnParameters": 4123,
+                        "id": 4217,
                         "nodeType": "Return",
                         "src": "749:11:8"
                       }
@@ -4638,7 +4638,7 @@
               ]
             },
             "functionSelector": "9b8e72c4",
-            "id": 4237,
+            "id": 4224,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -4646,38 +4646,38 @@
             "nameLocation": "161:6:8",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4133,
+              "id": 4120,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4125,
+                  "id": 4112,
                   "mutability": "mutable",
                   "name": "_A",
                   "nameLocation": "195:2:8",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4237,
+                  "scope": 4224,
                   "src": "168:29:8",
                   "stateVariable": false,
                   "storageLocation": "calldata",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_ECPoint_$4245_calldata_ptr",
+                    "typeIdentifier": "t_struct$_ECPoint_$4232_calldata_ptr",
                     "typeString": "struct Secp256r1.ECPoint"
                   },
                   "typeName": {
-                    "id": 4124,
+                    "id": 4111,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 4123,
+                      "id": 4110,
                       "name": "Secp256r1.ECPoint",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 4245,
+                      "referencedDeclaration": 4232,
                       "src": "168:17:8"
                     },
-                    "referencedDeclaration": 4245,
+                    "referencedDeclaration": 4232,
                     "src": "168:17:8",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_ECPoint_$4245_storage_ptr",
+                      "typeIdentifier": "t_struct$_ECPoint_$4232_storage_ptr",
                       "typeString": "struct Secp256r1.ECPoint"
                     }
                   },
@@ -4685,33 +4685,33 @@
                 },
                 {
                   "constant": false,
-                  "id": 4128,
+                  "id": 4115,
                   "mutability": "mutable",
                   "name": "_R",
                   "nameLocation": "226:2:8",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4237,
+                  "scope": 4224,
                   "src": "199:29:8",
                   "stateVariable": false,
                   "storageLocation": "calldata",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_ECPoint_$4245_calldata_ptr",
+                    "typeIdentifier": "t_struct$_ECPoint_$4232_calldata_ptr",
                     "typeString": "struct Secp256r1.ECPoint"
                   },
                   "typeName": {
-                    "id": 4127,
+                    "id": 4114,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 4126,
+                      "id": 4113,
                       "name": "Secp256r1.ECPoint",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 4245,
+                      "referencedDeclaration": 4232,
                       "src": "199:17:8"
                     },
-                    "referencedDeclaration": 4245,
+                    "referencedDeclaration": 4232,
                     "src": "199:17:8",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_ECPoint_$4245_storage_ptr",
+                      "typeIdentifier": "t_struct$_ECPoint_$4232_storage_ptr",
                       "typeString": "struct Secp256r1.ECPoint"
                     }
                   },
@@ -4719,12 +4719,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4130,
+                  "id": 4117,
                   "mutability": "mutable",
                   "name": "_c",
                   "nameLocation": "243:2:8",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4237,
+                  "scope": 4224,
                   "src": "235:10:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4733,7 +4733,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4129,
+                    "id": 4116,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "235:7:8",
@@ -4746,12 +4746,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4132,
+                  "id": 4119,
                   "mutability": "mutable",
                   "name": "_m",
                   "nameLocation": "255:2:8",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4237,
+                  "scope": 4224,
                   "src": "247:10:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4760,7 +4760,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4131,
+                    "id": 4118,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "247:7:8",
@@ -4775,17 +4775,17 @@
               "src": "167:97:8"
             },
             "returnParameters": {
-              "id": 4136,
+              "id": 4123,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4135,
+                  "id": 4122,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4237,
+                  "scope": 4224,
                   "src": "286:4:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4794,7 +4794,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 4134,
+                    "id": 4121,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "286:4:8",
@@ -4808,14 +4808,14 @@
               ],
               "src": "285:6:8"
             },
-            "scope": 4238,
+            "scope": 4225,
             "src": "152:670:8",
             "stateMutability": "pure",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 4239,
+        "scope": 4226,
         "src": "130:695:8",
         "usedErrors": []
       }
@@ -4830,12 +4830,12 @@
     "1337": {
       "events": {},
       "links": {},
-      "address": "0x7D59fD60d026f1dC699157a73B3A82BbdAE4dde0",
-      "transactionHash": "0xd1c672b41aa4f1b19464e557479f7c9e2007dda2f9adf0ad91a592e5b20e466c"
+      "address": "0xaE0f5AD23cD6372b01e34416442A418e38c2369e",
+      "transactionHash": "0x64015152c10b056c6c10cac3db56376e9c50e1f2b70bf5c7ee993fb9902d6010"
     }
   },
   "schemaVersion": "3.4.4",
-  "updatedAt": "2022-04-01T03:42:11.871Z",
+  "updatedAt": "2022-04-13T07:16:45.849Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
